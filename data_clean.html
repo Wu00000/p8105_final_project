@@ -168,7 +168,87 @@ pre code {
 </div>
 
 
+<div id="import-data" class="section level2">
+<h2>Import data</h2>
+<pre class="r"><code>innocent_raw &lt;- 
+  read_csv(&quot;./data/Innocent Deaths caused by Police (All time).csv&quot;)</code></pre>
+</div>
+<div id="tidy-data" class="section level2">
+<h2>Tidy data</h2>
+<pre class="r"><code>asp &lt;- 
+  c(&quot;Asphyxiation/Restrained&quot;, &quot;Asphyxiation/Restrain&quot;, &quot;Restrain/Asphyxiation&quot;)
 
+innocent_df &lt;- 
+  innocent_raw %&gt;% 
+  janitor::clean_names() %&gt;% 
+  rename(
+    date_of_death = date_of_injury_resulting_in_death_month_day_year,
+    city = location_of_death_city,
+    agency_involved = agency_or_agencies_involved,
+    highest_force = highest_level_of_force,
+    intended_force = intended_use_of_force_developing
+  ) %&gt;% 
+  select(-c(2, 6, 8, 11:13, 18:24, 26:27)) %&gt;% 
+  drop_na(
+    gender, city, agency_involved, highest_force, intended_force) %&gt;% 
+  filter(gender != &quot;Transgender&quot;) %&gt;% 
+  group_by(gender) %&gt;% 
+  mutate(
+    age = as.numeric(round(replace_na(age, mean(age, na.rm = TRUE)))),
+    gender = as.factor(gender),
+    race = as.factor(race),
+    date_of_death = lubridate::mdy(date_of_death),
+    latitude = replace_na(latitude, 42.167834),
+    highest_force = 
+      ifelse(highest_force %in% asp, &quot;Asphyxiated/Restrained&quot;, highest_force)
+  ) %&gt;% 
+  filter(age &gt; 0) %&gt;% 
+  arrange(unique_id)</code></pre>
+<ul>
+<li><strong>Brief data description</strong>
+<ul>
+<li>There are <code>30591</code> observations and <code>12</code> variables,
+<ul>
+<li>The variables include <code>5</code> character variables, <code>4</code> numeric variables, <code>2</code> factor variables, and <code>1</code> date variable<br />
+</li>
+</ul></li>
+<li><code>unique_id</code> is a key variable and unique in this dataset<br />
+</li>
+<li><code>age</code>, <code>gender</code>, and <code>race</code> represent the subject’s demographic characteristics<br />
+</li>
+<li><code>date_of_death</code> represents the date of the subject’s death and ranges from <code>2000-01-01</code> to <code>2021-08-31</code><br />
+</li>
+<li><code>city</code>, <code>state</code>, <code>latitude</code>, and <code>longitude</code> represent the location of the death<br />
+</li>
+<li><code>agency_involved</code> represents the police department involved in the killing<br />
+</li>
+<li><code>highest_force</code> represents the cause of death<br />
+</li>
+<li><code>intended_force</code> represents the intentional use of force by police</li>
+</ul></li>
+<li><strong>Data clean steps</strong>
+<ul>
+<li>Import raw data and use reasonable variables<br />
+</li>
+<li>Select several variables as mentioned above<br />
+</li>
+<li>Drop NA values and replace based on the following criteria:
+<ul>
+<li>Replace <code>age</code> using mean value in each gender group<br />
+</li>
+<li>Remove the comma in a value of <code>latitude</code><br />
+</li>
+<li>Normalize several similar terms in <code>highest_force</code><br />
+</li>
+</ul></li>
+<li>Convert data type of some variables<br />
+</li>
+<li>Gender with <code>Transgender</code> and age under one are not considered in this analysis<br />
+</li>
+<li>Rearrange data</li>
+</ul></li>
+</ul>
+</div>
 
 
 
