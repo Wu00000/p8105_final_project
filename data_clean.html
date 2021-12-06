@@ -168,13 +168,13 @@ pre code {
 </div>
 
 
-<div id="import-data" class="section level2">
-<h2>Import data</h2>
+<div id="import-data" class="section level3">
+<h3>Import data</h3>
 <pre class="r"><code>innocent_raw &lt;- 
   read_csv(&quot;./data/Innocent Deaths caused by Police (All time).csv&quot;)</code></pre>
 </div>
-<div id="tidy-data" class="section level2">
-<h2>Tidy data</h2>
+<div id="tidy-data" class="section level3">
+<h3>Tidy data</h3>
 <pre class="r"><code>asp &lt;- 
   c(&quot;Asphyxiation/Restrained&quot;, &quot;Asphyxiation/Restrain&quot;, &quot;Restrain/Asphyxiation&quot;)
 
@@ -249,6 +249,11 @@ innocent_df &lt;-
 <li>Rearrange data</li>
 </ul></li>
 </ul>
+</div>
+<div id="output-data-as-maindata.csv" class="section level3">
+<h3>Output data as <code>maindata.csv</code></h3>
+<pre class="r"><code># write_csv(innocent_df, &quot;./data/maindata.csv&quot;)
+# only do this once</code></pre>
 </div>
 
 

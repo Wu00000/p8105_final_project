@@ -12,13 +12,13 @@ knitr::opts_chunk$set(
 )
 ```
 
-## Import data
+### Import data
 ```{r}
 innocent_raw <- 
   read_csv("./data/Innocent Deaths caused by Police (All time).csv")
 ```
 
-## Tidy data
+### Tidy data
 ```{r}
 asp <- 
   c("Asphyxiation/Restrained", "Asphyxiation/Restrain", "Restrain/Asphyxiation")
@@ -73,3 +73,10 @@ innocent_df <-
     + Convert the data type of some variables  
   + Filter out gender with `Transgender` and age under one as they are not considered in this analysis    
   + Rearrange data
+  
+### Output data as `maindata.csv`
+```{r}
+# write_csv(innocent_df, "./data/maindata.csv")
+# only do this once
+```
+
