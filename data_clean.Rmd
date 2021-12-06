@@ -7,22 +7,9 @@ output: html_document
 library(tidyverse)
 
 knitr::opts_chunk$set(
-  fig.width = 6,
-  fig.asp = .6,
-  out.width = "90%",
   message = FALSE,
   warning = FALSE
 )
-
-theme_set(theme_minimal() + theme(legend.position = "bottom"))
-
-options(
-  ggplot2.continuous.colour = "viridis",
-  ggplot2.continuous.fill = "viridis"
-)
-
-scale_colour_discrete = scale_colour_viridis_d
-scale_fill_discrete = scale_fill_viridis_d
 ```
 
 ## Import data
@@ -42,45 +29,47 @@ innocent_df <-
   rename(
     date_of_death = date_of_injury_resulting_in_death_month_day_year,
     city = location_of_death_city,
-    agency_involved = agency_or_agencies_involved,
     highest_force = highest_level_of_force,
     intended_force = intended_use_of_force_developing
   ) %>% 
-  select(-c(2, 6, 8, 11:13, 18:24, 26:27)) %>% 
+  select(-c(2, 6, 8, 11:13, 16, 18:24, 26:27)) %>% 
   drop_na(
-    gender, city, agency_involved, highest_force, intended_force) %>% 
+    gender, city, highest_force, intended_force) %>% 
   filter(gender != "Transgender") %>% 
   group_by(gender) %>% 
   mutate(
     age = as.numeric(round(replace_na(age, mean(age, na.rm = TRUE)))),
+    age_bin = AMR::age_groups(age, c(15, 25, 35, 55, 75)),
     gender = as.factor(gender),
     race = as.factor(race),
+    race = recode(race, "european-American/White" = "European-American/White"),
     date_of_death = lubridate::mdy(date_of_death),
     latitude = replace_na(latitude, 42.167834),
     highest_force = 
-      ifelse(highest_force %in% asp, "Asphyxiated/Restrained", highest_force)
+      as.factor(ifelse(highest_force %in% asp, "Asphyxiated/Restrained", highest_force)),
+    intended_force = as.factor(intended_force)
   ) %>% 
-  filter(age > 0) %>% 
+  filter(age >= 1) %>% 
+  select(1, 2, 12, everything()) %>% 
   arrange(unique_id)
 ```
 + **Brief data description**   
   + There are ``r nrow(innocent_df)`` observations and ``r ncol(innocent_df)`` variables,  
-    + The variables include `5` character variables, `4` numeric variables, `2` factor variables, and `1` date variable  
+    + including `2` character variables, `4` numeric variables, `5` factor variables, and `1` date variable  
   + `unique_id` is a key variable and unique in this dataset  
-  + `age`, `gender`, and `race` represent the subject's demographic characteristics  
+  + `age`, `age_bin`, `gender`, and `race` represent the subject's demographic characteristics  
   + `date_of_death` represents the date of the subject's death and ranges from ``r min(innocent_df$date_of_death)`` to ``r max(innocent_df$date_of_death)``  
-  + `city`, `state`, `latitude`, and `longitude` represent the location of the death  
-  + `agency_involved` represents the police department involved in the killing  
+  + `city`, `state`, `latitude`, and `longitude` represent the location of the death    
   + `highest_force` represents the cause of death  
   + `intended_force` represents the intentional use of force by police
 
 + **Data clean steps**  
-  + Import raw data and use reasonable variables  
-  + Select several variables as mentioned above  
-  + Drop NA values and replace based on the following criteria:  
-    + Replace `age` using mean value in each gender group  
-    + Remove the comma in a value of `latitude`  
-    + Normalize several similar terms in `highest_force`  
-  + Convert data type of some variables  
-  + Gender with `Transgender` and age under one are not considered in this analysis  
+  + Use reasonable variables and select several variables    
+  + Drop NA values      
+  + Do the following mutations:  
+    + Replace NA values in the `age` with the mean in each gender group    
+    + Remove the comma in a value of `latitude`   
+    + Normalize several similar terms in `highest_force`      
+    + Convert the data type of some variables  
+  + Filter out gender with `Transgender` and age under one as they are not considered in this analysis    
   + Rearrange data
