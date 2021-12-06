@@ -10,32 +10,54 @@ library(readxl)
 ```
 
 ```{r}
-gun_owner <- read_csv("data/Gun Ownership by State 2021.csv") %>% 
+# Import data
+main_df <- 
+  read_csv("./data/maindata.csv")
+
+pop_stat <- 
+  read_excel("data/nst-est2019-01.xlsx",
+             range = "A9:M60") %>% 
+  select("state" = "West", "population" = "78347268") %>% 
+  mutate(
+    state = str_match(state, "[a-zA-Z ]+")
+  )
+
+gun_owner <- 
+  read_csv("data/Gun Ownership by State 2021.csv") %>% 
   janitor::clean_names() %>% 
   select(-total_guns)
 
-crime_stat <- read_excel("data/reported-violent-crime-rate-in-the-us-2020-by-state.xlsx", 
-                         sheet = "Data",
-                         range = "B5:C57") %>%
+crime_stat <- 
+  read_excel("data/reported-violent-crime-rate-in-the-us-2020-by-state.xlsx", 
+             sheet = "Data",
+             range = "B5:C57") %>%
   rename(state = 1, crime_per_10e6 = 2) %>% 
   filter(state != "United States") %>% 
   mutate(crime_per_10e6 = as.numeric(crime_per_10e6))
 
-unempolyment_stat <- read_excel("data/state-unemployment-rate-in-the-us-2020.xlsx", 
-                         sheet = "Data",
-                         range = "B5:C56") %>% 
+unempolyment_stat <- 
+  read_excel("data/state-unemployment-rate-in-the-us-2020.xlsx", 
+             sheet = "Data",
+             range = "B5:C56") %>% 
   rename(state = 1, unemploy_rate = 2) %>% 
   mutate(unemploy_rate = as.numeric(unemploy_rate)/100)
 
-gun_crime_unemply <- gun_owner %>% 
+# Join data
+pop_gun_crime_unemply <- 
+  gun_owner %>% 
+  left_join(pop_stat, by = "state") %>% 
   left_join(crime_stat, by = "state") %>% 
   left_join(unempolyment_stat, by = "state") %>% 
-  mutate(state = state.abb)
+  mutate(state = state.abb) %>% 
+  select(state, population, everything())
 
-regression_df <- innocent_df %>% 
+## --- From here, some modifications needed ---
+## Count of age_bin, gender, race in each state need to be normalized by population
+regression_df <- 
+  main_df %>% 
   filter(grepl('2020', date_of_death)) %>% 
-  select(unique_id, age, gender, race, state) %>% 
-  right_join(gun_crime_unemply, by = "state")
+  select(unique_id, age_bin, gender, race, state) %>% 
+  right_join(pop_gun_crime_unemply, by = "state")
 ```
 
 
