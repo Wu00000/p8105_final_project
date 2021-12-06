@@ -1,0 +1,41 @@
+---
+title: "data_regression"
+output: html_document
+---
+
+```{r}
+library(tidyverse)
+library(readr)
+library(readxl)
+```
+
+```{r}
+gun_owner <- read_csv("data/Gun Ownership by State 2021.csv") %>% 
+  janitor::clean_names() %>% 
+  select(-total_guns)
+
+crime_stat <- read_excel("data/reported-violent-crime-rate-in-the-us-2020-by-state.xlsx", 
+                         sheet = "Data",
+                         range = "B5:C57") %>%
+  rename(state = 1, crime_per_10e6 = 2) %>% 
+  filter(state != "United States") %>% 
+  mutate(crime_per_10e6 = as.numeric(crime_per_10e6))
+
+unempolyment_stat <- read_excel("data/state-unemployment-rate-in-the-us-2020.xlsx", 
+                         sheet = "Data",
+                         range = "B5:C56") %>% 
+  rename(state = 1, unemploy_rate = 2) %>% 
+  mutate(unemploy_rate = as.numeric(unemploy_rate)/100)
+
+gun_crime_unemply <- gun_owner %>% 
+  left_join(crime_stat, by = "state") %>% 
+  left_join(unempolyment_stat, by = "state") %>% 
+  mutate(state = state.abb)
+
+regression_df <- innocent_df %>% 
+  filter(grepl('2020', date_of_death)) %>% 
+  select(unique_id, age, gender, race, state) %>% 
+  right_join(gun_crime_unemply, by = "state")
+```
+
+
