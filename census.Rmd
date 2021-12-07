@@ -9,12 +9,19 @@ US census data
 Data layout description: https://www2.census.gov/programs-surveys/popest/technical-documentation/file-layouts/2010-2020/sc-est2020-alldata6.pdf
 
 ```{r}
+library(tidyverse)
+```
+
+
+```{r}
 census_df <- 
   read_csv("data/SC-EST2020-ALLDATA5.csv") %>% 
   janitor::clean_names() %>% 
   select(-sumlev, -region, -division, -state)  %>% 
-  rename(state = name) %>%
-  filter(origin != 0) %>% 
+  rename(state = name,
+         gender = sex) %>%
+  filter(origin != 0,
+         gender != 0) %>% 
   mutate(
     origin = as.integer(origin),
     race = as.integer(race),
@@ -33,12 +40,22 @@ census_df <-
   mutate(
     age = as.numeric(round(replace_na(age, mean(age, na.rm = TRUE)))),
     age_bin = AMR::age_groups(age, c(15, 25, 35, 55, 85))) %>% 
-  select(-age) %>% 
-  group_by(state, race, sex, age_bin) %>%
-  nest(census2010pop:popestimate2020) 
-  #mutate(result = map(data, ~sum)) %>% 
-  #unnest(result)
-  #summarize(
-    
+  select(-age, - census2010pop, -estimatesbase2010) %>% 
+  pivot_longer(
+    popestimate2010:popestimate2020,
+    names_to = "year",
+    names_prefix ="popestimate",
+    values_to = "population"
+  ) %>% 
+  group_by(state, race, gender, age_bin, year) %>%
+  summarize(population = sum(population)) %>% 
+  mutate(
+    gender = recode(gender, `1` = "Male", `2` = "Female"),
+    state = state.abb[match(state, state.name)]
+  ) %>% 
+  drop_na()
+```
+```{r eval=FALSE, include=FALSE}
+# write_csv(census_df, "data/census.csv")
 ```
 
