@@ -1,0 +1,107 @@
+---
+title: "Visualization"
+author: "Hening CUi"
+date: "12/6/2021"
+output: html_document
+---
+
+```{r,echo = FALSE}
+library (tidyverse)
+library(gganimate)
+library(viridis)
+library(modelr)
+library(mgcv)
+library(gifski)
+library(plotly)
+
+theme_set(theme_minimal() + theme(legend.position = "bottom"))
+
+knitr::opts_chunk$set(
+  fig.width = 8,
+  fig.height =6,
+  out.width = "90%"
+)
+
+options(
+  ggplot2.continuous.color = "viridis",
+  ggplot2.continuous.fill = "viridis"
+)
+
+scale_color_discrete = scale_color_viridis_d
+scale_fill_discrete = scale_fill_viridis_d
+```
+
+## Trend
+
+death vs time by year
+
+```{r}
+
+
+plot = 
+  read_csv("./data/maindata.csv") %>% 
+  separate(date_of_death, c("year", "month", "day")) %>% 
+  filter(year != 2021)
+
+#setwd("./plot")  
+
+plot %>% 
+  group_by(year) %>% 
+  summarize(count = n()) %>% 
+  ggplot(aes(x = year, y = count, group = 1)) +
+  geom_line() +
+  geom_point() +
+  labs(title = "Estimated innocent death over time",
+       x = "Year",
+       y = "Number of innocent death") 
+  #transition_reveal(as.integer(year))
+
+#setwd("..")  
+```
+
+death vs time by age
+
+```{r}
+plot %>% 
+  group_by(year,age_bin) %>% 
+  summarize(count = n()) %>% 
+  ggplot(aes(x = year, y = count, color = age_bin, group = age_bin)) +
+  geom_line() +
+  geom_point() +
+  labs(title = "Estimated innocent death over time by age group",
+       x = "Year",
+       y = "Number of innocent death") +
+  scale_x_discrete(breaks = seq(2000, 2020, 4))
+```
+
+by gender
+
+```{r}
+plot %>% 
+  group_by(year, gender) %>% 
+  summarize(count = n()) %>% 
+  ggplot(aes(x = year, y = count, color = gender, group = gender)) +
+  geom_line() +
+  geom_point() +
+  labs(title = "Estimated innocent death over time by gender",
+       x = "Year",
+       y = "Number of innocent death") +
+  scale_x_discrete(breaks = seq(2000, 2020, 4))
+```
+by race
+
+```{r}
+plot %>% 
+  group_by(year, race) %>% 
+  summarize(count = n()) %>% 
+  ggplot(aes(x = year, y = count, color = race, group = race)) +
+  geom_line() +
+  geom_point() +
+  labs(title = "Estimated innocent death over time by race",
+       x = "Year",
+       y = "Number of innocent death") +
+  scale_x_discrete(breaks = seq(2000, 2020, 4))
+```
+
+
+

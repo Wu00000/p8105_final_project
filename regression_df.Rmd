@@ -48,7 +48,7 @@ pop_gun_crime_unemply <-
   left_join(pop_stat, by = "state") %>% 
   left_join(crime_stat, by = "state") %>% 
   left_join(unempolyment_stat, by = "state") %>% 
-  mutate(state = state.abb) %>% 
+  mutate(state = state.abb[match(state, state.name)]) %>% 
   select(state, population, everything())
 
 ## --- From here, some modifications needed ---
@@ -57,7 +57,8 @@ regression_df <-
   main_df %>% 
   filter(grepl('2020', date_of_death)) %>% 
   select(unique_id, age_bin, gender, race, state) %>% 
-  right_join(pop_gun_crime_unemply, by = "state")
+  right_join(pop_gun_crime_unemply, by = "state") %>% 
+  
 ```
 
 
