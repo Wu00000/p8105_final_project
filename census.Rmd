@@ -1,0 +1,18 @@
+---
+title: "census"
+author: "Congyang Xie"
+date: "12/6/2021"
+output: github_document
+---
+US census data 
+
+Data layout description: https://www2.census.gov/programs-surveys/popest/technical-documentation/file-layouts/2010-2020/sc-est2020-alldata6.pdf
+
+```{r}
+census_df <- 
+  read_csv("data/SC-EST2020-ALLDATA6.csv") %>% 
+  janitor::clean_names() %>% 
+  select(-sumlev, -region, -division, -state, -origin) %>% 
+  rename(state = name)
+```
+
