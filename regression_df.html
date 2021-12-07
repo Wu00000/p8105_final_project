@@ -241,11 +241,22 @@ pop_gun_crime_unemply &lt;-
 
 ## --- From here, some modifications needed ---
 ## Count of age_bin, gender, race in each state need to be normalized by population
+regression_1 &lt;- 
+  main_df %&gt;% 
+  filter(grepl(&#39;2020&#39;, date_of_death)) %&gt;% 
+  select(unique_id, age_bin, gender, race, state) %&gt;% 
+  right_join(pop_gun_crime_unemply, by = &quot;state&quot;)
+
 regression_df &lt;- 
   main_df %&gt;% 
   filter(grepl(&#39;2020&#39;, date_of_death)) %&gt;% 
   select(unique_id, age_bin, gender, race, state) %&gt;% 
-  right_join(pop_gun_crime_unemply, by = &quot;state&quot;)</code></pre>
+  right_join(pop_gun_crime_unemply, by = &quot;state&quot;) %&gt;% 
+  group_by(state) %&gt;% 
+  summarize(count = n()) %&gt;% 
+  drop_na() %&gt;% 
+  left_join(regression_1, by = &quot;state&quot;) %&gt;% 
+  mutate(death_rate_per10e6 = round(count/population*1000000, digits = 2))</code></pre>
 
 
 
