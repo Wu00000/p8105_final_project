@@ -177,6 +177,8 @@ pre code {
 <h3>Tidy data</h3>
 <pre class="r"><code>asp &lt;- 
   c(&quot;Asphyxiation/Restrained&quot;, &quot;Asphyxiation/Restrain&quot;, &quot;Restrain/Asphyxiation&quot;)
+race_exclude &lt;- 
+  c(&quot;Middle Eastern&quot;, &quot;Race unspecified&quot;)
 
 innocent_df &lt;- 
   innocent_raw %&gt;% 
@@ -190,11 +192,12 @@ innocent_df &lt;-
   select(-c(2, 6, 8, 11:13, 16, 18:24, 26:27)) %&gt;% 
   drop_na(
     gender, city, highest_force, intended_force) %&gt;% 
-  filter(gender != &quot;Transgender&quot;) %&gt;% 
+  filter(gender != &quot;Transgender&quot;, 
+         (race %in% race_exclude) == FALSE) %&gt;% 
   group_by(gender) %&gt;% 
   mutate(
     age = as.numeric(round(replace_na(age, mean(age, na.rm = TRUE)))),
-    age_bin = AMR::age_groups(age, c(15, 25, 35, 55, 75)),
+    age_bin = AMR::age_groups(age, c(15, 25, 35, 55, 85)),
     gender = as.factor(gender),
     race = as.factor(race),
     race = recode(race, &quot;european-American/White&quot; = &quot;European-American/White&quot;),
@@ -210,7 +213,7 @@ innocent_df &lt;-
 <ul>
 <li><strong>Brief data description</strong>
 <ul>
-<li>There are <code>30651</code> observations and <code>12</code> variables,
+<li>There are <code>22057</code> observations and <code>12</code> variables,
 <ul>
 <li>including <code>2</code> character variables, <code>4</code> numeric variables, <code>5</code> factor variables, and <code>1</code> date variable<br />
 </li>
@@ -241,10 +244,10 @@ innocent_df &lt;-
 </li>
 <li>Normalize several similar terms in <code>highest_force</code><br />
 </li>
-<li>Convert the data type of some variables<br />
+<li>Convert the data type of some variables and create a new variable <code>age_bin</code><br />
 </li>
 </ul></li>
-<li>Filter out gender with <code>Transgender</code> and age under one as they are not considered in this analysis<br />
+<li>Gender with <code>Transgender</code>, race with <code>Middle Eastern</code> and <code>Race unspecified</code>, and age under one are not considered here<br />
 </li>
 <li>Rearrange data</li>
 </ul></li>

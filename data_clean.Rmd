@@ -22,6 +22,8 @@ innocent_raw <-
 ```{r}
 asp <- 
   c("Asphyxiation/Restrained", "Asphyxiation/Restrain", "Restrain/Asphyxiation")
+race_exclude <- 
+  c("Middle Eastern", "Race unspecified")
 
 innocent_df <- 
   innocent_raw %>% 
@@ -35,11 +37,12 @@ innocent_df <-
   select(-c(2, 6, 8, 11:13, 16, 18:24, 26:27)) %>% 
   drop_na(
     gender, city, highest_force, intended_force) %>% 
-  filter(gender != "Transgender") %>% 
+  filter(gender != "Transgender", 
+         (race %in% race_exclude) == FALSE) %>% 
   group_by(gender) %>% 
   mutate(
     age = as.numeric(round(replace_na(age, mean(age, na.rm = TRUE)))),
-    age_bin = AMR::age_groups(age, c(15, 25, 35, 55, 75)),
+    age_bin = AMR::age_groups(age, c(15, 25, 35, 55, 85)),
     gender = as.factor(gender),
     race = as.factor(race),
     race = recode(race, "european-American/White" = "European-American/White"),
@@ -70,8 +73,8 @@ innocent_df <-
     + Replace NA values in the `age` with the mean in each gender group    
     + Remove the comma in a value of `latitude`   
     + Normalize several similar terms in `highest_force`      
-    + Convert the data type of some variables  
-  + Filter out gender with `Transgender` and age under one as they are not considered in this analysis    
+    + Convert the data type of some variables and create a new variable `age_bin`    
+  + Gender with `Transgender`, race with `Middle Eastern` and `Race unspecified`, and age under one are not considered here      
   + Rearrange data
   
 ### Output data as `maindata.csv`
