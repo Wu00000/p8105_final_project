@@ -10,9 +10,35 @@ Data layout description: https://www2.census.gov/programs-surveys/popest/technic
 
 ```{r}
 census_df <- 
-  read_csv("data/SC-EST2020-ALLDATA6.csv") %>% 
+  read_csv("data/SC-EST2020-ALLDATA5.csv") %>% 
   janitor::clean_names() %>% 
-  select(-sumlev, -region, -division, -state, -origin) %>% 
-  rename(state = name)
+  select(-sumlev, -region, -division, -state)  %>% 
+  rename(state = name) %>%
+  filter(origin != 0) %>% 
+  mutate(
+    origin = as.integer(origin),
+    race = as.integer(race),
+    new_race = 
+      case_when( 
+        origin == 2 ~ "Hispanic/Latino",
+        origin == 1 & race == 1 ~ "European-American/White",
+        origin == 1 & race == 2 ~ "African-American/Black",
+        origin == 1 & race == 3 ~ "Native American/Alaskan",
+        origin == 1 & race %in% c(4, 5) ~ "Asian/Pacific Islander"
+      
+    )
+  ) %>% 
+  select(-race, -origin) %>%
+  rename(race = new_race) %>% 
+  mutate(
+    age = as.numeric(round(replace_na(age, mean(age, na.rm = TRUE)))),
+    age_bin = AMR::age_groups(age, c(15, 25, 35, 55, 85))) %>% 
+  select(-age) %>% 
+  group_by(state, race, sex, age_bin) %>%
+  nest(census2010pop:popestimate2020) 
+  #mutate(result = map(data, ~sum)) %>% 
+  #unnest(result)
+  #summarize(
+    
 ```
 
