@@ -179,6 +179,7 @@ reg_df1 %>%
 fit1 <- lm(log(innocent_kill_per100k) ~ year + state + age_bin + gender + race, data = reg_df1)
 
 # Model diagnosis
+par(mfrow = c(2, 2))
 plot(fit1)
 ```
 
@@ -204,5 +205,6 @@ fit2 <- lm(log(innocent_kill_per100k) ~ state + age_bin +
     data = reg_df2)
 
 # Model diagnosis
+par(mfrow = c(2, 2))
 plot(fit2)
 ```
