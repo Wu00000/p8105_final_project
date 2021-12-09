@@ -1,8 +1,11 @@
 ---
 title: "Visualization"
-author: "Hening CUi"
-date: "12/6/2021"
-output: html_document
+output: 
+  html_document:
+    code_folding: hide
+    toc: true
+    toc_float: true
+    
 ---
 
 ```{r,echo = FALSE}

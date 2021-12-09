@@ -2,8 +2,10 @@
 title: "Who should be responsible for the innocent deaths?"
 output: 
   html_document:
+    code_folding: hide
     toc: true
     toc_float: true
+    
 ---
 
 ## Introduction
