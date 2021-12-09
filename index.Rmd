@@ -1,7 +1,53 @@
 ---
-title: "Holy cow!"
+title: "My awesome website"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
 ---
 
-### I have a webpage!
+## Introduction
 
-And I can put all kinds of stuff on it!
+In the wake of George Floyd’s murder, a number of protests arisen across the nation. This motivates us to investigate innocent deaths under police violence and the association of confounders with excessive police force. Although the majority encounters that meet death with law enforcement officials present a lethal threat to officers or society, there are still people that involved in the police action meets death with a quantity not to be ignored.  This project analyses the data on people involved in a police operation and results in fatalities.  Despite the assessment of  overuse of police force across geographical factors, this project also focuses on socioeconomic factors, political factors and periodical patterns. 
+
+
+## Data:
+
+Innocent death by polices
+basic state https://www.kaggle.com/kannan1314/innocent-deaths-caused-by-police-all-time 	
+Association between death and other factor:
+Rate of gun ownership
+Rate of crime (https://www.statista.com/topics/2153/crime-in-the-united-states/#dossierKeyfigures)
+Education: (https://www.census.gov/data/tables/2020/demo/educational-attainment/cps-detailed-tables.html) 
+Periodical? (Festival, President Trump, 911)
+Economic index(Inflation rate, CPI) 
+Employment/Unemployment rate: (https://www.bls.gov/news.release/laus.toc.htm#)
+Funding of local PD
+
+
+## Findings
+
+
+
+
+
+## Report
+
+
+
+
+
+## Website Navigation
+
+
+- [Dashboard](dashboard.html)
+- [About](about.html)
+
+
+## Contributors
+
+Hening Cui
+Congyang Xie
+Qihang Wu
+Jialiang Hua
+Wenhan Bao
