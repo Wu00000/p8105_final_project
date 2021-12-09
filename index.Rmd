@@ -1,57 +1,62 @@
 ---
-title: "Who should be responsible for the innocent deaths?"
+title: "Police; License to Kill?"
 output: 
   html_document:
     toc: true
     toc_float: true
+    code_folding: hide
 ---
+```{r setup, echo = FALSE, message = FALSE}
+library(tidyverse)
 
-## Introduction
+knitr::opts_chunk$set(
+  message = FALSE,
+  warning = FALSE
+)
+```
 
+<b>Exploring the innocent killing rate in the U.S. by police from 2000 to 2020</b>
+
+<font size="3">By: Hening Cui | Jialiang Hua | Congyang Xie | Wenhan Bao | Qihang Wu</font>
+
+<img src="images/index_img1.png" style="width:120%">
+<font size="2"> Image source: [The Guardian](https://www.theguardian.com/us-news/series/counted-us-police-killings)</font>
+
+<br>
+
+### Background
 In the wake of George Floyd’s murder, a number of protests arisen across the nation. This motivates us to investigate innocent deaths under police violence and the association of confounders with excessive police force. Although the majority encounters that meet death with law enforcement officials present a lethal threat to officers or society, there are still people that involved in the police action meets death with a quantity not to be ignored.  This project analyses the data on people involved in a police operation and results in fatalities.  Despite the assessment of  overuse of police force across geographical factors, this project also focuses on socioeconomic factors, political factors and periodical patterns. 
 
 
-## Data:
+### Datasets
 
-Innocent death by polices
-basic state https://www.kaggle.com/kannan1314/innocent-deaths-caused-by-police-all-time 	
-Association between death and other factor:
-Rate of gun ownership
-Rate of crime (https://www.statista.com/topics/2153/crime-in-the-united-states/#dossierKeyfigures)
-Education: (https://www.census.gov/data/tables/2020/demo/educational-attainment/cps-detailed-tables.html) 
-Periodical? (Festival, President Trump, 911)
-Economic index(Inflation rate, CPI) 
-Employment/Unemployment rate: (https://www.bls.gov/news.release/laus.toc.htm#)
-Funding of local PD
+- Main data: [Innocent death by polices](https://www.kaggle.com/kannan1314/innocent-deaths-caused-by-police-all-time)
+- Other sources:
+  - [Gun ownership by state 2021](https://worldpopulationreview.com/state-rankings/gun-ownership-by-state )
+  - [Crime rate by state 2020](https://www.statista.com/topics/2153/crime-in-the-united-states/#dossierKeyfigures)
+  - [Unemployment rate by state 2020](https://www.bls.gov/web/laus/laumstrk.htm)
 
 
-## Findings
+### Findings
 
 
 
 
 
-## Report
+### Report
 
 
 
 
-
-## Website Navigation
+### Website Navigation
 
 
 - [Dashboard](dashboard.html)
 - [About](about.html)
 
 
-## Contributors
+### Contributors
 
-Hening Cui
 
-Congyang Xie
 
-Qihang Wu
-
-Jialiang Hua
-
-Wenhan Bao
+<font size="5"><a href = "#top" target = "_self">Back to top</a></font>
