@@ -3,18 +3,16 @@ output_dir: "."
 navbar:
   title: "Home"
   right:
-    - text: "Plotly"
-      href: plotly.html
+    - text: "Trend plot"
+      href: Visualization.html
     - text: "Regression Analysis"
       href: regression_df.html
     - text: "Interactive Map"
-      href: dashboard.html
+      href: shiny_dashboard_template.html
     - text: "Resource"
       href: resource.html
-    - icon: fa-envelope fa-lg
-      href: mailto:<dwjialiang@gmail.com>
     - icon: fa-github fa-lg
-      href: https://github.com/cuhuajialiang
+      href: https://github.com/Wu00000/p8105_final_project
 output:
   html_document:
     theme: readable

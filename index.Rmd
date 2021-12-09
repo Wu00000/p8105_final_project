@@ -1,5 +1,5 @@
 ---
-title: "My awesome website"
+title: "Who should be responsible for the innocent deaths?"
 output: 
   html_document:
     toc: true
@@ -47,7 +47,11 @@ Funding of local PD
 ## Contributors
 
 Hening Cui
+
 Congyang Xie
+
 Qihang Wu
+
 Jialiang Hua
+
 Wenhan Bao
