@@ -31,21 +31,22 @@ scale_color_discrete = scale_color_viridis_d
 scale_fill_discrete = scale_fill_viridis_d
 ```
 
+load data
+
+```{r}
+plot_df = 
+  read_csv("./data/maindata.csv") %>% 
+  separate(date_of_death, c("year", "month", "day")) %>% 
+  filter(year != 2021)
+```
+
 ## Trend
 
 death vs time by year
 
 ```{r}
-
-
-plot = 
-  read_csv("./data/maindata.csv") %>% 
-  separate(date_of_death, c("year", "month", "day")) %>% 
-  filter(year != 2021)
-
-#setwd("./plot")  
-
-plot %>% 
+plot_time = 
+  plot_df %>% 
   group_by(year) %>% 
   summarize(count = n()) %>% 
   ggplot(aes(x = year, y = count, group = 1)) +
@@ -54,15 +55,20 @@ plot %>%
   labs(title = "Estimated innocent death over time",
        x = "Year",
        y = "Number of innocent death") 
-  #transition_reveal(as.integer(year))
 
-#setwd("..")  
+setwd("./plot")
+
+plot_time + 
+  transition_reveal(as.integer(year))
+
+setwd("..")  
 ```
 
 death vs time by age
 
 ```{r}
-plot %>% 
+plot_age =
+  plot_df %>% 
   group_by(year,age_bin) %>% 
   summarize(count = n()) %>% 
   ggplot(aes(x = year, y = count, color = age_bin, group = age_bin)) +
@@ -72,12 +78,20 @@ plot %>%
        x = "Year",
        y = "Number of innocent death") +
   scale_x_discrete(breaks = seq(2000, 2020, 4))
+
+setwd("./plot")
+
+plot_age + 
+  transition_reveal(as.integer(year))
+
+setwd("..") 
 ```
 
 by gender
 
 ```{r}
-plot %>% 
+plot_gender =
+  plot_df %>% 
   group_by(year, gender) %>% 
   summarize(count = n()) %>% 
   ggplot(aes(x = year, y = count, color = gender, group = gender)) +
@@ -87,11 +101,19 @@ plot %>%
        x = "Year",
        y = "Number of innocent death") +
   scale_x_discrete(breaks = seq(2000, 2020, 4))
+
+setwd("./plot")
+
+plot_gender + 
+  transition_reveal(as.integer(year))
+
+setwd("..") 
 ```
 by race
 
 ```{r}
-plot %>% 
+plot_race =
+  plot_df %>% 
   group_by(year, race) %>% 
   summarize(count = n()) %>% 
   ggplot(aes(x = year, y = count, color = race, group = race)) +
@@ -101,6 +123,13 @@ plot %>%
        x = "Year",
        y = "Number of innocent death") +
   scale_x_discrete(breaks = seq(2000, 2020, 4))
+
+setwd("./plot")
+
+plot_race + 
+  transition_reveal(as.integer(year))
+
+setwd("..") 
 ```
 
 
