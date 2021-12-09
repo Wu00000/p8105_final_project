@@ -9,19 +9,14 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
-<meta name="author" content="Hening CUi" />
 
 
 <title>Visualization</title>
 
-<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
-<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="site_libs/header-attrs-2.10/header-attrs.js"></script>
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<<<<<<< HEAD
 <link href="site_libs/bootstrap-3.3.5/css/readable.min.css" rel="stylesheet" />
-=======
-<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
->>>>>>> 6b829b44fe77485b2edb93ffd42883b7da250ca6
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
@@ -34,7 +29,11 @@
        h6 {font-size: 12px;}
        code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
        pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
@@ -222,7 +221,73 @@ $(document).ready(function () {
 </style>
 
 <!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
 
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
 
 
 
@@ -232,6 +297,16 @@ $(document).ready(function () {
 
 
 <div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
 
 
 
@@ -252,36 +327,19 @@ $(document).ready(function () {
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-<<<<<<< HEAD
-  <a href="plotly.html">Plotly</a>
+  <a href="Visualization.html">Trend plot</a>
 </li>
 <li>
   <a href="regression_df.html">Regression Analysis</a>
 </li>
 <li>
-  <a href="dashboard.html">Interactive Map</a>
+  <a href="shiny_dashboard_template.html">Interactive Map</a>
 </li>
 <li>
   <a href="resource.html">Resource</a>
 </li>
 <li>
-  <a href="mailto:&lt;dwjialiang@gmail.com&gt;">
-=======
-  <a href="about.html">About</a>
-</li>
-<li>
-  <a href="mailto:&lt;you@youremail.com&gt;">
->>>>>>> 6b829b44fe77485b2edb93ffd42883b7da250ca6
-    <span class="fa fa-envelope fa-lg"></span>
-     
-  </a>
-</li>
-<li>
-<<<<<<< HEAD
-  <a href="https://github.com/cuhuajialiang">
-=======
-  <a href="http://github.com/&lt;YOUR_GH_NAME&gt;/">
->>>>>>> 6b829b44fe77485b2edb93ffd42883b7da250ca6
+  <a href="https://github.com/Wu00000/p8105_final_project">
     <span class="fa fa-github fa-lg"></span>
      
   </a>
@@ -293,27 +351,21 @@ $(document).ready(function () {
 
 <div id="header">
 
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
 
 
 <h1 class="title toc-ignore">Visualization</h1>
-<h4 class="author">Hening CUi</h4>
-<h4 class="date">12/6/2021</h4>
 
 </div>
 
 
-<<<<<<< HEAD
-=======
-<pre><code>## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.1 ──</code></pre>
-<pre><code>## ✓ ggplot2 3.3.5     ✓ purrr   0.3.4
-## ✓ tibble  3.1.5     ✓ dplyr   1.0.7
-## ✓ tidyr   1.1.4     ✓ stringr 1.4.0
-## ✓ readr   2.0.2     ✓ forcats 0.5.1</code></pre>
-<pre><code>## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-## x dplyr::filter() masks stats::filter()
-## x dplyr::lag()    masks stats::lag()</code></pre>
-<pre><code>## Loading required package: viridisLite</code></pre>
->>>>>>> 6b829b44fe77485b2edb93ffd42883b7da250ca6
 <pre><code>## Loading required package: nlme</code></pre>
 <pre><code>## 
 ## Attaching package: &#39;nlme&#39;</code></pre>
@@ -323,27 +375,9 @@ $(document).ready(function () {
 <pre><code>## The following object is masked from &#39;package:dplyr&#39;:
 ## 
 ##     collapse</code></pre>
-<pre><code>## This is mgcv 1.8-38. For overview type &#39;help(&quot;mgcv-package&quot;)&#39;.</code></pre>
-<<<<<<< HEAD
-<div id="trend" class="section level2">
-<h2>Trend</h2>
-<p>death vs time by year</p>
-<pre class="r"><code>plot = 
-=======
-<pre><code>## 
-## Attaching package: &#39;plotly&#39;</code></pre>
-<pre><code>## The following object is masked from &#39;package:ggplot2&#39;:
-## 
-##     last_plot</code></pre>
-<pre><code>## The following object is masked from &#39;package:stats&#39;:
-## 
-##     filter</code></pre>
-<pre><code>## The following object is masked from &#39;package:graphics&#39;:
-## 
-##     layout</code></pre>
+<pre><code>## This is mgcv 1.8-36. For overview type &#39;help(&quot;mgcv-package&quot;)&#39;.</code></pre>
 <p>load data</p>
 <pre class="r"><code>plot_df = 
->>>>>>> 6b829b44fe77485b2edb93ffd42883b7da250ca6
   read_csv(&quot;./data/maindata.csv&quot;) %&gt;% 
   separate(date_of_death, c(&quot;year&quot;, &quot;month&quot;, &quot;day&quot;)) %&gt;% 
   filter(year != 2021)</code></pre>
@@ -368,13 +402,7 @@ $(document).ready(function () {
   geom_point() +
   labs(title = &quot;Estimated innocent death over time&quot;,
        x = &quot;Year&quot;,
-<<<<<<< HEAD
-       y = &quot;Number of innocent death&quot;) </code></pre>
-<p><img src="Visualization_files/figure-html/unnamed-chunk-2-1.png" width="90%" /></p>
-<pre class="r"><code>  #transition_reveal(as.integer(year))
-=======
        y = &quot;Number of innocent death&quot;) 
->>>>>>> 6b829b44fe77485b2edb93ffd42883b7da250ca6
 
 setwd(&quot;./plot&quot;)
 
@@ -395,16 +423,12 @@ plot_time +
        y = &quot;Number of innocent death&quot;) +
   scale_x_discrete(breaks = seq(2000, 2020, 4))</code></pre>
 <pre><code>## `summarise()` has grouped output by &#39;year&#39;. You can override using the `.groups` argument.</code></pre>
-<<<<<<< HEAD
-<p><img src="Visualization_files/figure-html/unnamed-chunk-3-1.png" width="90%" /></p>
-=======
 <pre class="r"><code>setwd(&quot;./plot&quot;)
 
 plot_age + 
   transition_reveal(as.integer(year))</code></pre>
 <p><img src="Visualization_files/figure-html/unnamed-chunk-4-1.gif" width="90%" /></p>
 <pre class="r"><code>setwd(&quot;..&quot;) </code></pre>
->>>>>>> 6b829b44fe77485b2edb93ffd42883b7da250ca6
 <p>by gender</p>
 <pre class="r"><code>plot_gender =
   plot_df %&gt;% 
@@ -418,10 +442,6 @@ plot_age +
        y = &quot;Number of innocent death&quot;) +
   scale_x_discrete(breaks = seq(2000, 2020, 4))</code></pre>
 <pre><code>## `summarise()` has grouped output by &#39;year&#39;. You can override using the `.groups` argument.</code></pre>
-<<<<<<< HEAD
-<p><img src="Visualization_files/figure-html/unnamed-chunk-4-1.png" width="90%" /> by race</p>
-<pre class="r"><code>plot %&gt;% 
-=======
 <pre class="r"><code>setwd(&quot;./plot&quot;)
 
 plot_gender + 
@@ -431,7 +451,6 @@ plot_gender +
 <p>by race</p>
 <pre class="r"><code>plot_race =
   plot_df %&gt;% 
->>>>>>> 6b829b44fe77485b2edb93ffd42883b7da250ca6
   group_by(year, race) %&gt;% 
   summarize(count = n()) %&gt;% 
   ggplot(aes(x = year, y = count, color = race, group = race)) +
@@ -442,20 +461,18 @@ plot_gender +
        y = &quot;Number of innocent death&quot;) +
   scale_x_discrete(breaks = seq(2000, 2020, 4))</code></pre>
 <pre><code>## `summarise()` has grouped output by &#39;year&#39;. You can override using the `.groups` argument.</code></pre>
-<<<<<<< HEAD
-<p><img src="Visualization_files/figure-html/unnamed-chunk-5-1.png" width="90%" /></p>
-=======
 <pre class="r"><code>setwd(&quot;./plot&quot;)
 
 plot_race + 
   transition_reveal(as.integer(year))</code></pre>
 <p><img src="Visualization_files/figure-html/unnamed-chunk-6-1.gif" width="90%" /></p>
 <pre class="r"><code>setwd(&quot;..&quot;) </code></pre>
->>>>>>> 6b829b44fe77485b2edb93ffd42883b7da250ca6
 </div>
 
 
 
+</div>
+</div>
 
 </div>
 
@@ -487,7 +504,41 @@ $(document).ready(function () {
 </script>
 
 <!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
 
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>

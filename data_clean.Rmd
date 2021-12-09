@@ -1,6 +1,11 @@
 ---
 title: "Data clean"
-output: html_document
+output: 
+  html_document:
+    code_folding: hide
+    toc: true
+    toc_float: true
+    
 ---
 
 ```{r setup, echo = FALSE, message = FALSE}
