@@ -72,7 +72,7 @@ We developed two models to investigate the association between innocent death by
 
 
 ### Report
-Our report can be found from [here](report_link.html)
+Our report can be found from [here](report_link.html).
 
 
 
