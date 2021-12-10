@@ -2,15 +2,10 @@
 title: "Police; License to Kill?"
 output: 
   html_document:
-    code_folding: hide
     toc: true
     toc_float: true
-<<<<<<< HEAD
-    code_folding: hide
-=======
-    
->>>>>>> b2a3e29dea193b6eb0ca983439ec36f4ba4145ee
 ---
+    
 ```{r setup, echo = FALSE, message = FALSE}
 library(tidyverse)
 
@@ -42,9 +37,16 @@ In the wake of George Floyd’s murder, a number of protests arisen across the n
   - [Unemployment rate by state 2020](https://www.bls.gov/web/laus/laumstrk.htm)
 
 
-### Findings
+### Findings {.tabset}
+
+#### Finding 1
+
+We find that ....
 
 
+#### Finding 2
+
+Our regression model indicates that ... statistically significant. This indicates that there indeed are group differences by age and gender... Further detailed analyses are in the Regression Analysis sections.
 
 
 
@@ -58,10 +60,11 @@ In the wake of George Floyd’s murder, a number of protests arisen across the n
 
 - [Dashboard](dashboard.html)
 - [About](about.html)
+- [Resource](resource.html)
 
 
 ### Contributors
 
 
 
-<font size="5"><a href = "#top" target = "_self">Back to top</a></font>
+<font size="3"><a href = "#top" target = "_self">Back to top</a></font>
