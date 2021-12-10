@@ -14,6 +14,7 @@ library(readxl)
 library(kableExtra)
 library(knitr)
 library(modelr)
+library(plotly)
 
 knitr::opts_chunk$set(
   fig.width = 10,
@@ -103,12 +104,16 @@ Searching for more potential predictors and finding the association between inno
 Gun ownership rates vary by state and Montana has the highest.
 
 ```{r}
-gun_owner %>% 
+gun_plt = 
+  gun_owner %>% 
   mutate(state = fct_reorder(state, gun_ownership)) %>% 
-  ggplot(aes(x = gun_ownership, y = state, fill = state)) + 
-  geom_bar(stat = "identity", show.legend = FALSE) + 
+  ggplot(aes(x = gun_ownership, y = state, fill = as.numeric(state))) + 
+  geom_col(alpha = 0.6, show.legend = FALSE) +
+  scale_fill_gradient(low = "#77969A", high = "#516E41") +
   labs(x = "Gun Ownership Rate",
        y = "State")
+
+ggplotly(gun_plt) %>% layout(showlegend = F)
 ```
 
 #### Crime rate by state in 2020
@@ -116,13 +121,17 @@ gun_owner %>%
 The crime rate varies from state to state, with Alaska showing the highest rate
 
 ```{r}
-crime_stat %>% 
-  filter(state != "District of Columbia") %>% 
-  mutate(state = fct_reorder(state, crime_per_10e6)) %>% 
-  ggplot(aes(x = crime_per_10e6, y = state, fill = state)) + 
-  geom_bar(stat = "identity", show.legend = FALSE) + 
+crime_plt =
+  crime_stat %>%
+  filter(state != "District of Columbia") %>%
+  mutate(state = fct_reorder(state, crime_per_10e6)) %>%
+  ggplot(aes(x = crime_per_10e6, y = state, fill = as.numeric(state))) +
+  geom_col(alpha = 0.6, show.legend = FALSE) +
+  scale_fill_gradient(low = "#77969A", high = "#516E41") +
   labs(x = "Crimte rate per 100k",
        y = "State")
+
+ggplotly(crime_plt) %>% layout(showlegend = F)
 ```
 
 #### Unemployment rate by state in 2020
@@ -130,13 +139,17 @@ crime_stat %>%
 Unemployment rates in each state show a diversified trend and Nevada has the highest unemployment rate.
 
 ```{r}
-unempolyment_stat %>% 
-  filter(state != "District of Columbia") %>% 
-  mutate(state = fct_reorder(state, unemploy_rate)) %>% 
-  ggplot(aes(x = unemploy_rate, y = state, fill = state)) + 
-  geom_bar(stat = "identity", show.legend = FALSE) + 
+unemployment_plt =
+  unempolyment_stat %>%
+  filter(state != "District of Columbia") %>%
+  mutate(state = fct_reorder(state, unemploy_rate)) %>%
+  ggplot(aes(x = unemploy_rate, y = state, fill = as.numeric(state))) +
+  geom_col(alpha = 0.6, show.legend = FALSE) +
+  scale_fill_gradient(low = "#77969A", high = "#516E41") +
   labs(x = "Unemployment rate",
        y = "State")
+
+ggplotly(unemployment_plt) %>% layout(showlegend = F)
 ```
 
 ---------------------------------------------------
