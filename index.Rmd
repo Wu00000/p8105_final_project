@@ -4,7 +4,10 @@ output:
   html_document:
     toc: true
     toc_float: true
+<<<<<<< HEAD
     code_folding: hide
+=======
+>>>>>>> cc62c8be9367c8b7951f62b28762b574c2420828
 ---
     
 ```{r setup, echo = FALSE, message = FALSE}

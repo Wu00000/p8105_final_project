@@ -11,21 +11,12 @@
 
 
 
-<<<<<<< HEAD
-<title>Regression_Model1.knit</title>
-
-<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
-<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="site_libs/bootstrap-3.3.5/css/readable.min.css" rel="stylesheet" />
-=======
-<title>Regression-Model 1</title>
+<title>Regression-Model 2</title>
 
 <script src="site_libs/header-attrs-2.10/header-attrs.js"></script>
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/paper.min.css" rel="stylesheet" />
->>>>>>> cc62c8be9367c8b7951f62b28762b574c2420828
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
@@ -384,125 +375,80 @@ div.tocify {
 
 
 
-<<<<<<< HEAD
-=======
-<h1 class="title toc-ignore">Regression-Model 1</h1>
->>>>>>> cc62c8be9367c8b7951f62b28762b574c2420828
+<h1 class="title toc-ignore">Regression-Model 2</h1>
 
 </div>
 
 
-<<<<<<< HEAD
-<div id="regression-model-1" class="section level2">
-<h2>Regression-Model 1</h2>
-=======
->>>>>>> cc62c8be9367c8b7951f62b28762b574c2420828
 <hr />
 <div id="description" class="section level3">
 <h3>Description</h3>
-<p>In this study, we are curious about the association between innocent death rate by police and potential factors. In this case, innocent death(per 10K) will be considered as dependent variable while some interests will be regarded as predictors so that multiple linear regression will be used to testify and assess whether the correlation is significant or not.</p>
+<p>Searching for more potential predictors and finding the association between innocent death and other factors, we decide to concern about the variables (Gun ownership rates, crime rate, unemployment rate in each state) and just concentrate on 2020.</p>
 <ul>
-<li>For Model 1, predictors and variables are below:
+<li>In this model, predictors and variables are below:
 <ul>
 <li><strong>innocent death(per 10K):</strong> count of innocent death divided by state population and multiplied by 10K</li>
-<li><strong>year:</strong> the year of death(2010 - 2020)</li>
 <li><strong>state:</strong> the best state location where the injury causing death happened that we can find using Google Maps.</li>
 <li><strong>age_bin:</strong> age divided into 6 groups(0-14, 15-24, 25-34, 35-54, 55-85, 85+)</li>
 <li><strong>gender:</strong> Male, Female</li>
-<li><strong>race:</strong> Usually based on visual evidence or official reports(European-American/White, African-American/Black, Native American/Alaskan, Asian/Pacific Islander, Hispanic/Latino)</li>
+<li><strong>race:</strong> usually based on visual evidence or official reports(European-American/White, African-American/Black, Native American/Alaskan, Asian/Pacific Islander, Hispanic/Latino)</li>
+<li><strong>Gun ownership rate:</strong> rate of the act of owning a gun, either legal or illegal</li>
+<li><strong>Crime Rate per 100K:</strong> be calculated by dividing the total number of reported crimes of any kind by the total population and multiplied by 100K</li>
+<li><strong>Unemployment rate:</strong> measures unemployment within the civilian non-institutional population aged 16 years and olde</li>
 </ul></li>
 </ul>
 <hr />
 </div>
 <div id="explorative-graphs" class="section level3">
 <h3>Explorative Graphs</h3>
-<div id="year" class="section level4">
-<h4>Year</h4>
-<p>From 2010 to 2020, the number of death in the USA shows a tendency of rising first and then falling slightly.</p>
-<pre class="r"><code>main_df %&gt;% 
-  filter(year %in% c(2010:2020)) %&gt;% 
-  group_by(year) %&gt;% 
-  summarize(count = n()) %&gt;% 
-  ggplot(aes(x = year, y = count, fill = year)) + 
-  geom_bar(stat = &quot;identity&quot;) +
-  scale_x_continuous(breaks = c(2010:2020)) +
-  theme(legend.position = &quot;none&quot;)</code></pre>
-<p><img src="Regression_Model1_files/figure-html/unnamed-chunk-6-1.png" width="90%" /></p>
+<div id="gun-ownership-rate-by-state-in-2020" class="section level4">
+<h4>Gun ownership rate by state in 2020</h4>
+<p>Gun ownership rates vary by state and Montana has the highest.</p>
+<pre class="r"><code>gun_owner %&gt;% 
+  mutate(state = fct_reorder(state, gun_ownership)) %&gt;% 
+  ggplot(aes(x = gun_ownership, y = state, fill = state)) + 
+  geom_bar(stat = &quot;identity&quot;, show.legend = FALSE) + 
+  labs(x = &quot;Gun Ownership Rate&quot;,
+       y = &quot;State&quot;)</code></pre>
+<p><img src="Regression_Model2_files/figure-html/unnamed-chunk-6-1.png" width="90%" /></p>
 </div>
-<div id="sex" class="section level4">
-<h4>Sex</h4>
-<p>Rate of male is much larger than female, but the proportion of male and female remains roughly the same from 2010 to 2020.</p>
-<pre class="r"><code>main_df %&gt;% 
-  filter(year %in% c(2010:2020)) %&gt;% 
-  group_by(year, gender) %&gt;% 
-  summarize(count = n()) %&gt;% 
-  ggplot(aes(x = year, y = count, fill = gender)) + 
-  geom_bar(stat = &quot;identity&quot;, position = position_dodge()) +
-  scale_x_continuous(breaks = c(2010:2020)) +
-  theme(legend.title = element_blank())</code></pre>
-<p><img src="Regression_Model1_files/figure-html/unnamed-chunk-7-1.png" width="90%" /></p>
+<div id="crime-rate-by-state-in-2020" class="section level4">
+<h4>Crime rate by state in 2020</h4>
+<p>The crime rate varies from state to state, with Alaska showing the highest rate</p>
+<pre class="r"><code>crime_stat %&gt;% 
+  filter(state != &quot;District of Columbia&quot;) %&gt;% 
+  mutate(state = fct_reorder(state, crime_per_10e6)) %&gt;% 
+  ggplot(aes(x = crime_per_10e6, y = state, fill = state)) + 
+  geom_bar(stat = &quot;identity&quot;, show.legend = FALSE) + 
+  labs(x = &quot;Crimte rate per 100k&quot;,
+       y = &quot;State&quot;)</code></pre>
+<p><img src="Regression_Model2_files/figure-html/unnamed-chunk-7-1.png" width="90%" /></p>
 </div>
-<div id="age-group" class="section level4">
-<h4>Age group</h4>
-<p>The ratio between different age groups are consistent, and the age group(25-34) has the largest share.</p>
-<pre class="r"><code>main_df %&gt;% 
-  filter(year %in% c(2010:2020)) %&gt;% 
-  group_by(year, age_bin) %&gt;% 
-  summarize(count = n()) %&gt;% 
-  ggplot(aes(x = year, y = count, fill = age_bin)) + 
-  geom_bar(stat = &quot;identity&quot;) +
-  scale_x_continuous(breaks = c(2010:2020)) +
-  theme(legend.title = element_blank())</code></pre>
-<p><img src="Regression_Model1_files/figure-html/unnamed-chunk-8-1.png" width="90%" /></p>
-</div>
-<div id="race" class="section level4">
-<h4>Race</h4>
-<p>The Hispanic race accounts for the largest proportion and the rates from 2010 to 2020 are similar.</p>
-<pre class="r"><code>main_df %&gt;%
-  filter(year %in% c(2010:2020)) %&gt;% 
-  group_by(year, race) %&gt;% 
-  summarize(count = n()) %&gt;% 
-  ggplot(aes(x = year, y = count, fill = race)) + 
-  geom_bar(stat = &quot;identity&quot;) +
-  scale_x_continuous(breaks = c(2010:2020)) +
-  theme(legend.title = element_blank())</code></pre>
-<p><img src="Regression_Model1_files/figure-html/unnamed-chunk-9-1.png" width="90%" /></p>
+<div id="unemployment-rate-by-state-in-2020" class="section level4">
+<h4>Unemployment rate by state in 2020</h4>
+<p>Unemployment rates in each state show a diversified trend and Nevada has the highest unemployment rate.</p>
+<pre class="r"><code>unempolyment_stat %&gt;% 
+  filter(state != &quot;District of Columbia&quot;) %&gt;% 
+  mutate(state = fct_reorder(state, unemploy_rate)) %&gt;% 
+  ggplot(aes(x = unemploy_rate, y = state, fill = state)) + 
+  geom_bar(stat = &quot;identity&quot;, show.legend = FALSE) + 
+  labs(x = &quot;Unemployment rate&quot;,
+       y = &quot;State&quot;)</code></pre>
+<p><img src="Regression_Model2_files/figure-html/unnamed-chunk-8-1.png" width="90%" /></p>
 <hr />
 </div>
 </div>
 <div id="statistical-analysis" class="section level3">
 <h3>Statistical Analysis</h3>
-<div id="distribution-of-dependent-variableinnocent-deathper-10k" class="section level4">
-<h4>1.Distribution of dependent variable(innocent death(per 10K))</h4>
-<p>The density plot below is the distribution of innocent death(per 10K) which we notice it is not satisfied of the assumption of the multiple linear regression so that we need to transform it.</p>
-<pre class="r"><code># Find distribution of the target variable `innocent_kill_per100k`
-reg_df1 %&gt;% 
-  ggplot(aes(x = innocent_kill_per100k)) + 
-  geom_density(color = &quot;dodgerblue1&quot;, fill = &quot;skyblue2&quot;) + 
-  geom_vline(xintercept = mean(reg_df1$innocent_kill_per100k), linetype = &quot;dotted&quot;) +
-  labs(x = &quot;innocent death(per 10K)&quot;)</code></pre>
-<p><img src="Regression_Model1_files/figure-html/unnamed-chunk-11-1.png" width="90%" /></p>
-</div>
-<div id="transformation" class="section level4">
-<h4>2.Transformation</h4>
-<p>In order to get normal distribution, here we conduct log transformation. The plot followed is what we get by transformation and it almost satisfies the assumption of the multiple linear regression</p>
-<pre class="r"><code># After transformation
-reg_df1 %&gt;% 
-  ggplot(aes(x = log(innocent_kill_per100k))) + 
-  geom_density(color = &quot;dodgerblue1&quot;, fill = &quot;skyblue2&quot;) + 
-  geom_vline(xintercept = mean(log(reg_df1$innocent_kill_per100k)), linetype = &quot;dotted&quot;) + 
-  labs(x = &quot;log(innocent death per 10K)&quot;)</code></pre>
-<p><img src="Regression_Model1_files/figure-html/unnamed-chunk-12-1.png" width="90%" /></p>
-</div>
 <div id="modeling" class="section level4">
-<h4>3.Modeling</h4>
-<p>By transformation above, the formula is below:</p>
-<p><span class="math display">\[ log(innocent \space death \space per \space 100k) = \beta_0 + \beta_1year + \beta_2state + \beta_3 age + \beta_4 gender + \beta_5 race\]</span></p>
-<pre class="r"><code># Model 1 -- across all years in database
-# Fit a model
-fit1 &lt;- lm(log(innocent_kill_per100k) ~ year + state + age_bin + gender + race, data = reg_df1)
+<h4>1.Modeling</h4>
+<p>Because the distribution of innocent death per 10K is the same in model 1, here we still conduct log transformation and the formula is followed below:</p>
+<p><span class="math display">\[ log(innocent \space death \space per \space 100k) = \beta_0 +  \beta_1state + \beta_2 age + \beta_3 gender + \beta_4 race + \beta_5Gun \space ownership \space rate\]</span> <span class="math display">\[ + \beta_6Crime \space rate(per \space 100K) + \beta_7 Unemployment \space rate\]</span></p>
+<pre class="r"><code># Fit a model
+fit2 &lt;- lm(log(innocent_kill_per100k) ~ state + age_bin + gender + race + gun_ownership + crime_per_10e6 + unemploy_rate, 
+    data = reg_df2)
 
-summary(fit1) %&gt;% 
+summary(fit2) %&gt;% 
   broom::tidy() %&gt;% 
   knitr::kable() %&gt;%
   kable_styling() %&gt;% 
@@ -534,33 +480,16 @@ p.value
 (Intercept)
 </td>
 <td style="text-align:right;">
--17.4771721
+0.6891827
 </td>
 <td style="text-align:right;">
-6.3550561
+0.3229229
 </td>
 <td style="text-align:right;">
--2.7501208
+2.1342022
 </td>
 <td style="text-align:right;">
-0.0059792
-</td>
-</tr>
-<tr>
-<td style="text-align:left;">
-year
-</td>
-<td style="text-align:right;">
-0.0088940
-</td>
-<td style="text-align:right;">
-0.0031510
-</td>
-<td style="text-align:right;">
-2.8225948
-</td>
-<td style="text-align:right;">
-0.0047829
+0.0334034
 </td>
 </tr>
 <tr>
@@ -568,16 +497,16 @@ year
 stateAL
 </td>
 <td style="text-align:right;">
--0.9751259
+-1.0989007
 </td>
 <td style="text-align:right;">
-0.1171184
+0.3106113
 </td>
 <td style="text-align:right;">
--8.3259834
+-3.5378643
 </td>
 <td style="text-align:right;">
-0.0000000
+0.0004483
 </td>
 </tr>
 <tr>
@@ -585,16 +514,16 @@ stateAL
 stateAR
 </td>
 <td style="text-align:right;">
--0.7143967
+-1.1173843
 </td>
 <td style="text-align:right;">
-0.1220852
+0.3305492
 </td>
 <td style="text-align:right;">
--5.8516236
+-3.3803869
 </td>
 <td style="text-align:right;">
-0.0000000
+0.0007914
 </td>
 </tr>
 <tr>
@@ -602,16 +531,16 @@ stateAR
 stateAZ
 </td>
 <td style="text-align:right;">
--0.9762401
+-1.3916567
 </td>
 <td style="text-align:right;">
-0.1119234
+0.3163712
 </td>
 <td style="text-align:right;">
--8.7223954
+-4.3988095
 </td>
 <td style="text-align:right;">
-0.0000000
+0.0000138
 </td>
 </tr>
 <tr>
@@ -619,13 +548,13 @@ stateAZ
 stateCA
 </td>
 <td style="text-align:right;">
--1.9133129
+-2.2225582
 </td>
 <td style="text-align:right;">
-0.1053994
+0.2832757
 </td>
 <td style="text-align:right;">
--18.1529815
+-7.8459179
 </td>
 <td style="text-align:right;">
 0.0000000
@@ -636,16 +565,16 @@ stateCA
 stateCO
 </td>
 <td style="text-align:right;">
--0.8053986
+-1.2473995
 </td>
 <td style="text-align:right;">
-0.1156925
+0.3171607
 </td>
 <td style="text-align:right;">
--6.9615454
+-3.9330204
 </td>
 <td style="text-align:right;">
-0.0000000
+0.0000981
 </td>
 </tr>
 <tr>
@@ -653,16 +582,16 @@ stateCO
 stateCT
 </td>
 <td style="text-align:right;">
--1.0959539
+-1.6116779
 </td>
 <td style="text-align:right;">
-0.1364584
+0.4187934
 </td>
 <td style="text-align:right;">
--8.0314146
+-3.8483839
 </td>
 <td style="text-align:right;">
-0.0000000
+0.0001373
 </td>
 </tr>
 <tr>
@@ -670,16 +599,16 @@ stateCT
 stateDE
 </td>
 <td style="text-align:right;">
--0.1817259
+-0.6710861
 </td>
 <td style="text-align:right;">
-0.1657085
+0.4610444
 </td>
 <td style="text-align:right;">
--1.0966596
+-1.4555781
 </td>
 <td style="text-align:right;">
-0.2728442
+0.1462546
 </td>
 </tr>
 <tr>
@@ -687,13 +616,13 @@ stateDE
 stateFL
 </td>
 <td style="text-align:right;">
--1.6793241
+-2.2344374
 </td>
 <td style="text-align:right;">
-0.1086841
+0.2932063
 </td>
 <td style="text-align:right;">
--15.4514285
+-7.6207001
 </td>
 <td style="text-align:right;">
 0.0000000
@@ -704,13 +633,13 @@ stateFL
 stateGA
 </td>
 <td style="text-align:right;">
--1.5063060
+-1.9956775
 </td>
 <td style="text-align:right;">
-0.1109401
+0.3064578
 </td>
 <td style="text-align:right;">
--13.5776547
+-6.5120789
 </td>
 <td style="text-align:right;">
 0.0000000
@@ -721,16 +650,16 @@ stateGA
 stateHI
 </td>
 <td style="text-align:right;">
--0.8181526
+-1.0524806
 </td>
 <td style="text-align:right;">
-0.1457846
+0.4206326
 </td>
 <td style="text-align:right;">
--5.6120631
+-2.5021376
 </td>
 <td style="text-align:right;">
-0.0000000
+0.0127230
 </td>
 </tr>
 <tr>
@@ -738,16 +667,16 @@ stateHI
 stateIA
 </td>
 <td style="text-align:right;">
--0.5286406
+-1.2243394
 </td>
 <td style="text-align:right;">
-0.1267045
+0.3558764
 </td>
 <td style="text-align:right;">
--4.1722334
+-3.4403499
 </td>
 <td style="text-align:right;">
-0.0000307
+0.0006390
 </td>
 </tr>
 <tr>
@@ -755,16 +684,16 @@ stateIA
 stateID
 </td>
 <td style="text-align:right;">
--0.2528257
+-0.2872206
 </td>
 <td style="text-align:right;">
-0.1333734
+0.3690521
 </td>
 <td style="text-align:right;">
--1.8956232
+-0.7782658
 </td>
 <td style="text-align:right;">
-0.0580688
+0.4368495
 </td>
 </tr>
 <tr>
@@ -772,13 +701,13 @@ stateID
 stateIL
 </td>
 <td style="text-align:right;">
--1.7588366
+-1.9989388
 </td>
 <td style="text-align:right;">
-0.1115584
+0.3002974
 </td>
 <td style="text-align:right;">
--15.7660672
+-6.6565298
 </td>
 <td style="text-align:right;">
 0.0000000
@@ -789,16 +718,16 @@ stateIL
 stateIN
 </td>
 <td style="text-align:right;">
--1.0441833
+-1.1786486
 </td>
 <td style="text-align:right;">
-0.1168838
+0.3285479
 </td>
 <td style="text-align:right;">
--8.9335131
+-3.5874485
 </td>
 <td style="text-align:right;">
-0.0000000
+0.0003732
 </td>
 </tr>
 <tr>
@@ -806,16 +735,16 @@ stateIN
 stateKS
 </td>
 <td style="text-align:right;">
--0.4010644
+-0.6529928
 </td>
 <td style="text-align:right;">
-0.1179791
+0.3429460
 </td>
 <td style="text-align:right;">
--3.3994533
+-1.9040688
 </td>
 <td style="text-align:right;">
-0.0006806
+0.0575827
 </td>
 </tr>
 <tr>
@@ -823,16 +752,16 @@ stateKS
 stateKY
 </td>
 <td style="text-align:right;">
--0.8496913
+-1.4161355
 </td>
 <td style="text-align:right;">
-0.1218143
+0.3295630
 </td>
 <td style="text-align:right;">
--6.9752998
+-4.2970104
 </td>
 <td style="text-align:right;">
-0.0000000
+0.0000215
 </td>
 </tr>
 <tr>
@@ -840,16 +769,16 @@ stateKY
 stateLA
 </td>
 <td style="text-align:right;">
--1.0658196
+-1.5039054
 </td>
 <td style="text-align:right;">
-0.1171061
+0.3069370
 </td>
 <td style="text-align:right;">
--9.1013165
+-4.8997198
 </td>
 <td style="text-align:right;">
-0.0000000
+0.0000014
 </td>
 </tr>
 <tr>
@@ -857,13 +786,13 @@ stateLA
 stateMA
 </td>
 <td style="text-align:right;">
--1.5108951
+-2.2236702
 </td>
 <td style="text-align:right;">
-0.1267318
+0.3897218
 </td>
 <td style="text-align:right;">
--11.9219892
+-5.7057881
 </td>
 <td style="text-align:right;">
 0.0000000
@@ -874,13 +803,13 @@ stateMA
 stateMD
 </td>
 <td style="text-align:right;">
--1.4233778
+-1.8532493
 </td>
 <td style="text-align:right;">
-0.1175506
+0.3235074
 </td>
 <td style="text-align:right;">
--12.1086373
+-5.7286149
 </td>
 <td style="text-align:right;">
 0.0000000
@@ -891,16 +820,16 @@ stateMD
 stateME
 </td>
 <td style="text-align:right;">
--0.2027755
+-0.3514603
 </td>
 <td style="text-align:right;">
-0.1471793
+0.3882003
 </td>
 <td style="text-align:right;">
--1.3777450
+-0.9053582
 </td>
 <td style="text-align:right;">
-0.1683451
+0.3657935
 </td>
 </tr>
 <tr>
@@ -908,13 +837,13 @@ stateME
 stateMI
 </td>
 <td style="text-align:right;">
--1.4431084
+-2.3535326
 </td>
 <td style="text-align:right;">
-0.1127801
+0.3468094
 </td>
 <td style="text-align:right;">
--12.7957725
+-6.7862425
 </td>
 <td style="text-align:right;">
 0.0000000
@@ -925,16 +854,16 @@ stateMI
 stateMN
 </td>
 <td style="text-align:right;">
--1.0528079
+-1.5947587
 </td>
 <td style="text-align:right;">
-0.1179600
+0.3446404
 </td>
 <td style="text-align:right;">
--8.9251262
+-4.6273120
 </td>
 <td style="text-align:right;">
-0.0000000
+0.0000049
 </td>
 </tr>
 <tr>
@@ -942,16 +871,16 @@ stateMN
 stateMO
 </td>
 <td style="text-align:right;">
--0.9128596
+-1.1941849
 </td>
 <td style="text-align:right;">
-0.1142723
+0.3226003
 </td>
 <td style="text-align:right;">
--7.9884606
+-3.7017473
 </td>
 <td style="text-align:right;">
-0.0000000
+0.0002426
 </td>
 </tr>
 <tr>
@@ -959,16 +888,16 @@ stateMO
 stateMS
 </td>
 <td style="text-align:right;">
--0.8308880
+-1.3511323
 </td>
 <td style="text-align:right;">
-0.1204401
+0.3567108
 </td>
 <td style="text-align:right;">
--6.8987637
+-3.7877529
 </td>
 <td style="text-align:right;">
-0.0000000
+0.0001741
 </td>
 </tr>
 <tr>
@@ -976,16 +905,16 @@ stateMS
 stateMT
 </td>
 <td style="text-align:right;">
--0.0226050
+-0.2404037
 </td>
 <td style="text-align:right;">
-0.1424377
+0.3893960
 </td>
 <td style="text-align:right;">
--0.1587011
+-0.6173760
 </td>
 <td style="text-align:right;">
-0.8739109
+0.5373205
 </td>
 </tr>
 <tr>
@@ -993,13 +922,13 @@ stateMT
 stateNC
 </td>
 <td style="text-align:right;">
--1.6202020
+-2.0555387
 </td>
 <td style="text-align:right;">
-0.1149814
+0.3139196
 </td>
 <td style="text-align:right;">
--14.0909885
+-6.5479793
 </td>
 <td style="text-align:right;">
 0.0000000
@@ -1010,16 +939,16 @@ stateNC
 stateND
 </td>
 <td style="text-align:right;">
-0.2581848
+0.9274598
 </td>
 <td style="text-align:right;">
-0.1801051
+0.4168436
 </td>
 <td style="text-align:right;">
-1.4335231
+2.2249589
 </td>
 <td style="text-align:right;">
-0.1517723
+0.0266133
 </td>
 </tr>
 <tr>
@@ -1027,16 +956,16 @@ stateND
 stateNE
 </td>
 <td style="text-align:right;">
--0.1960224
+-1.0291044
 </td>
 <td style="text-align:right;">
-0.1279746
+0.3921767
 </td>
 <td style="text-align:right;">
--1.5317294
+-2.6240835
 </td>
 <td style="text-align:right;">
-0.1256539
+0.0090041
 </td>
 </tr>
 <tr>
@@ -1044,16 +973,16 @@ stateNE
 stateNH
 </td>
 <td style="text-align:right;">
--0.4582721
+-1.1626280
 </td>
 <td style="text-align:right;">
-0.1598590
+0.4588618
 </td>
 <td style="text-align:right;">
--2.8667260
+-2.5337212
 </td>
 <td style="text-align:right;">
-0.0041651
+0.0116476
 </td>
 </tr>
 <tr>
@@ -1061,13 +990,13 @@ stateNH
 stateNJ
 </td>
 <td style="text-align:right;">
--1.6595669
+-2.3143862
 </td>
 <td style="text-align:right;">
-0.1175556
+0.3457220
 </td>
 <td style="text-align:right;">
--14.1172960
+-6.6943568
 </td>
 <td style="text-align:right;">
 0.0000000
@@ -1078,16 +1007,16 @@ stateNJ
 stateNM
 </td>
 <td style="text-align:right;">
--0.2182738
+-0.6495582
 </td>
 <td style="text-align:right;">
-0.1170650
+0.3301576
 </td>
 <td style="text-align:right;">
--1.8645531
+-1.9674184
 </td>
 <td style="text-align:right;">
-0.0623039
+0.0497911
 </td>
 </tr>
 <tr>
@@ -1095,16 +1024,16 @@ stateNM
 stateNV
 </td>
 <td style="text-align:right;">
--0.6108735
+-0.9519919
 </td>
 <td style="text-align:right;">
-0.1169175
+0.3299262
 </td>
 <td style="text-align:right;">
--5.2248261
+-2.8854693
 </td>
 <td style="text-align:right;">
-0.0000002
+0.0041092
 </td>
 </tr>
 <tr>
@@ -1112,13 +1041,13 @@ stateNV
 stateNY
 </td>
 <td style="text-align:right;">
--2.2384269
+-2.4515176
 </td>
 <td style="text-align:right;">
-0.1124025
+0.3071817
 </td>
 <td style="text-align:right;">
--19.9143954
+-7.9806751
 </td>
 <td style="text-align:right;">
 0.0000000
@@ -1129,13 +1058,13 @@ stateNY
 stateOH
 </td>
 <td style="text-align:right;">
--1.4200333
+-2.0994949
 </td>
 <td style="text-align:right;">
-0.1145467
+0.3177560
 </td>
 <td style="text-align:right;">
--12.3969776
+-6.6072538
 </td>
 <td style="text-align:right;">
 0.0000000
@@ -1146,16 +1075,16 @@ stateOH
 stateOK
 </td>
 <td style="text-align:right;">
--0.5212405
+-1.2188956
 </td>
 <td style="text-align:right;">
-0.1119228
+0.3120061
 </td>
 <td style="text-align:right;">
--4.6571436
+-3.9066408
 </td>
 <td style="text-align:right;">
-0.0000033
+0.0001090
 </td>
 </tr>
 <tr>
@@ -1163,16 +1092,16 @@ stateOK
 stateOR
 </td>
 <td style="text-align:right;">
--0.7492003
+-1.1826654
 </td>
 <td style="text-align:right;">
-0.1247194
+0.3723930
 </td>
 <td style="text-align:right;">
--6.0070887
+-3.1758526
 </td>
 <td style="text-align:right;">
-0.0000000
+0.0016039
 </td>
 </tr>
 <tr>
@@ -1180,13 +1109,13 @@ stateOR
 statePA
 </td>
 <td style="text-align:right;">
--1.7273092
+-2.2032772
 </td>
 <td style="text-align:right;">
-0.1144257
+0.3124064
 </td>
 <td style="text-align:right;">
--15.0954646
+-7.0525982
 </td>
 <td style="text-align:right;">
 0.0000000
@@ -1197,16 +1126,16 @@ statePA
 stateRI
 </td>
 <td style="text-align:right;">
--0.0192068
+-0.2128800
 </td>
 <td style="text-align:right;">
-0.2276193
+0.7125128
 </td>
 <td style="text-align:right;">
--0.0843814
+-0.2987737
 </td>
 <td style="text-align:right;">
-0.9327566
+0.7652602
 </td>
 </tr>
 <tr>
@@ -1214,16 +1143,16 @@ stateRI
 stateSC
 </td>
 <td style="text-align:right;">
--1.0217658
+-1.5305588
 </td>
 <td style="text-align:right;">
-0.1158590
+0.3290521
 </td>
 <td style="text-align:right;">
--8.8190449
+-4.6514174
 </td>
 <td style="text-align:right;">
-0.0000000
+0.0000044
 </td>
 </tr>
 <tr>
@@ -1231,16 +1160,16 @@ stateSC
 stateSD
 </td>
 <td style="text-align:right;">
--0.0783748
+0.2715696
 </td>
 <td style="text-align:right;">
-0.1500194
+0.5369194
 </td>
 <td style="text-align:right;">
--0.5224312
+0.5057921
 </td>
 <td style="text-align:right;">
-0.6013938
+0.6132673
 </td>
 </tr>
 <tr>
@@ -1248,16 +1177,16 @@ stateSD
 stateTN
 </td>
 <td style="text-align:right;">
--1.2211238
+-1.6386419
 </td>
 <td style="text-align:right;">
-0.1182430
+0.3567650
 </td>
 <td style="text-align:right;">
--10.3272379
+-4.5930568
 </td>
 <td style="text-align:right;">
-0.0000000
+0.0000058
 </td>
 </tr>
 <tr>
@@ -1265,13 +1194,13 @@ stateTN
 stateTX
 </td>
 <td style="text-align:right;">
--1.7089449
+-2.2138739
 </td>
 <td style="text-align:right;">
-0.1072073
+0.2894506
 </td>
 <td style="text-align:right;">
--15.9405606
+-7.6485371
 </td>
 <td style="text-align:right;">
 0.0000000
@@ -1282,16 +1211,16 @@ stateTX
 stateUT
 </td>
 <td style="text-align:right;">
--0.3999981
+-0.4668296
 </td>
 <td style="text-align:right;">
-0.1239951
+0.3288249
 </td>
 <td style="text-align:right;">
--3.2259198
+-1.4196908
 </td>
 <td style="text-align:right;">
-0.0012640
+0.1564378
 </td>
 </tr>
 <tr>
@@ -1299,13 +1228,13 @@ stateUT
 stateVA
 </td>
 <td style="text-align:right;">
--1.5624211
+-1.9748317
 </td>
 <td style="text-align:right;">
-0.1174759
+0.3167580
 </td>
 <td style="text-align:right;">
--13.2999317
+-6.2345121
 </td>
 <td style="text-align:right;">
 0.0000000
@@ -1316,16 +1245,16 @@ stateVA
 stateVT
 </td>
 <td style="text-align:right;">
-0.3131923
+-0.0624461
 </td>
 <td style="text-align:right;">
-0.1843710
+0.4580131
 </td>
 <td style="text-align:right;">
-1.6987066
+-0.1363414
 </td>
 <td style="text-align:right;">
-0.0894381
+0.8916166
 </td>
 </tr>
 <tr>
@@ -1333,16 +1262,16 @@ stateVT
 stateWA
 </td>
 <td style="text-align:right;">
--1.0940134
+-1.5928467
 </td>
 <td style="text-align:right;">
-0.1124643
+0.2971262
 </td>
 <td style="text-align:right;">
--9.7276492
+-5.3608424
 </td>
 <td style="text-align:right;">
-0.0000000
+0.0000001
 </td>
 </tr>
 <tr>
@@ -1350,16 +1279,16 @@ stateWA
 stateWI
 </td>
 <td style="text-align:right;">
--0.9445794
+-1.0657284
 </td>
 <td style="text-align:right;">
-0.1190741
+0.3172038
 </td>
 <td style="text-align:right;">
--7.9327030
+-3.3597595
 </td>
 <td style="text-align:right;">
-0.0000000
+0.0008512
 </td>
 </tr>
 <tr>
@@ -1367,16 +1296,16 @@ stateWI
 stateWV
 </td>
 <td style="text-align:right;">
--0.2051339
+-0.7995538
 </td>
 <td style="text-align:right;">
-0.1385176
+0.3702908
 </td>
 <td style="text-align:right;">
--1.4809228
+-2.1592591
 </td>
 <td style="text-align:right;">
-0.1386916
+0.0313943
 </td>
 </tr>
 <tr>
@@ -1384,16 +1313,16 @@ stateWV
 stateWY
 </td>
 <td style="text-align:right;">
-0.3856686
+-0.2374881
 </td>
 <td style="text-align:right;">
-0.1651197
+0.5327764
 </td>
 <td style="text-align:right;">
-2.3356904
+-0.4457556
 </td>
 <td style="text-align:right;">
-0.0195476
+0.6560030
 </td>
 </tr>
 <tr>
@@ -1401,13 +1330,13 @@ stateWY
 age_bin15-24
 </td>
 <td style="text-align:right;">
-1.0519203
+1.2784345
 </td>
 <td style="text-align:right;">
-0.0561490
+0.2015292
 </td>
 <td style="text-align:right;">
-18.7344549
+6.3436688
 </td>
 <td style="text-align:right;">
 0.0000000
@@ -1418,13 +1347,13 @@ age_bin15-24
 age_bin25-34
 </td>
 <td style="text-align:right;">
-1.2895009
+1.5014500
 </td>
 <td style="text-align:right;">
-0.0558117
+0.2011661
 </td>
 <td style="text-align:right;">
-23.1044961
+7.4637317
 </td>
 <td style="text-align:right;">
 0.0000000
@@ -1435,13 +1364,13 @@ age_bin25-34
 age_bin35-54
 </td>
 <td style="text-align:right;">
-0.8466577
+1.1715659
 </td>
 <td style="text-align:right;">
-0.0556151
+0.2011345
 </td>
 <td style="text-align:right;">
-15.2235297
+5.8247875
 </td>
 <td style="text-align:right;">
 0.0000000
@@ -1452,16 +1381,16 @@ age_bin35-54
 age_bin55-84
 </td>
 <td style="text-align:right;">
-0.2454968
+0.4509995
 </td>
 <td style="text-align:right;">
-0.0585397
+0.2091285
 </td>
 <td style="text-align:right;">
-4.1936779
+2.1565668
 </td>
 <td style="text-align:right;">
-0.0000279
+0.0316050
 </td>
 </tr>
 <tr>
@@ -1469,13 +1398,13 @@ age_bin55-84
 age_bin85+
 </td>
 <td style="text-align:right;">
-2.2862123
+2.5418229
 </td>
 <td style="text-align:right;">
-0.1217420
+0.3469829
 </td>
 <td style="text-align:right;">
-18.7791602
+7.3254991
 </td>
 <td style="text-align:right;">
 0.0000000
@@ -1486,13 +1415,13 @@ age_bin85+
 genderMale
 </td>
 <td style="text-align:right;">
-0.9285918
+0.9189116
 </td>
 <td style="text-align:right;">
-0.0240640
+0.0732914
 </td>
 <td style="text-align:right;">
-38.5884621
+12.5377896
 </td>
 <td style="text-align:right;">
 0.0000000
@@ -1503,16 +1432,16 @@ genderMale
 raceAsian/Pacific Islander
 </td>
 <td style="text-align:right;">
--0.4028476
+-0.8560392
 </td>
 <td style="text-align:right;">
-0.0528607
+0.1773996
 </td>
 <td style="text-align:right;">
--7.6209207
+-4.8254853
 </td>
 <td style="text-align:right;">
-0.0000000
+0.0000020
 </td>
 </tr>
 <tr>
@@ -1520,13 +1449,13 @@ raceAsian/Pacific Islander
 raceEuropean-American/White
 </td>
 <td style="text-align:right;">
--1.4309563
+-1.5550598
 </td>
 <td style="text-align:right;">
-0.0235813
+0.0755542
 </td>
 <td style="text-align:right;">
--60.6817318
+-20.5820416
 </td>
 <td style="text-align:right;">
 0.0000000
@@ -1537,13 +1466,13 @@ raceEuropean-American/White
 raceHispanic/Latino
 </td>
 <td style="text-align:right;">
--0.6719026
+-0.9486063
 </td>
 <td style="text-align:right;">
-0.0315505
+0.0989200
 </td>
 <td style="text-align:right;">
--21.2961329
+-9.5896270
 </td>
 <td style="text-align:right;">
 0.0000000
@@ -1554,22 +1483,22 @@ raceHispanic/Latino
 raceNative American/Alaskan
 </td>
 <td style="text-align:right;">
-0.6445710
+0.4062721
 </td>
 <td style="text-align:right;">
-0.0575762
+0.1885110
 </td>
 <td style="text-align:right;">
-11.1951010
+2.1551642
 </td>
 <td style="text-align:right;">
-0.0000000
+0.0317153
 </td>
 </tr>
 </tbody>
 </table>
 </div>
-<pre class="r"><code>summary(fit1) %&gt;% 
+<pre class="r"><code>summary(fit2) %&gt;% 
   broom::glance() %&gt;% 
   knitr::kable() %&gt;% 
   kable_styling()</code></pre>
@@ -1605,54 +1534,50 @@ nobs
 <tbody>
 <tr>
 <td style="text-align:right;">
-0.7244886
+0.779379
 </td>
 <td style="text-align:right;">
-0.7211087
+0.7484607
 </td>
 <td style="text-align:right;">
-0.6819863
+0.6610668
 </td>
 <td style="text-align:right;">
-214.3573
+25.20763
 </td>
 <td style="text-align:right;">
 0
 </td>
 <td style="text-align:right;">
-60
+59
 </td>
 <td style="text-align:right;">
-4891
+421
 </td>
 <td style="text-align:right;">
-4952
+481
 </td>
 </tr>
 </tbody>
 </table>
-<p>Based on the summary and statistics in the table above, we could conclude that all all predictor are significant in statistical aspect although some levels in state have no significant association.</p>
-<p>When concentrating on the table of R.squared, we could figure out that <span class="math inline">\(R^2\)</span> value is 0.72 which means that 72% of the variability in the outcome data can be explained by the model, especially if R-squared value r &gt; 0.7 this value is generally considered strong effect size <em>(Ref:Moore, D. S., Notz, W. I, &amp; Flinger, M. A. (2013). The basic practice of statistics (6th ed.))</em></p>
+<p>According to the statistics in the table above, we could conclude that all all P-value is smaller than significant level which means the association is significant in statistical aspect although some levels in state have no significant association.</p>
+<p>When concentrating on the table of R.squared, we could figure out that adjusted <span class="math inline">\(R^2\)</span> value is 0.75 which means that 75% of the variability in the outcome data can be explained by the model, especially if R-squared value r &gt; 0.7 this value is generally considered strong effect size <em>(Ref:Moore, D. S., Notz, W. I, &amp; Flinger, M. A. (2013). The basic practice of statistics (6th ed.))</em></p>
 </div>
 <div id="mlr-dignostics" class="section level4">
-<h4>4.MLR dignostics</h4>
-<p>In order to further make sure the accuracy of model 1 and the homoscedasticity of residual, we draw four pictures which are Residuals vs Fitted, Normal QQ, Scale-Location and Residuals vs Leverage respectively.</p>
+<h4>2.MLR dignostics</h4>
+<p>The four graphs is used for proving the homoscedasticity of residual. When looking deep into those graphs, we’re able to conclude that all assumption is satisfied.</p>
 <ul>
-<li>Residuals vs Fitted: show that we have equally spread residuals around a horizontal line without distinct patterns which indicate it has linear relationship</li>
-<li>Q-Q plot: Use for examining the normality assumption which is satisfied here</li>
-<li>Scale-Location: The assumption of homoscedasticity has been checked in that we can see a horizontal line with equally spread points.</li>
+<li>Residuals vs Fitted: show that it has linear relationship due to the nearly equal distribution.</li>
+<li>Q-Q plot: illustrate residual is normality</li>
+<li>Scale-Location: The assumption of homoscedasticity has been checked.</li>
 <li>Residuals vs Leverage: shows that there’s no too many outlier points and influential points in the plot.</li>
 </ul>
 <pre class="r"><code># Model diagnosis
 par(mfrow = c(2, 2))
-plot(fit1)</code></pre>
-<p><img src="Regression_Model1_files/figure-html/unnamed-chunk-14-1.png" width="90%" /></p>
+plot(fit2)</code></pre>
+<p><img src="Regression_Model2_files/figure-html/unnamed-chunk-12-1.png" width="90%" /></p>
 </div>
 </div>
-<<<<<<< HEAD
-</div>
-=======
->>>>>>> cc62c8be9367c8b7951f62b28762b574c2420828
 
 
 
