@@ -1,6 +1,6 @@
 ---
 title: "Final Project Proposal"
-output: github_document
+output: html_document
 ---
 
 ## Group Members  
