@@ -1,0 +1,225 @@
+---
+title: "Final Report"
+author: "Hening Cui, Jialiang Hua, Congyang Xie, Wenhan Bao, Qihang Wu"
+date: "Dec 9 2021"
+output: pdf_document
+---
+```{r setup, echo = FALSE, message = FALSE}
+library(tidyverse)
+library(readr)
+library(readxl)
+library(kableExtra)
+library(knitr)
+library(modelr)
+
+knitr::opts_chunk$set(
+  echo = FALSE, 
+  fig.width = 10,
+  fig.height = 5,
+  out.width = "90%",
+  message = FALSE,
+  warning = FALSE
+)
+
+theme_set(theme_minimal() + theme(legend.position = "bottom"))
+
+options(
+  ggplot2.continuous.colour = "viridis",
+  ggplot2.continuous.fill = "viridis"
+)
+
+options(knitr.table.format = "html")
+scale_colour_discrete = scale_colour_viridis_d
+scale_fill_discrete = scale_fill_viridis_d
+```
+
+```{r, echo=FALSE}
+main_df <- 
+  read_csv("./data/maindata.csv")
+
+main_df <- 
+  main_df %>% 
+  mutate(year = lubridate::year(date_of_death)) %>% 
+  filter(year != 2021)
+```
+
+```{r, echo=FALSE}
+pop_stat <- 
+  read_csv("data/census.csv")
+```
+
+```{r, echo=FALSE}
+gun_owner <- 
+  read_csv("data/Gun Ownership by State 2021.csv") %>% 
+  janitor::clean_names() %>% 
+  select(-total_guns)
+```
+
+```{r, echo=FALSE}
+crime_stat <- 
+  read_excel("data/reported-violent-crime-rate-in-the-us-2020-by-state.xlsx", 
+             sheet = "Data",
+             range = "B5:C57") %>%
+  rename(state = 1, crime_per_10e6 = 2) %>% 
+  filter(state != "United States") %>% 
+  mutate(crime_per_10e6 = as.numeric(crime_per_10e6))
+```
+
+```{r, echo=FALSE}
+unempolyment_stat <- 
+  read_excel("data/state-unemployment-rate-in-the-us-2020.xlsx", 
+             sheet = "Data",
+             range = "B5:C56") %>% 
+  rename(state = 1, unemploy_rate = 2) %>% 
+  mutate(unemploy_rate = as.numeric(unemploy_rate)/100)
+```
+
+```{r, echo=FALSE}
+main_df <- 
+  read_csv("./data/maindata.csv")
+
+main_df <- 
+  main_df %>% 
+  mutate(year = lubridate::year(date_of_death)) %>% 
+  filter(year != 2021)
+```
+
+```{r, echo=FALSE}
+pop_stat <- 
+  read_csv("data/census.csv")
+```
+
+```{r, echo=FALSE}
+gun_owner <- 
+  read_csv("data/Gun Ownership by State 2021.csv") %>% 
+  janitor::clean_names() %>% 
+  select(-total_guns)
+```
+
+```{r, echo=FALSE}
+crime_stat <- 
+  read_excel("data/reported-violent-crime-rate-in-the-us-2020-by-state.xlsx", 
+             sheet = "Data",
+             range = "B5:C57") %>%
+  rename(state = 1, crime_per_10e6 = 2) %>% 
+  filter(state != "United States") %>% 
+  mutate(crime_per_10e6 = as.numeric(crime_per_10e6))
+```
+
+```{r, echo=FALSE}
+unempolyment_stat <- 
+  read_excel("data/state-unemployment-rate-in-the-us-2020.xlsx", 
+             sheet = "Data",
+             range = "B5:C56") %>% 
+  rename(state = 1, unemploy_rate = 2) %>% 
+  mutate(unemploy_rate = as.numeric(unemploy_rate)/100)
+```
+
+## Motivation
+In the wake of George Floyd’s murder, a number of protests arisen across the nation. This motivates us to investigate innocent deaths under police violence and the association of confounders with excessive police force. Although the majority encounters that meet death with law enforcement officials present a lethal threat to officers or society, there are still people that involved in the police action meets death with a quantity not to be ignored.  This project analyses the data on people involved in a police operation and results in fatalities.  Despite the assessment of  overuse of police force across geographical factors, this project also focuses on socioeconomic factors, political factors and periodical patterns.
+
+## Initial Questions
+- What is the trend of the innocent killing by police over time in the U.S. 
+- Which state have higher rates of gun ownership, crime rates, and unemployment rates than others.  
+- Whether the factors above have potential correlations with the number of innocent killings in the U.S.
+
+## Data
+The main dataset for our project is from Kaggle and to make a more comprehensive analysis, we also combined other datasets from sources like the World Population Review, Statista, and the U.S. Bureau of Labor Statistics, etc. To make this report have both relaistic social signifiance and far-reaching historical significance, we only analyze the cases between 2010 and 2020, even though the main dataset contains a wide time range from 2000 to August 2021. 
+
+## Exploratory Data Analysis
+### US Total
+The total amount of innocent killings across 50 states by year in the U.S. from 2010 to 2020 is shown as following, which illustrates that the number of cases has increased year by year and stabilized after 2013. 
+```{r}
+main_df %>% 
+  filter(year %in% c(2010:2020)) %>% 
+  group_by(year) %>% 
+  summarize(count = n()) %>% 
+  ggplot(aes(x = year, y = count, fill = year)) + 
+  geom_bar(stat = "identity") +
+  scale_x_continuous(breaks = c(2010:2020)) +
+  theme(legend.position = "none")
+```
+
+### Sex
+Graph below shows that sex for each year. Innnocent killings generally occur in the male group, while the proportion of male and female remains roughly the same from 2010 to 2020.
+```{r}
+main_df %>% 
+  filter(year %in% c(2010:2020)) %>% 
+  group_by(year, gender) %>% 
+  summarize(count = n()) %>% 
+  ggplot(aes(x = year, y = count, fill = gender)) + 
+  geom_bar(stat = "identity", position = position_dodge()) +
+  scale_x_continuous(breaks = c(2010:2020)) +
+  theme(legend.title = element_blank())
+```
+
+### Age
+The ratio between different age groups are consistent, and people in the age group (25-84) are more likely to be victims.
+```{r}
+main_df %>% 
+  filter(year %in% c(2010:2020)) %>% 
+  group_by(year, age_bin) %>% 
+  summarize(count = n()) %>% 
+  ggplot(aes(x = year, y = count, fill = age_bin)) + 
+  geom_bar(stat = "identity") +
+  scale_x_continuous(breaks = c(2010:2020)) +
+  theme(legend.title = element_blank())
+```
+
+### Race and ethicity
+```{r}
+main_df %>%
+  filter(year %in% c(2010:2020)) %>% 
+  group_by(year, race) %>% 
+  summarize(count = n()) %>% 
+  ggplot(aes(x = year, y = count, fill = race)) + 
+  geom_bar(stat = "identity") +
+  scale_x_continuous(breaks = c(2010:2020)) +
+  theme(legend.title = element_blank())
+```
+
+## Visualization
+
+## Statistical Analysis
+```{r}
+reg_df1 <- 
+  main_df %>% 
+  group_by(year, state, age_bin, gender, race) %>% 
+  summarize(count = n()) %>% 
+  filter(year %in% c(2010:2020), state != "DC") %>% 
+  left_join(pop_stat, by = c("year", "state", "age_bin", "gender", "race")) %>% 
+  mutate(innocent_kill_per100k = count / population * 10^5)
+```
+
+For statistical analysis, we come up with two regression models. The first one contains variables including state, age, gender, and race based on the data from year 2010 to 2020, while the second one considers not only the above predictors but also the other three: gun ownership, crime rate, and unemployment rate in 2020. Since we believe that all these three factors may somehow connect with the rate of innocent killings by the police in the U.S. For instance, the police might be armed with more advanced weapons in the states where the crime rate is high, which will lead to a higher rate of innocent killings in these regions.  
+The following graph is the distribution of the target variable `innocent_kill_per100k`, we can see that the distribution has nothing to do with the normal, therefore we need to perform a transformation.
+```{r}
+reg_df1 %>% 
+  ggplot(aes(x = innocent_kill_per100k)) + 
+  geom_density(color = "dodgerblue1", fill = "skyblue2") + 
+  geom_vline(xintercept = mean(reg_df1$innocent_kill_per100k), linetype = "dotted") +
+  labs(
+    title = "Distribution of Innocent Killings Per 100k",
+    x = "innocent death(per 10K)")
+```
+
+Now, it looks way more better.
+```{r}
+reg_df1 %>% 
+  ggplot(aes(x = log(innocent_kill_per100k))) + 
+  geom_density(color = "dodgerblue1", fill = "skyblue2") + 
+  geom_vline(xintercept = mean(log(reg_df1$innocent_kill_per100k)), linetype = "dotted") + 
+  labs(
+    title = "Distribution of Innocent Killings Per 100k after transformation",
+    x = "log(innocent death per 10K)")
+```
+
+
+## Results
+
+## Conclusion
+
+## Discussion
+
+## Contribution
+
