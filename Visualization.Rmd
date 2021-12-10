@@ -1,10 +1,10 @@
 ---
 title: "Visualization"
-author: "Hening CUi"
-date: "12/6/2021"
 output: 
   html_document:
     code_folding: hide
+    toc: true
+    toc_float: true
 ---
 
 ```{r, warning = FALSE,message = FALSE}
@@ -49,9 +49,9 @@ accumulate_by <- function(dat, var) {
   
 ```
 
-## Trend
+## Trend of death cases
 
-death vs time by year
+### Overall death cases
 
 ```{r}
 plot_year =
@@ -79,7 +79,7 @@ plot_year =
 plot_year
 ```
 
-death vs time by age
+### Grouped by age
 
 
 ```{r, warning = FALSE, message = FALSE, echo = FALSE}
@@ -116,7 +116,7 @@ plot_age
 
 
 
-by gender
+### Grouped by gender
 
 ```{r, warning = FALSE, message = FALSE, echo = FALSE}
 plot_gender =
@@ -148,7 +148,8 @@ plot_gender =
 
 plot_gender
 ```
-by race
+
+### Grouped by race
 
 ```{r, warning = FALSE, message = FALSE, echo = FALSE}
 plot_race =

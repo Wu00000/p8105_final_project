@@ -1,7 +1,8 @@
-name: "Yay internet!"
+name: "p8105_final_project"
 output_dir: "."
 navbar:
   title: "Home"
+  type: lux
   right:
     - text: "Trend plot"
       href: Visualization.html
@@ -15,7 +16,7 @@ navbar:
       href: https://heningcui.shinyapps.io/interactive_map/
     - text: "Resource"
       href: resource.html
-    - icon: fa-github fa-lg
+    - icon: fa-github
       href: https://github.com/Wu00000/p8105_final_project
 output:
   html_document:
