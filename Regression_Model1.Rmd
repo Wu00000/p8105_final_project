@@ -95,7 +95,7 @@ In this study, we are curious about the association between innocent death rate 
 
 ### Explorative Graphs
 
-In order to completely comprehensive the model 1, the distribution of predictors and variables (innocent death number, sex, age group, race) are plotted below from 2010 to 2020 and there's a phenomenon that the proportion in each predictor is also consistent. For more analysis, you could jump to trend plot part.
+In order to comprehensively understanding the model 1, the distribution of predictors and variables (innocent death number, sex, age group, race) are plotted below from 2010 to 2020 and there's a phenomenon that the proportion in each predictor is consistent though the total keeps changing. For more details of analysis, you could jump to trend plot part.
 
 ```{r}
 Year_plot = main_df %>% 
