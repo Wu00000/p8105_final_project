@@ -1,0 +1,233 @@
+---
+title: " "
+output: 
+  html_document: 
+    code_folding: hide
+    toc: true
+    toc_float: true
+---
+
+```{r setup, echo = FALSE, message = FALSE}
+library(tidyverse)
+library(readr)
+library(readxl)
+library(kableExtra)
+library(knitr)
+
+knitr::opts_chunk$set(
+  fig.width = 10,
+  fig.asp = .6,
+  out.width = "90%",
+  message = FALSE,
+  warning = FALSE
+)
+
+theme_set(theme_minimal() + theme(legend.position = "bottom"))
+
+options(
+  ggplot2.continuous.colour = "viridis",
+  ggplot2.continuous.fill = "viridis"
+)
+
+options(knitr.table.format = "html")
+scale_colour_discrete = scale_colour_viridis_d
+scale_fill_discrete = scale_fill_viridis_d
+```
+
+```{r, echo=FALSE}
+main_df <- 
+  read_csv("./data/maindata.csv")
+
+main_df <- 
+  main_df %>% 
+  mutate(year = lubridate::year(date_of_death)) %>% 
+  filter(year != 2021)
+```
+
+```{r, echo=FALSE}
+pop_stat <- 
+  read_csv("data/census.csv")
+```
+
+```{r, echo=FALSE}
+gun_owner <- 
+  read_csv("data/Gun Ownership by State 2021.csv") %>% 
+  janitor::clean_names() %>% 
+  select(-total_guns)
+```
+
+```{r, echo=FALSE}
+crime_stat <- 
+  read_excel("data/reported-violent-crime-rate-in-the-us-2020-by-state.xlsx", 
+             sheet = "Data",
+             range = "B5:C57") %>%
+  rename(state = 1, crime_per_10e6 = 2) %>% 
+  filter(state != "United States") %>% 
+  mutate(crime_per_10e6 = as.numeric(crime_per_10e6))
+```
+
+```{r, echo=FALSE}
+unempolyment_stat <- 
+  read_excel("data/state-unemployment-rate-in-the-us-2020.xlsx", 
+             sheet = "Data",
+             range = "B5:C56") %>% 
+  rename(state = 1, unemploy_rate = 2) %>% 
+  mutate(unemploy_rate = as.numeric(unemploy_rate)/100)
+```
+
+## Regression-Model 1
+
+---------------------------------------------------
+
+### Description
+
+In this study, we are curious about the association between innocent death rate by police and potential factors. In this case, innocent death(per 10K) will be considered as dependent variable while some interests will be regarded as predictors so that multiple linear regression will be used to testify and assess whether the correlation is significant or not.
+
++ For Model 1, predictors and variables are below:
+  + **innocent death(per 10K):** count of innocent death divided by state population and multiplied by 10K
+  + **year:** the year of death(2010 - 2020)
+  + **state:** the best state location where the injury causing death happened that we can find using Google Maps.
+  + **age_bin:** age divided into 6 groups(0-14, 15-24, 25-34, 35-54, 55-85, 85+)
+  + **gender:** Male, Female
+  + **race:** Usually based on visual evidence or official reports(European-American/White, African-American/Black, Native American/Alaskan, Asian/Pacific Islander, Hispanic/Latino)
+
+---------------------------------------------------
+
+### Explorative Graphs
+
+#### Year
+From 2010 to 2020, the number of death in the USA shows a tendency of rising first and then falling slightly. 
+```{r}
+main_df %>% 
+  filter(year %in% c(2010:2020)) %>% 
+  group_by(year) %>% 
+  summarize(count = n()) %>% 
+  ggplot(aes(x = year, y = count, fill = year)) + 
+  geom_bar(stat = "identity") +
+  scale_x_continuous(breaks = c(2010:2020)) +
+  theme(legend.position = "none")
+``` 
+
+#### Sex
+Rate of male is much larger than female, but the proportion of male and female remains roughly the same from 2010 to 2020. 
+```{r}
+main_df %>% 
+  filter(year %in% c(2010:2020)) %>% 
+  group_by(year, gender) %>% 
+  summarize(count = n()) %>% 
+  ggplot(aes(x = year, y = count, fill = gender)) + 
+  geom_bar(stat = "identity", position = position_dodge()) +
+  scale_x_continuous(breaks = c(2010:2020)) +
+  theme(legend.title = element_blank())
+```
+
+#### Age group
+The ratio between different age groups are consistent, and the age group(25-34) has the largest share.
+```{r}
+main_df %>% 
+  filter(year %in% c(2010:2020)) %>% 
+  group_by(year, age_bin) %>% 
+  summarize(count = n()) %>% 
+  ggplot(aes(x = year, y = count, fill = age_bin)) + 
+  geom_bar(stat = "identity") +
+  scale_x_continuous(breaks = c(2010:2020)) +
+  theme(legend.title = element_blank())
+```
+
+#### Race
+The Hispanic race accounts for the largest proportion and the rates from 2010 to 2020 are similar.
+```{r}
+main_df %>%
+  filter(year %in% c(2010:2020)) %>% 
+  group_by(year, race) %>% 
+  summarize(count = n()) %>% 
+  ggplot(aes(x = year, y = count, fill = race)) + 
+  geom_bar(stat = "identity") +
+  scale_x_continuous(breaks = c(2010:2020)) +
+  theme(legend.title = element_blank())
+```
+
+---------------------------------------------------
+
+### Statistical Analysis
+
+```{r, echo=FALSE}
+reg_df1 <- 
+  main_df %>% 
+  group_by(year, state, age_bin, gender, race) %>% 
+  summarize(count = n()) %>% 
+  filter(year %in% c(2010:2020), state != "DC") %>% 
+  left_join(pop_stat, by = c("year", "state", "age_bin", "gender", "race")) %>% 
+  mutate(innocent_kill_per100k = count / population * 10^5)
+```
+
+#### 1.Distribution of dependent variable(innocent death(per 10K))
+
+The density plot below is the distribution of innocent death(per 10K) which we notice it is not satisfied of the assumption of the multiple linear regression so that we need to transform it.
+
+```{r}
+# Find distribution of the target variable `innocent_kill_per100k`
+reg_df1 %>% 
+  ggplot(aes(x = innocent_kill_per100k)) + 
+  geom_density(color = "dodgerblue1", fill = "skyblue2") + 
+  geom_vline(xintercept = mean(reg_df1$innocent_kill_per100k), linetype = "dotted") +
+  labs(x = "innocent death(per 10K)")
+```
+
+#### 2.Transformation
+
+In order to get normal distribution, here we conduct log transformation. The plot followed is what we get by transformation and it almost satisfies the assumption of the multiple linear regression
+
+```{r}
+# After transformation
+reg_df1 %>% 
+  ggplot(aes(x = log(innocent_kill_per100k))) + 
+  geom_density(color = "dodgerblue1", fill = "skyblue2") + 
+  geom_vline(xintercept = mean(log(reg_df1$innocent_kill_per100k)), linetype = "dotted") + 
+  labs(x = "log(innocent death per 10K)")
+```
+
+#### 3.Modeling
+
+By transformation above, the formula is below:
+
+$$ log(innocent \space death \space per \space 100k) = \beta_0 + \beta_1year + \beta_2state + \beta_3 age + \beta_4 gender + \beta_5 race$$
+
+```{r}
+# Model 1 -- across all years in database
+# Fit a model
+fit1 <- lm(log(innocent_kill_per100k) ~ year + state + age_bin + gender + race, data = reg_df1)
+
+summary(fit1) %>% 
+  broom::tidy() %>% 
+  knitr::kable() %>%
+  kable_styling() %>% 
+  scroll_box(height = "200px")
+
+summary(fit1) %>% 
+  broom::glance() %>% 
+  knitr::kable() %>% 
+  kable_styling()
+```
+
+Based on the summary and statistics in the table above, we could conclude that all all predictor are significant in statistical aspect although some levels in state have no significant association.
+
+
+When concentrating on the table of R.squared, we could figure out that $R^2$ value is 0.72 which means that 72% of the variability in the outcome data can be explained by the model, especially if R-squared value r > 0.7 this value is generally considered strong effect size *(Ref:Moore, D. S., Notz, W. I, & Flinger, M. A. (2013). The basic practice of statistics (6th ed.))*
+
+#### 4.MLR dignostics
+
+In order to further make sure the accuracy of model 1 and the homoscedasticity of residual, we draw four pictures which are Residuals vs Fitted, Normal QQ, Scale-Location and Residuals vs Leverage respectively.
+
+* Residuals vs Fitted: show that we have equally spread residuals around a horizontal line without distinct patterns which indicate it has linear relationship
+* Q-Q plot: Use for examining the normality assumption which is satisfied here
+* Scale-Location: The assumption of homoscedasticity has been checked in that we can see a horizontal line with equally spread points.
+* Residuals vs Leverage: shows that there's no too many outlier points and influential points in the plot.
+
+
+```{r}
+# Model diagnosis
+par(mfrow = c(2, 2))
+plot(fit1)
+```
+

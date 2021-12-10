@@ -1,0 +1,1654 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Regression_Model2.knit</title>
+
+<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/readable.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Home</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="Visualization.html">Trend plot</a>
+</li>
+<li>
+  <a href="regression_df.html">Regression Analysis</a>
+</li>
+<li>
+  <a href="shiny_dashboard_template.html">Interactive Map</a>
+</li>
+<li>
+  <a href="resource.html">Resource</a>
+</li>
+<li>
+  <a href="https://github.com/Wu00000/p8105_final_project">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
+
+
+
+</div>
+
+
+<div id="regression-model-2" class="section level2">
+<h2>Regression-Model 2</h2>
+<hr />
+<div id="description" class="section level3">
+<h3>Description</h3>
+<p>Searching for more potential predictors and finding the association between innocent death and other factors, we decide to concern about the variables (Gun ownership rates, crime rate, unemployment rate in each state) and just concentrate on 2020.</p>
+<ul>
+<li>In this model, predictors and variables are below:
+<ul>
+<li><strong>innocent death(per 10K):</strong> count of innocent death divided by state population and multiplied by 10K</li>
+<li><strong>state:</strong> the best state location where the injury causing death happened that we can find using Google Maps.</li>
+<li><strong>age_bin:</strong> age divided into 6 groups(0-14, 15-24, 25-34, 35-54, 55-85, 85+)</li>
+<li><strong>gender:</strong> Male, Female</li>
+<li><strong>race:</strong> usually based on visual evidence or official reports(European-American/White, African-American/Black, Native American/Alaskan, Asian/Pacific Islander, Hispanic/Latino)</li>
+<li><strong>Gun ownership rate:</strong> rate of the act of owning a gun, either legal or illegal</li>
+<li><strong>Crime Rate per 100K:</strong> be calculated by dividing the total number of reported crimes of any kind by the total population and multiplied by 100K</li>
+<li><strong>Unemployment rate:</strong> measures unemployment within the civilian non-institutional population aged 16 years and olde</li>
+</ul></li>
+</ul>
+<hr />
+</div>
+<div id="explorative-graphs" class="section level3">
+<h3>Explorative Graphs</h3>
+<div id="gun-ownership-rate-by-state-in-2020" class="section level4">
+<h4>Gun ownership rate by state in 2020</h4>
+<p>Gun ownership rates vary by state and Montana has the highest.</p>
+<pre class="r"><code>gun_owner %&gt;% 
+  mutate(state = fct_reorder(state, gun_ownership)) %&gt;% 
+  ggplot(aes(x = gun_ownership, y = state, fill = state)) + 
+  geom_bar(stat = &quot;identity&quot;, show.legend = FALSE) + 
+  labs(x = &quot;Gun Ownership Rate&quot;,
+       y = &quot;State&quot;)</code></pre>
+<p><img src="Regression_Model2_files/figure-html/unnamed-chunk-6-1.png" width="90%" /></p>
+</div>
+<div id="crime-rate-by-state-in-2020" class="section level4">
+<h4>Crime rate by state in 2020</h4>
+<p>The crime rate varies from state to state, with Alaska showing the highest rate</p>
+<pre class="r"><code>crime_stat %&gt;% 
+  filter(state != &quot;District of Columbia&quot;) %&gt;% 
+  mutate(state = fct_reorder(state, crime_per_10e6)) %&gt;% 
+  ggplot(aes(x = crime_per_10e6, y = state, fill = state)) + 
+  geom_bar(stat = &quot;identity&quot;, show.legend = FALSE) + 
+  labs(x = &quot;Crimte rate per 100k&quot;,
+       y = &quot;State&quot;)</code></pre>
+<p><img src="Regression_Model2_files/figure-html/unnamed-chunk-7-1.png" width="90%" /></p>
+</div>
+<div id="unemployment-rate-by-state-in-2020" class="section level4">
+<h4>Unemployment rate by state in 2020</h4>
+<p>Unemployment rates in each state show a diversified trend and Nevada has the highest unemployment rate.</p>
+<pre class="r"><code>unempolyment_stat %&gt;% 
+  filter(state != &quot;District of Columbia&quot;) %&gt;% 
+  mutate(state = fct_reorder(state, unemploy_rate)) %&gt;% 
+  ggplot(aes(x = unemploy_rate, y = state, fill = state)) + 
+  geom_bar(stat = &quot;identity&quot;, show.legend = FALSE) + 
+  labs(x = &quot;Unemployment rate&quot;,
+       y = &quot;State&quot;)</code></pre>
+<p><img src="Regression_Model2_files/figure-html/unnamed-chunk-8-1.png" width="90%" /></p>
+<hr />
+</div>
+</div>
+<div id="statistical-analysis" class="section level3">
+<h3>Statistical Analysis</h3>
+<div id="modeling" class="section level4">
+<h4>1.Modeling</h4>
+<p>Because the distribution of innocent death per 10K is the same in model 1, here we still conduct log transformation and the formula is followed below:</p>
+<p><span class="math display">\[ log(innocent \space death \space per \space 100k) = \beta_0 +  \beta_1state + \beta_2 age + \beta_3 gender + \beta_4 race + \beta_5Gun \space ownership \space rate\]</span> <span class="math display">\[ + \beta_6Crime \space rate(per \space 100K) + \beta_7 Unemployment \space rate\]</span></p>
+<pre class="r"><code># Fit a model
+fit2 &lt;- lm(log(innocent_kill_per100k) ~ state + age_bin + gender + race + gun_ownership + crime_per_10e6 + unemploy_rate, 
+    data = reg_df2)
+
+summary(fit2) %&gt;% 
+  broom::tidy() %&gt;% 
+  knitr::kable() %&gt;%
+  kable_styling() %&gt;% 
+  scroll_box(height = &quot;200px&quot;)</code></pre>
+<div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:200px; ">
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
+term
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+estimate
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+std.error
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+statistic
+</th>
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
+p.value
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+(Intercept)
+</td>
+<td style="text-align:right;">
+0.6891827
+</td>
+<td style="text-align:right;">
+0.3229229
+</td>
+<td style="text-align:right;">
+2.1342022
+</td>
+<td style="text-align:right;">
+0.0334034
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+stateAL
+</td>
+<td style="text-align:right;">
+-1.0989007
+</td>
+<td style="text-align:right;">
+0.3106113
+</td>
+<td style="text-align:right;">
+-3.5378643
+</td>
+<td style="text-align:right;">
+0.0004483
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+stateAR
+</td>
+<td style="text-align:right;">
+-1.1173843
+</td>
+<td style="text-align:right;">
+0.3305492
+</td>
+<td style="text-align:right;">
+-3.3803869
+</td>
+<td style="text-align:right;">
+0.0007914
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+stateAZ
+</td>
+<td style="text-align:right;">
+-1.3916567
+</td>
+<td style="text-align:right;">
+0.3163712
+</td>
+<td style="text-align:right;">
+-4.3988095
+</td>
+<td style="text-align:right;">
+0.0000138
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+stateCA
+</td>
+<td style="text-align:right;">
+-2.2225582
+</td>
+<td style="text-align:right;">
+0.2832757
+</td>
+<td style="text-align:right;">
+-7.8459179
+</td>
+<td style="text-align:right;">
+0.0000000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+stateCO
+</td>
+<td style="text-align:right;">
+-1.2473995
+</td>
+<td style="text-align:right;">
+0.3171607
+</td>
+<td style="text-align:right;">
+-3.9330204
+</td>
+<td style="text-align:right;">
+0.0000981
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+stateCT
+</td>
+<td style="text-align:right;">
+-1.6116779
+</td>
+<td style="text-align:right;">
+0.4187934
+</td>
+<td style="text-align:right;">
+-3.8483839
+</td>
+<td style="text-align:right;">
+0.0001373
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+stateDE
+</td>
+<td style="text-align:right;">
+-0.6710861
+</td>
+<td style="text-align:right;">
+0.4610444
+</td>
+<td style="text-align:right;">
+-1.4555781
+</td>
+<td style="text-align:right;">
+0.1462546
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+stateFL
+</td>
+<td style="text-align:right;">
+-2.2344374
+</td>
+<td style="text-align:right;">
+0.2932063
+</td>
+<td style="text-align:right;">
+-7.6207001
+</td>
+<td style="text-align:right;">
+0.0000000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+stateGA
+</td>
+<td style="text-align:right;">
+-1.9956775
+</td>
+<td style="text-align:right;">
+0.3064578
+</td>
+<td style="text-align:right;">
+-6.5120789
+</td>
+<td style="text-align:right;">
+0.0000000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+stateHI
+</td>
+<td style="text-align:right;">
+-1.0524806
+</td>
+<td style="text-align:right;">
+0.4206326
+</td>
+<td style="text-align:right;">
+-2.5021376
+</td>
+<td style="text-align:right;">
+0.0127230
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+stateIA
+</td>
+<td style="text-align:right;">
+-1.2243394
+</td>
+<td style="text-align:right;">
+0.3558764
+</td>
+<td style="text-align:right;">
+-3.4403499
+</td>
+<td style="text-align:right;">
+0.0006390
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+stateID
+</td>
+<td style="text-align:right;">
+-0.2872206
+</td>
+<td style="text-align:right;">
+0.3690521
+</td>
+<td style="text-align:right;">
+-0.7782658
+</td>
+<td style="text-align:right;">
+0.4368495
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+stateIL
+</td>
+<td style="text-align:right;">
+-1.9989388
+</td>
+<td style="text-align:right;">
+0.3002974
+</td>
+<td style="text-align:right;">
+-6.6565298
+</td>
+<td style="text-align:right;">
+0.0000000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+stateIN
+</td>
+<td style="text-align:right;">
+-1.1786486
+</td>
+<td style="text-align:right;">
+0.3285479
+</td>
+<td style="text-align:right;">
+-3.5874485
+</td>
+<td style="text-align:right;">
+0.0003732
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+stateKS
+</td>
+<td style="text-align:right;">
+-0.6529928
+</td>
+<td style="text-align:right;">
+0.3429460
+</td>
+<td style="text-align:right;">
+-1.9040688
+</td>
+<td style="text-align:right;">
+0.0575827
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+stateKY
+</td>
+<td style="text-align:right;">
+-1.4161355
+</td>
+<td style="text-align:right;">
+0.3295630
+</td>
+<td style="text-align:right;">
+-4.2970104
+</td>
+<td style="text-align:right;">
+0.0000215
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+stateLA
+</td>
+<td style="text-align:right;">
+-1.5039054
+</td>
+<td style="text-align:right;">
+0.3069370
+</td>
+<td style="text-align:right;">
+-4.8997198
+</td>
+<td style="text-align:right;">
+0.0000014
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+stateMA
+</td>
+<td style="text-align:right;">
+-2.2236702
+</td>
+<td style="text-align:right;">
+0.3897218
+</td>
+<td style="text-align:right;">
+-5.7057881
+</td>
+<td style="text-align:right;">
+0.0000000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+stateMD
+</td>
+<td style="text-align:right;">
+-1.8532493
+</td>
+<td style="text-align:right;">
+0.3235074
+</td>
+<td style="text-align:right;">
+-5.7286149
+</td>
+<td style="text-align:right;">
+0.0000000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+stateME
+</td>
+<td style="text-align:right;">
+-0.3514603
+</td>
+<td style="text-align:right;">
+0.3882003
+</td>
+<td style="text-align:right;">
+-0.9053582
+</td>
+<td style="text-align:right;">
+0.3657935
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+stateMI
+</td>
+<td style="text-align:right;">
+-2.3535326
+</td>
+<td style="text-align:right;">
+0.3468094
+</td>
+<td style="text-align:right;">
+-6.7862425
+</td>
+<td style="text-align:right;">
+0.0000000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+stateMN
+</td>
+<td style="text-align:right;">
+-1.5947587
+</td>
+<td style="text-align:right;">
+0.3446404
+</td>
+<td style="text-align:right;">
+-4.6273120
+</td>
+<td style="text-align:right;">
+0.0000049
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+stateMO
+</td>
+<td style="text-align:right;">
+-1.1941849
+</td>
+<td style="text-align:right;">
+0.3226003
+</td>
+<td style="text-align:right;">
+-3.7017473
+</td>
+<td style="text-align:right;">
+0.0002426
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+stateMS
+</td>
+<td style="text-align:right;">
+-1.3511323
+</td>
+<td style="text-align:right;">
+0.3567108
+</td>
+<td style="text-align:right;">
+-3.7877529
+</td>
+<td style="text-align:right;">
+0.0001741
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+stateMT
+</td>
+<td style="text-align:right;">
+-0.2404037
+</td>
+<td style="text-align:right;">
+0.3893960
+</td>
+<td style="text-align:right;">
+-0.6173760
+</td>
+<td style="text-align:right;">
+0.5373205
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+stateNC
+</td>
+<td style="text-align:right;">
+-2.0555387
+</td>
+<td style="text-align:right;">
+0.3139196
+</td>
+<td style="text-align:right;">
+-6.5479793
+</td>
+<td style="text-align:right;">
+0.0000000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+stateND
+</td>
+<td style="text-align:right;">
+0.9274598
+</td>
+<td style="text-align:right;">
+0.4168436
+</td>
+<td style="text-align:right;">
+2.2249589
+</td>
+<td style="text-align:right;">
+0.0266133
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+stateNE
+</td>
+<td style="text-align:right;">
+-1.0291044
+</td>
+<td style="text-align:right;">
+0.3921767
+</td>
+<td style="text-align:right;">
+-2.6240835
+</td>
+<td style="text-align:right;">
+0.0090041
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+stateNH
+</td>
+<td style="text-align:right;">
+-1.1626280
+</td>
+<td style="text-align:right;">
+0.4588618
+</td>
+<td style="text-align:right;">
+-2.5337212
+</td>
+<td style="text-align:right;">
+0.0116476
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+stateNJ
+</td>
+<td style="text-align:right;">
+-2.3143862
+</td>
+<td style="text-align:right;">
+0.3457220
+</td>
+<td style="text-align:right;">
+-6.6943568
+</td>
+<td style="text-align:right;">
+0.0000000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+stateNM
+</td>
+<td style="text-align:right;">
+-0.6495582
+</td>
+<td style="text-align:right;">
+0.3301576
+</td>
+<td style="text-align:right;">
+-1.9674184
+</td>
+<td style="text-align:right;">
+0.0497911
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+stateNV
+</td>
+<td style="text-align:right;">
+-0.9519919
+</td>
+<td style="text-align:right;">
+0.3299262
+</td>
+<td style="text-align:right;">
+-2.8854693
+</td>
+<td style="text-align:right;">
+0.0041092
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+stateNY
+</td>
+<td style="text-align:right;">
+-2.4515176
+</td>
+<td style="text-align:right;">
+0.3071817
+</td>
+<td style="text-align:right;">
+-7.9806751
+</td>
+<td style="text-align:right;">
+0.0000000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+stateOH
+</td>
+<td style="text-align:right;">
+-2.0994949
+</td>
+<td style="text-align:right;">
+0.3177560
+</td>
+<td style="text-align:right;">
+-6.6072538
+</td>
+<td style="text-align:right;">
+0.0000000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+stateOK
+</td>
+<td style="text-align:right;">
+-1.2188956
+</td>
+<td style="text-align:right;">
+0.3120061
+</td>
+<td style="text-align:right;">
+-3.9066408
+</td>
+<td style="text-align:right;">
+0.0001090
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+stateOR
+</td>
+<td style="text-align:right;">
+-1.1826654
+</td>
+<td style="text-align:right;">
+0.3723930
+</td>
+<td style="text-align:right;">
+-3.1758526
+</td>
+<td style="text-align:right;">
+0.0016039
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+statePA
+</td>
+<td style="text-align:right;">
+-2.2032772
+</td>
+<td style="text-align:right;">
+0.3124064
+</td>
+<td style="text-align:right;">
+-7.0525982
+</td>
+<td style="text-align:right;">
+0.0000000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+stateRI
+</td>
+<td style="text-align:right;">
+-0.2128800
+</td>
+<td style="text-align:right;">
+0.7125128
+</td>
+<td style="text-align:right;">
+-0.2987737
+</td>
+<td style="text-align:right;">
+0.7652602
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+stateSC
+</td>
+<td style="text-align:right;">
+-1.5305588
+</td>
+<td style="text-align:right;">
+0.3290521
+</td>
+<td style="text-align:right;">
+-4.6514174
+</td>
+<td style="text-align:right;">
+0.0000044
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+stateSD
+</td>
+<td style="text-align:right;">
+0.2715696
+</td>
+<td style="text-align:right;">
+0.5369194
+</td>
+<td style="text-align:right;">
+0.5057921
+</td>
+<td style="text-align:right;">
+0.6132673
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+stateTN
+</td>
+<td style="text-align:right;">
+-1.6386419
+</td>
+<td style="text-align:right;">
+0.3567650
+</td>
+<td style="text-align:right;">
+-4.5930568
+</td>
+<td style="text-align:right;">
+0.0000058
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+stateTX
+</td>
+<td style="text-align:right;">
+-2.2138739
+</td>
+<td style="text-align:right;">
+0.2894506
+</td>
+<td style="text-align:right;">
+-7.6485371
+</td>
+<td style="text-align:right;">
+0.0000000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+stateUT
+</td>
+<td style="text-align:right;">
+-0.4668296
+</td>
+<td style="text-align:right;">
+0.3288249
+</td>
+<td style="text-align:right;">
+-1.4196908
+</td>
+<td style="text-align:right;">
+0.1564378
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+stateVA
+</td>
+<td style="text-align:right;">
+-1.9748317
+</td>
+<td style="text-align:right;">
+0.3167580
+</td>
+<td style="text-align:right;">
+-6.2345121
+</td>
+<td style="text-align:right;">
+0.0000000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+stateVT
+</td>
+<td style="text-align:right;">
+-0.0624461
+</td>
+<td style="text-align:right;">
+0.4580131
+</td>
+<td style="text-align:right;">
+-0.1363414
+</td>
+<td style="text-align:right;">
+0.8916166
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+stateWA
+</td>
+<td style="text-align:right;">
+-1.5928467
+</td>
+<td style="text-align:right;">
+0.2971262
+</td>
+<td style="text-align:right;">
+-5.3608424
+</td>
+<td style="text-align:right;">
+0.0000001
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+stateWI
+</td>
+<td style="text-align:right;">
+-1.0657284
+</td>
+<td style="text-align:right;">
+0.3172038
+</td>
+<td style="text-align:right;">
+-3.3597595
+</td>
+<td style="text-align:right;">
+0.0008512
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+stateWV
+</td>
+<td style="text-align:right;">
+-0.7995538
+</td>
+<td style="text-align:right;">
+0.3702908
+</td>
+<td style="text-align:right;">
+-2.1592591
+</td>
+<td style="text-align:right;">
+0.0313943
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+stateWY
+</td>
+<td style="text-align:right;">
+-0.2374881
+</td>
+<td style="text-align:right;">
+0.5327764
+</td>
+<td style="text-align:right;">
+-0.4457556
+</td>
+<td style="text-align:right;">
+0.6560030
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+age_bin15-24
+</td>
+<td style="text-align:right;">
+1.2784345
+</td>
+<td style="text-align:right;">
+0.2015292
+</td>
+<td style="text-align:right;">
+6.3436688
+</td>
+<td style="text-align:right;">
+0.0000000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+age_bin25-34
+</td>
+<td style="text-align:right;">
+1.5014500
+</td>
+<td style="text-align:right;">
+0.2011661
+</td>
+<td style="text-align:right;">
+7.4637317
+</td>
+<td style="text-align:right;">
+0.0000000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+age_bin35-54
+</td>
+<td style="text-align:right;">
+1.1715659
+</td>
+<td style="text-align:right;">
+0.2011345
+</td>
+<td style="text-align:right;">
+5.8247875
+</td>
+<td style="text-align:right;">
+0.0000000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+age_bin55-84
+</td>
+<td style="text-align:right;">
+0.4509995
+</td>
+<td style="text-align:right;">
+0.2091285
+</td>
+<td style="text-align:right;">
+2.1565668
+</td>
+<td style="text-align:right;">
+0.0316050
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+age_bin85+
+</td>
+<td style="text-align:right;">
+2.5418229
+</td>
+<td style="text-align:right;">
+0.3469829
+</td>
+<td style="text-align:right;">
+7.3254991
+</td>
+<td style="text-align:right;">
+0.0000000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+genderMale
+</td>
+<td style="text-align:right;">
+0.9189116
+</td>
+<td style="text-align:right;">
+0.0732914
+</td>
+<td style="text-align:right;">
+12.5377896
+</td>
+<td style="text-align:right;">
+0.0000000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+raceAsian/Pacific Islander
+</td>
+<td style="text-align:right;">
+-0.8560392
+</td>
+<td style="text-align:right;">
+0.1773996
+</td>
+<td style="text-align:right;">
+-4.8254853
+</td>
+<td style="text-align:right;">
+0.0000020
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+raceEuropean-American/White
+</td>
+<td style="text-align:right;">
+-1.5550598
+</td>
+<td style="text-align:right;">
+0.0755542
+</td>
+<td style="text-align:right;">
+-20.5820416
+</td>
+<td style="text-align:right;">
+0.0000000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+raceHispanic/Latino
+</td>
+<td style="text-align:right;">
+-0.9486063
+</td>
+<td style="text-align:right;">
+0.0989200
+</td>
+<td style="text-align:right;">
+-9.5896270
+</td>
+<td style="text-align:right;">
+0.0000000
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+raceNative American/Alaskan
+</td>
+<td style="text-align:right;">
+0.4062721
+</td>
+<td style="text-align:right;">
+0.1885110
+</td>
+<td style="text-align:right;">
+2.1551642
+</td>
+<td style="text-align:right;">
+0.0317153
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<pre class="r"><code>summary(fit2) %&gt;% 
+  broom::glance() %&gt;% 
+  knitr::kable() %&gt;% 
+  kable_styling()</code></pre>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:right;">
+r.squared
+</th>
+<th style="text-align:right;">
+adj.r.squared
+</th>
+<th style="text-align:right;">
+sigma
+</th>
+<th style="text-align:right;">
+statistic
+</th>
+<th style="text-align:right;">
+p.value
+</th>
+<th style="text-align:right;">
+df
+</th>
+<th style="text-align:right;">
+df.residual
+</th>
+<th style="text-align:right;">
+nobs
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+0.779379
+</td>
+<td style="text-align:right;">
+0.7484607
+</td>
+<td style="text-align:right;">
+0.6610668
+</td>
+<td style="text-align:right;">
+25.20763
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+59
+</td>
+<td style="text-align:right;">
+421
+</td>
+<td style="text-align:right;">
+481
+</td>
+</tr>
+</tbody>
+</table>
+<p>According to the statistics in the table above, we could conclude that all all P-value is smaller than significant level which means the association is significant in statistical aspect although some levels in state have no significant association.</p>
+<p>When concentrating on the table of R.squared, we could figure out that adjusted <span class="math inline">\(R^2\)</span> value is 0.75 which means that 75% of the variability in the outcome data can be explained by the model, especially if R-squared value r &gt; 0.7 this value is generally considered strong effect size <em>(Ref:Moore, D. S., Notz, W. I, &amp; Flinger, M. A. (2013). The basic practice of statistics (6th ed.))</em></p>
+</div>
+<div id="mlr-dignostics" class="section level4">
+<h4>2.MLR dignostics</h4>
+<p>The four graphs is used for proving the homoscedasticity of residual. When looking deep into those graphs, we’re able to conclude that all assumption is satisfied.</p>
+<ul>
+<li>Residuals vs Fitted: show that it has linear relationship due to the nearly equal distribution.</li>
+<li>Q-Q plot: illustrate residual is normality</li>
+<li>Scale-Location: The assumption of homoscedasticity has been checked.</li>
+<li>Residuals vs Leverage: shows that there’s no too many outlier points and influential points in the plot.</li>
+</ul>
+<pre class="r"><code># Model diagnosis
+par(mfrow = c(2, 2))
+plot(fit2)</code></pre>
+<p><img src="Regression_Model2_files/figure-html/unnamed-chunk-12-1.png" width="90%" /></p>
+</div>
+</div>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
