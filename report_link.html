@@ -11,7 +11,7 @@
 
 
 
-<title>Police; License to Kill?</title>
+<title>Report</title>
 
 <script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -29,11 +29,7 @@
        h6 {font-size: 12px;}
        code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
        pre:not([class]) { background-color: white }</style>
-<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
-<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
-<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
-<script src="site_libs/navigation-1.1/codefolding.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
@@ -221,73 +217,7 @@ $(document).ready(function () {
 </style>
 
 <!-- code folding -->
-<style type="text/css">
-.code-folding-btn { margin-bottom: 4px; }
-</style>
 
-
-
-<style type="text/css">
-
-#TOC {
-  margin: 25px 0px 20px 0px;
-}
-@media (max-width: 768px) {
-#TOC {
-  position: relative;
-  width: 100%;
-}
-}
-
-@media print {
-.toc-content {
-  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
-  float: right;
-}
-}
-
-.toc-content {
-  padding-left: 30px;
-  padding-right: 40px;
-}
-
-div.main-container {
-  max-width: 1200px;
-}
-
-div.tocify {
-  width: 20%;
-  max-width: 260px;
-  max-height: 85%;
-}
-
-@media (min-width: 768px) and (max-width: 991px) {
-  div.tocify {
-    width: 25%;
-  }
-}
-
-@media (max-width: 767px) {
-  div.tocify {
-    width: 100%;
-    max-width: none;
-  }
-}
-
-.tocify ul, .tocify li {
-  line-height: 20px;
-}
-
-.tocify-subheader .tocify-item {
-  font-size: 0.90em;
-}
-
-.tocify .list-group-item {
-  border-radius: 0px;
-}
-
-
-</style>
 
 
 
@@ -297,16 +227,6 @@ div.tocify {
 
 
 <div class="container-fluid main-container">
-
-
-<!-- setup 3col/9col grid for toc_float and main content  -->
-<div class="row">
-<div class="col-xs-12 col-sm-4 col-md-3">
-<div id="TOC" class="tocify">
-</div>
-</div>
-
-<div class="toc-content col-xs-12 col-sm-8 col-md-9">
 
 
 
@@ -363,80 +283,17 @@ div.tocify {
 
 <div id="header">
 
-<div class="btn-group pull-right float-right">
-<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
-<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
-<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
-<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
-</ul>
-</div>
 
 
-
-<h1 class="title toc-ignore">Police; License to Kill?</h1>
+<h1 class="title toc-ignore">Report</h1>
 
 </div>
 
 
-<p><b>Exploring the innocent killing rate in the U.S. by police from 2000 to 2020</b></p>
-<p><font size="3">By: Hening Cui | Jialiang Hua | Congyang Xie | Wenhan Bao | Qihang Wu</font></p>
-<p><img src="images/index_img1.png" style="width:120%"> <font size="2"> Image source: <a href="https://www.theguardian.com/us-news/series/counted-us-police-killings">The Guardian</a></font></p>
-<p><br></p>
-<div id="background" class="section level3">
-<h3>Background</h3>
-<p>In the wake of George Floyd’s murder, a number of protests arisen across the nation. This motivates us to investigate innocent deaths under police violence and the association of confounders with excessive police force. Although the majority encounters that meet death with law enforcement officials present a lethal threat to officers or society, there are still people that involved in the police action meets death with a quantity not to be ignored. This project analyses the data on people involved in a police operation and results in fatalities. Despite the assessment of overuse of police force across geographical factors, this project also focuses on socioeconomic factors, political factors and periodical patterns.</p>
-</div>
-<div id="datasets" class="section level3">
-<h3>Datasets</h3>
-<ul>
-<li>Main data: <a href="https://www.kaggle.com/kannan1314/innocent-deaths-caused-by-police-all-time">Innocent death by polices</a></li>
-<li>Other sources:
-<ul>
-<li><a href="https://worldpopulationreview.com/state-rankings/gun-ownership-by-state">Gun ownership by state 2021</a></li>
-<li><a href="https://www.statista.com/topics/2153/crime-in-the-united-states/#dossierKeyfigures">Crime rate by state 2020</a></li>
-<li><a href="https://www.bls.gov/web/laus/laumstrk.htm">Unemployment rate by state 2020</a></li>
-</ul></li>
-</ul>
-</div>
-<div id="findings" class="section level3 tabset">
-<h3 class="tabset">Findings</h3>
-<div id="finding-1" class="section level4">
-<h4>Finding 1</h4>
-<p>We find that ….</p>
-</div>
-<div id="finding-2" class="section level4">
-<h4>Finding 2</h4>
-<p>Our regression model indicates that … statistically significant. This indicates that there indeed are group differences by age and gender… Further detailed analyses are in the Regression Analysis sections.</p>
-</div>
-</div>
-<div id="report" class="section level3">
-<h3>Report</h3>
-<p>Our report can be found from <a href="report_link.html">here</a></p>
-</div>
-<div id="website-navigation" class="section level3">
-<h3>Website Navigation</h3>
-<ul>
-<li><a href="dashboard.html">Dashboard</a></li>
-<li><a href="about.html">About</a></li>
-<li><a href="resource.html">Resource</a></li>
-</ul>
-</div>
-<div id="contributors" class="section level3">
-<h3>Contributors</h3>
-<ul>
-<li>Hening Cui</li>
-<li>Jialiang Hua</li>
-<li>Congyang Xie</li>
-<li>Wenhan Bao</li>
-<li>Qihang Wu</li>
-</ul>
-<p><font size="3"><a href = "#top" target = "_self">Back to top</a></font></p>
-</div>
+<iframe src="final_report/Final_report.pdf" width="100%" height="1000px">
 
 
 
-</div>
-</div>
 
 </div>
 
@@ -468,41 +325,7 @@ $(document).ready(function () {
 </script>
 
 <!-- code folding -->
-<script>
-$(document).ready(function () {
-  window.initializeCodeFolding("hide" === "show");
-});
-</script>
 
-<script>
-$(document).ready(function ()  {
-
-    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
-    $('.unlisted.unnumbered').addClass('toc-ignore')
-
-    // move toc-ignore selectors from section div to header
-    $('div.section.toc-ignore')
-        .removeClass('toc-ignore')
-        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
-
-    // establish options
-    var options = {
-      selectors: "h1,h2,h3",
-      theme: "bootstrap3",
-      context: '.toc-content',
-      hashGenerator: function (text) {
-        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
-      },
-      ignoreSelector: ".toc-ignore",
-      scrollTo: 0
-    };
-    options.showAndHide = true;
-    options.smoothScroll = true;
-
-    // tocify
-    var toc = $("#TOC").tocify(options).data("toc-tocify");
-});
-</script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>

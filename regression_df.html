@@ -249,11 +249,23 @@ $(document).ready(function () {
         <li>
   <a href="Visualization.html">Trend plot</a>
 </li>
-<li>
-  <a href="regression_df.html">Regression Analysis</a>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Regression Analysis
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="Regression_Model1.html">Model 1</a>
+    </li>
+    <li>
+      <a href="Regression_Model2.html">Model 2</a>
+    </li>
+  </ul>
 </li>
 <li>
-  <a href="shiny_dashboard_template.html">Interactive Map</a>
+  <a href="https://heningcui.shinyapps.io/interactive_map/">Interactive Map</a>
 </li>
 <li>
   <a href="resource.html">Resource</a>
@@ -309,8 +321,8 @@ main_df &lt;-
 </div>
 <div id="exploratory-data-analysis" class="section level3">
 <h3>Exploratory data analysis</h3>
-<div id="state" class="section level4">
-<h4>State</h4>
+<div id="us-total" class="section level4">
+<h4>US total</h4>
 <pre class="r"><code>main_df %&gt;% 
   group_by(year) %&gt;% 
   summarize(count = n()) %&gt;% 

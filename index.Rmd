@@ -4,10 +4,7 @@ output:
   html_document:
     toc: true
     toc_float: true
-<<<<<<< HEAD
     code_folding: hide
-=======
->>>>>>> b2e7ead76ff09b2a73122d561c102be27c5b2a04
 ---
     
 ```{r setup, echo = FALSE, message = FALSE}
@@ -55,7 +52,7 @@ Our regression model indicates that ... statistically significant. This indicate
 
 
 ### Report
-
+Our report can be found from [here](report_link.html)
 
 
 
@@ -68,7 +65,11 @@ Our regression model indicates that ... statistically significant. This indicate
 
 
 ### Contributors
-
+- Hening Cui
+- Jialiang Hua
+- Congyang Xie
+- Wenhan Bao
+- Qihang Wu
 
 
 <font size="3"><a href = "#top" target = "_self">Back to top</a></font>
