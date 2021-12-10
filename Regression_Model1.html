@@ -28,6 +28,13 @@
 <script src="site_libs/navigation-1.1/codefolding.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<script src="site_libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+<script src="site_libs/plotly-binding-4.10.0/plotly.js"></script>
+<script src="site_libs/typedarray-0.1/typedarray.min.js"></script>
+<link href="site_libs/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
+<script src="site_libs/crosstalk-1.2.0/js/crosstalk.min.js"></script>
+<link href="site_libs/plotly-htmlwidgets-css-2.5.1/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="site_libs/plotly-main-2.5.1/plotly-latest.min.js"></script>
 <script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
 <link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
@@ -391,59 +398,141 @@ div.tocify {
 </div>
 <div id="explorative-graphs" class="section level3">
 <h3>Explorative Graphs</h3>
-<div id="year" class="section level4">
-<h4>Year</h4>
-<p>From 2010 to 2020, the number of death in the USA shows a tendency of rising first and then falling slightly.</p>
-<pre class="r"><code>main_df %&gt;% 
-  filter(year %in% c(2010:2020)) %&gt;% 
-  group_by(year) %&gt;% 
-  summarize(count = n()) %&gt;% 
-  ggplot(aes(x = year, y = count, fill = year)) + 
+<p>In order to completely comprehensive the model 1, the distribution of predictors and variables (innocent death number, sex, age group, race) are plotted below from 2010 to 2020 and there’s a phenomenon that the proportion in each predictor is also consistent. For more analysis, you could jump to trend plot part.</p>
+<pre class="r"><code>year_plot =
+  main_df %&gt;%
+  filter(year %in% c(2010:2020)) %&gt;%
+  group_by(year) %&gt;%
+  summarize(count = n()) %&gt;%
+  ggplot(aes(x = year, y = count, fill = as.factor(year))) +
   geom_bar(stat = &quot;identity&quot;) +
   scale_x_continuous(breaks = c(2010:2020)) +
-  theme(legend.position = &quot;none&quot;)</code></pre>
-<p><img src="Regression_Model1_files/figure-html/unnamed-chunk-6-1.png" width="90%" /></p>
-</div>
-<div id="sex" class="section level4">
-<h4>Sex</h4>
-<p>Rate of male is much larger than female, but the proportion of male and female remains roughly the same from 2010 to 2020.</p>
-<pre class="r"><code>main_df %&gt;% 
+  scale_fill_manual(
+    values = c(
+      &quot;#CC543A&quot;,
+      &quot;#E9A368&quot;,
+      &quot;#b98b73&quot;,
+      &quot;#cb997e&quot;,
+      &quot;#ddbea9&quot;,
+      &quot;#ffe8d6&quot;,
+      &quot;#d4c7b0&quot;,
+      &quot;#b7b7a4&quot;,
+      &quot;#a5a58d&quot;,
+      &quot;#6b705c&quot;,
+      &quot;#3f4238&quot;
+    )
+  ) +
+  theme(legend.position = &quot;none&quot;,
+        axis.text.x = element_text(angle = 45),
+        axis.title.x = element_blank()) 
+
+sex_plot = 
+  main_df %&gt;% 
   filter(year %in% c(2010:2020)) %&gt;% 
   group_by(year, gender) %&gt;% 
   summarize(count = n()) %&gt;% 
   ggplot(aes(x = year, y = count, fill = gender)) + 
   geom_bar(stat = &quot;identity&quot;, position = position_dodge()) +
   scale_x_continuous(breaks = c(2010:2020)) +
-  theme(legend.title = element_blank())</code></pre>
-<p><img src="Regression_Model1_files/figure-html/unnamed-chunk-7-1.png" width="90%" /></p>
-</div>
-<div id="age-group" class="section level4">
-<h4>Age group</h4>
-<p>The ratio between different age groups are consistent, and the age group(25-34) has the largest share.</p>
-<pre class="r"><code>main_df %&gt;% 
-  filter(year %in% c(2010:2020)) %&gt;% 
-  group_by(year, age_bin) %&gt;% 
-  summarize(count = n()) %&gt;% 
-  ggplot(aes(x = year, y = count, fill = age_bin)) + 
+  scale_fill_manual(values = c(&quot;#cb997e&quot;, &quot;#867835&quot;), labels = c(&quot;Female&quot;, &quot;Male&quot;)) +
+  theme(legend.title = element_blank(),
+        axis.text.x = element_text(angle = 45),
+        axis.title.x = element_blank())
+
+age_plot = 
+  main_df %&gt;%
+  filter(year %in% c(2010:2020)) %&gt;%
+  group_by(year, age_bin) %&gt;%
+  summarize(count = n()) %&gt;%
+  ggplot(aes(x = year, y = count, fill = age_bin)) +
   geom_bar(stat = &quot;identity&quot;) +
   scale_x_continuous(breaks = c(2010:2020)) +
-  theme(legend.title = element_blank())</code></pre>
-<p><img src="Regression_Model1_files/figure-html/unnamed-chunk-8-1.png" width="90%" /></p>
-</div>
-<div id="race" class="section level4">
-<h4>Race</h4>
-<p>The Hispanic race accounts for the largest proportion and the rates from 2010 to 2020 are similar.</p>
-<pre class="r"><code>main_df %&gt;%
-  filter(year %in% c(2010:2020)) %&gt;% 
-  group_by(year, race) %&gt;% 
-  summarize(count = n()) %&gt;% 
-  ggplot(aes(x = year, y = count, fill = race)) + 
+  scale_fill_manual(values = c(&quot;#a3a380&quot;,&quot;#d6ce93&quot;,&quot;#efebce&quot;,&quot;#d8a48f&quot;,&quot;#bb8588&quot;, &quot;#f48498&quot;)) +
+  theme(
+    legend.title = element_blank(),
+    axis.text.x = element_text(angle = 45),
+    axis.title.x = element_blank()
+  ) +
+  guides(fill = guide_legend(ncol = 6))
+
+race_plot = 
+  main_df %&gt;%
+  filter(year %in% c(2010:2020)) %&gt;%
+  group_by(year, race) %&gt;%
+  summarize(count = n()) %&gt;%
+  ggplot(aes(x = year, y = count, fill = race)) +
   geom_bar(stat = &quot;identity&quot;) +
   scale_x_continuous(breaks = c(2010:2020)) +
-  theme(legend.title = element_blank())</code></pre>
-<p><img src="Regression_Model1_files/figure-html/unnamed-chunk-9-1.png" width="90%" /></p>
+  scale_fill_manual(values = c(&quot;#a3a380&quot;,&quot;#d6ce93&quot;,&quot;#efebce&quot;,&quot;#d8a48f&quot;,&quot;#bb8588&quot;)) +
+  theme(
+    legend.title = element_blank(),
+    axis.text.x = element_text(angle = 45),
+    axis.title.x = element_blank()
+  ) +
+  guides(fill = guide_legend(ncol = 3))</code></pre>
+<pre class="r"><code>combination_plt =
+  subplot(
+    ggplotly(year_plot),
+    ggplotly(sex_plot),
+    ggplotly(age_plot),
+    ggplotly(race_plot),
+    nrows = 2,
+    titleY = TRUE,
+    titleX = TRUE,
+    margin = 0.1
+  ) 
+
+annotations = list( 
+  list( 
+    x = 0.2,  
+    y = 1.0,  
+    text = &quot;Year&quot;,  
+    xref = &quot;paper&quot;,  
+    yref = &quot;paper&quot;,  
+    xanchor = &quot;center&quot;,  
+    yanchor = &quot;bottom&quot;,  
+    showarrow = FALSE 
+  ),  
+  list( 
+    x = 0.8,  
+    y = 1,  
+    text = &quot;Sex&quot;,  
+    xref = &quot;paper&quot;,  
+    yref = &quot;paper&quot;,  
+    xanchor = &quot;center&quot;,  
+    yanchor = &quot;bottom&quot;,  
+    showarrow = FALSE 
+  ),  
+  list( 
+    x = 0.2,  
+    y = 0.45,  
+    text = &quot;Age&quot;,  
+    xref = &quot;paper&quot;,  
+    yref = &quot;paper&quot;,  
+    xanchor = &quot;center&quot;,  
+    yanchor = &quot;bottom&quot;,  
+    showarrow = FALSE 
+  ),
+  list( 
+    x = 0.8,  
+    y = 0.45,  
+    text = &quot;Race&quot;,  
+    xref = &quot;paper&quot;,  
+    yref = &quot;paper&quot;,  
+    xanchor = &quot;center&quot;,  
+    yanchor = &quot;bottom&quot;,  
+    showarrow = FALSE 
+  ))
+
+  
+combination_plt =
+  combination_plt %&gt;%
+  layout(showlegend = F, annotations = annotations)
+
+combination_plt</code></pre>
+<div id="htmlwidget-bb7fc7e2dc0a76f101dd" style="width:90%;height:576px;" class="plotly html-widget"></div>
+<script type="application/json" data-for="htmlwidget-bb7fc7e2dc0a76f101dd">{"x":{"data":[{"orientation":"v","width":0.900000000000091,"base":0,"x":[2010],"y":[929],"text":"year: 2010<br />count:  929<br />as.factor(year): 2010","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(204,84,58,1)","line":{"width":1.88976377952756,"color":"transparent"}},"name":"2010","legendgroup":"2010","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"v","width":0.900000000000091,"base":0,"x":[2011],"y":[1077],"text":"year: 2011<br />count: 1077<br />as.factor(year): 2011","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(233,163,104,1)","line":{"width":1.88976377952756,"color":"transparent"}},"name":"2011","legendgroup":"2011","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"v","width":0.900000000000091,"base":0,"x":[2012],"y":[1229],"text":"year: 2012<br />count: 1229<br />as.factor(year): 2012","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(185,139,115,1)","line":{"width":1.88976377952756,"color":"transparent"}},"name":"2012","legendgroup":"2012","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"v","width":0.900000000000091,"base":0,"x":[2013],"y":[1563],"text":"year: 2013<br />count: 1563<br />as.factor(year): 2013","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(203,153,126,1)","line":{"width":1.88976377952756,"color":"transparent"}},"name":"2013","legendgroup":"2013","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"v","width":0.900000000000091,"base":0,"x":[2014],"y":[1568],"text":"year: 2014<br />count: 1568<br />as.factor(year): 2014","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(221,190,169,1)","line":{"width":1.88976377952756,"color":"transparent"}},"name":"2014","legendgroup":"2014","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"v","width":0.900000000000091,"base":0,"x":[2015],"y":[1474],"text":"year: 2015<br />count: 1474<br />as.factor(year): 2015","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(255,232,214,1)","line":{"width":1.88976377952756,"color":"transparent"}},"name":"2015","legendgroup":"2015","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"v","width":0.900000000000091,"base":0,"x":[2016],"y":[1463],"text":"year: 2016<br />count: 1463<br />as.factor(year): 2016","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(212,199,176,1)","line":{"width":1.88976377952756,"color":"transparent"}},"name":"2016","legendgroup":"2016","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"v","width":0.900000000000091,"base":0,"x":[2017],"y":[1525],"text":"year: 2017<br />count: 1525<br />as.factor(year): 2017","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(183,183,164,1)","line":{"width":1.88976377952756,"color":"transparent"}},"name":"2017","legendgroup":"2017","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"v","width":0.900000000000091,"base":0,"x":[2018],"y":[1496],"text":"year: 2018<br />count: 1496<br />as.factor(year): 2018","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(165,165,141,1)","line":{"width":1.88976377952756,"color":"transparent"}},"name":"2018","legendgroup":"2018","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"v","width":0.900000000000091,"base":0,"x":[2019],"y":[1420],"text":"year: 2019<br />count: 1420<br />as.factor(year): 2019","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(107,112,92,1)","line":{"width":1.88976377952756,"color":"transparent"}},"name":"2019","legendgroup":"2019","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"v","width":0.900000000000091,"base":0,"x":[2020],"y":[1345],"text":"year: 2020<br />count: 1345<br />as.factor(year): 2020","type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(63,66,56,1)","line":{"width":1.88976377952756,"color":"transparent"}},"name":"2020","legendgroup":"2020","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"orientation":"v","width":[0.449999999999818,0.449999999999818,0.449999999999818,0.449999999999818,0.449999999999818,0.449999999999818,0.449999999999818,0.449999999999818,0.449999999999818,0.449999999999818,0.449999999999818],"base":[0,0,0,0,0,0,0,0,0,0,0],"x":[2009.775,2010.775,2011.775,2012.775,2013.775,2014.775,2015.775,2016.775,2017.775,2018.775,2019.775],"y":[87,97,109,154,166,110,124,155,172,157,160],"text":["year: 2010<br />count:   87<br />gender: Female","year: 2011<br />count:   97<br />gender: Female","year: 2012<br />count:  109<br />gender: Female","year: 2013<br />count:  154<br />gender: Female","year: 2014<br />count:  166<br />gender: Female","year: 2015<br />count:  110<br />gender: Female","year: 2016<br />count:  124<br />gender: Female","year: 2017<br />count:  155<br />gender: Female","year: 2018<br />count:  172<br />gender: Female","year: 2019<br />count:  157<br />gender: Female","year: 2020<br />count:  160<br />gender: Female"],"type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(203,153,126,1)","line":{"width":1.88976377952756,"color":"transparent"}},"name":"Female","legendgroup":"Female","showlegend":true,"xaxis":"x2","yaxis":"y2","hoverinfo":"text","frame":null},{"orientation":"v","width":[0.449999999999818,0.449999999999818,0.449999999999818,0.449999999999818,0.449999999999818,0.449999999999818,0.449999999999818,0.449999999999818,0.449999999999818,0.449999999999818,0.449999999999818],"base":[0,0,0,0,0,0,0,0,0,0,0],"x":[2010.225,2011.225,2012.225,2013.225,2014.225,2015.225,2016.225,2017.225,2018.225,2019.225,2020.225],"y":[842,980,1120,1409,1402,1364,1339,1370,1324,1263,1185],"text":["year: 2010<br />count:  842<br />gender: Male","year: 2011<br />count:  980<br />gender: Male","year: 2012<br />count: 1120<br />gender: Male","year: 2013<br />count: 1409<br />gender: Male","year: 2014<br />count: 1402<br />gender: Male","year: 2015<br />count: 1364<br />gender: Male","year: 2016<br />count: 1339<br />gender: Male","year: 2017<br />count: 1370<br />gender: Male","year: 2018<br />count: 1324<br />gender: Male","year: 2019<br />count: 1263<br />gender: Male","year: 2020<br />count: 1185<br />gender: Male"],"type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(134,120,53,1)","line":{"width":1.88976377952756,"color":"transparent"}},"name":"Male","legendgroup":"Male","showlegend":true,"xaxis":"x2","yaxis":"y2","hoverinfo":"text","frame":null},{"orientation":"v","width":[0.900000000000091,0.900000000000091,0.900000000000091,0.900000000000091,0.900000000000091,0.900000000000091,0.900000000000091,0.900000000000091,0.900000000000091,0.900000000000091,0.900000000000091],"base":[916,1069,1211,1536,1548,1463,1441,1500,1473,1397,1332],"x":[2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020],"y":[13,8,18,27,20,11,22,25,23,23,13],"text":["year: 2010<br />count:  13<br />age_bin: 0-14","year: 2011<br />count:   8<br />age_bin: 0-14","year: 2012<br />count:  18<br />age_bin: 0-14","year: 2013<br />count:  27<br />age_bin: 0-14","year: 2014<br />count:  20<br />age_bin: 0-14","year: 2015<br />count:  11<br />age_bin: 0-14","year: 2016<br />count:  22<br />age_bin: 0-14","year: 2017<br />count:  25<br />age_bin: 0-14","year: 2018<br />count:  23<br />age_bin: 0-14","year: 2019<br />count:  23<br />age_bin: 0-14","year: 2020<br />count:  13<br />age_bin: 0-14"],"type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(163,163,128,1)","line":{"width":1.88976377952756,"color":"transparent"}},"name":"0-14","legendgroup":"0-14","showlegend":true,"xaxis":"x3","yaxis":"y3","hoverinfo":"text","frame":null},{"orientation":"v","width":[0.900000000000091,0.900000000000091,0.900000000000091,0.900000000000091,0.900000000000091,0.900000000000091,0.900000000000091,0.900000000000091,0.900000000000091,0.900000000000091,0.900000000000091],"base":[695,793,913,1161,1182,1160,1166,1183,1185,1136,1057],"x":[2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020],"y":[221,276,298,375,366,303,275,317,288,261,275],"text":["year: 2010<br />count: 221<br />age_bin: 15-24","year: 2011<br />count: 276<br />age_bin: 15-24","year: 2012<br />count: 298<br />age_bin: 15-24","year: 2013<br />count: 375<br />age_bin: 15-24","year: 2014<br />count: 366<br />age_bin: 15-24","year: 2015<br />count: 303<br />age_bin: 15-24","year: 2016<br />count: 275<br />age_bin: 15-24","year: 2017<br />count: 317<br />age_bin: 15-24","year: 2018<br />count: 288<br />age_bin: 15-24","year: 2019<br />count: 261<br />age_bin: 15-24","year: 2020<br />count: 275<br />age_bin: 15-24"],"type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(214,206,147,1)","line":{"width":1.88976377952756,"color":"transparent"}},"name":"15-24","legendgroup":"15-24","showlegend":true,"xaxis":"x3","yaxis":"y3","hoverinfo":"text","frame":null},{"orientation":"v","width":[0.900000000000091,0.900000000000091,0.900000000000091,0.900000000000091,0.900000000000091,0.900000000000091,0.900000000000091,0.900000000000091,0.900000000000091,0.900000000000091,0.900000000000091],"base":[420,472,554,671,679,718,712,697,726,699,648],"x":[2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020],"y":[275,321,359,490,503,442,454,486,459,437,409],"text":["year: 2010<br />count: 275<br />age_bin: 25-34","year: 2011<br />count: 321<br />age_bin: 25-34","year: 2012<br />count: 359<br />age_bin: 25-34","year: 2013<br />count: 490<br />age_bin: 25-34","year: 2014<br />count: 503<br />age_bin: 25-34","year: 2015<br />count: 442<br />age_bin: 25-34","year: 2016<br />count: 454<br />age_bin: 25-34","year: 2017<br />count: 486<br />age_bin: 25-34","year: 2018<br />count: 459<br />age_bin: 25-34","year: 2019<br />count: 437<br />age_bin: 25-34","year: 2020<br />count: 409<br />age_bin: 25-34"],"type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(239,235,206,1)","line":{"width":1.88976377952756,"color":"transparent"}},"name":"25-34","legendgroup":"25-34","showlegend":true,"xaxis":"x3","yaxis":"y3","hoverinfo":"text","frame":null},{"orientation":"v","width":[0.900000000000091,0.900000000000091,0.900000000000091,0.900000000000091,0.900000000000091,0.900000000000091,0.900000000000091,0.900000000000091,0.900000000000091,0.900000000000091,0.900000000000091],"base":[96,86,110,160,126,172,162,152,167,166,129],"x":[2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020],"y":[324,386,444,511,553,546,550,545,559,533,519],"text":["year: 2010<br />count: 324<br />age_bin: 35-54","year: 2011<br />count: 386<br />age_bin: 35-54","year: 2012<br />count: 444<br />age_bin: 35-54","year: 2013<br />count: 511<br />age_bin: 35-54","year: 2014<br />count: 553<br />age_bin: 35-54","year: 2015<br />count: 546<br />age_bin: 35-54","year: 2016<br />count: 550<br />age_bin: 35-54","year: 2017<br />count: 545<br />age_bin: 35-54","year: 2018<br />count: 559<br />age_bin: 35-54","year: 2019<br />count: 533<br />age_bin: 35-54","year: 2020<br />count: 519<br />age_bin: 35-54"],"type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(216,164,143,1)","line":{"width":1.88976377952756,"color":"transparent"}},"name":"35-54","legendgroup":"35-54","showlegend":true,"xaxis":"x3","yaxis":"y3","hoverinfo":"text","frame":null},{"orientation":"v","width":[0.900000000000091,0.900000000000091,0.900000000000091,0.900000000000091,0.900000000000091,0.900000000000091,0.900000000000091,0.900000000000091,0.900000000000091,0.900000000000091,0.900000000000091],"base":[4,1,0,6,4,4,4,3,3,4,6],"x":[2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020],"y":[92,85,110,154,122,168,158,149,164,162,123],"text":["year: 2010<br />count:  92<br />age_bin: 55-84","year: 2011<br />count:  85<br />age_bin: 55-84","year: 2012<br />count: 110<br />age_bin: 55-84","year: 2013<br />count: 154<br />age_bin: 55-84","year: 2014<br />count: 122<br />age_bin: 55-84","year: 2015<br />count: 168<br />age_bin: 55-84","year: 2016<br />count: 158<br />age_bin: 55-84","year: 2017<br />count: 149<br />age_bin: 55-84","year: 2018<br />count: 164<br />age_bin: 55-84","year: 2019<br />count: 162<br />age_bin: 55-84","year: 2020<br />count: 123<br />age_bin: 55-84"],"type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(187,133,136,1)","line":{"width":1.88976377952756,"color":"transparent"}},"name":"55-84","legendgroup":"55-84","showlegend":true,"xaxis":"x3","yaxis":"y3","hoverinfo":"text","frame":null},{"orientation":"v","width":[0.900000000000091,0.900000000000091,0.900000000000091,0.900000000000091,0.900000000000091,0.900000000000091,0.900000000000091,0.900000000000091,0.900000000000091,0.900000000000091],"base":[0,0,0,0,0,0,0,0,0,0],"x":[2010,2011,2013,2014,2015,2016,2017,2018,2019,2020],"y":[4,1,6,4,4,4,3,3,4,6],"text":["year: 2010<br />count:   4<br />age_bin: 85+","year: 2011<br />count:   1<br />age_bin: 85+","year: 2013<br />count:   6<br />age_bin: 85+","year: 2014<br />count:   4<br />age_bin: 85+","year: 2015<br />count:   4<br />age_bin: 85+","year: 2016<br />count:   4<br />age_bin: 85+","year: 2017<br />count:   3<br />age_bin: 85+","year: 2018<br />count:   3<br />age_bin: 85+","year: 2019<br />count:   4<br />age_bin: 85+","year: 2020<br />count:   6<br />age_bin: 85+"],"type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(244,132,152,1)","line":{"width":1.88976377952756,"color":"transparent"}},"name":"85+","legendgroup":"85+","showlegend":true,"xaxis":"x3","yaxis":"y3","hoverinfo":"text","frame":null},{"orientation":"v","width":[0.900000000000091,0.900000000000091,0.900000000000091,0.900000000000091,0.900000000000091,0.900000000000091,0.900000000000091,0.900000000000091,0.900000000000091,0.900000000000091,0.900000000000091],"base":[634,720,811,1082,1114,1065,1044,1088,1074,970,908],"x":[2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020],"y":[295,357,418,481,454,409,419,437,422,450,437],"text":["year: 2010<br />count: 295<br />race: African-American/Black","year: 2011<br />count: 357<br />race: African-American/Black","year: 2012<br />count: 418<br />race: African-American/Black","year: 2013<br />count: 481<br />race: African-American/Black","year: 2014<br />count: 454<br />race: African-American/Black","year: 2015<br />count: 409<br />race: African-American/Black","year: 2016<br />count: 419<br />race: African-American/Black","year: 2017<br />count: 437<br />race: African-American/Black","year: 2018<br />count: 422<br />race: African-American/Black","year: 2019<br />count: 450<br />race: African-American/Black","year: 2020<br />count: 437<br />race: African-American/Black"],"type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(163,163,128,1)","line":{"width":1.88976377952756,"color":"transparent"}},"name":"African-American/Black","legendgroup":"African-American/Black","showlegend":true,"xaxis":"x4","yaxis":"y4","hoverinfo":"text","frame":null},{"orientation":"v","width":[0.900000000000091,0.900000000000091,0.900000000000091,0.900000000000091,0.900000000000091,0.900000000000091,0.900000000000091,0.900000000000091,0.900000000000091,0.900000000000091,0.900000000000091],"base":[616,699,788,1050,1084,1034,1018,1068,1041,930,882],"x":[2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020],"y":[18,21,23,32,30,31,26,20,33,40,26],"text":["year: 2010<br />count:  18<br />race: Asian/Pacific Islander","year: 2011<br />count:  21<br />race: Asian/Pacific Islander","year: 2012<br />count:  23<br />race: Asian/Pacific Islander","year: 2013<br />count:  32<br />race: Asian/Pacific Islander","year: 2014<br />count:  30<br />race: Asian/Pacific Islander","year: 2015<br />count:  31<br />race: Asian/Pacific Islander","year: 2016<br />count:  26<br />race: Asian/Pacific Islander","year: 2017<br />count:  20<br />race: Asian/Pacific Islander","year: 2018<br />count:  33<br />race: Asian/Pacific Islander","year: 2019<br />count:  40<br />race: Asian/Pacific Islander","year: 2020<br />count:  26<br />race: Asian/Pacific Islander"],"type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(214,206,147,1)","line":{"width":1.88976377952756,"color":"transparent"}},"name":"Asian/Pacific Islander","legendgroup":"Asian/Pacific Islander","showlegend":true,"xaxis":"x4","yaxis":"y4","hoverinfo":"text","frame":null},{"orientation":"v","width":[0.900000000000091,0.900000000000091,0.900000000000091,0.900000000000091,0.900000000000091,0.900000000000091,0.900000000000091,0.900000000000091,0.900000000000091,0.900000000000091,0.900000000000091],"base":[168,199,228,312,321,272,246,306,300,263,250],"x":[2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020],"y":[448,500,560,738,763,762,772,762,741,667,632],"text":["year: 2010<br />count: 448<br />race: European-American/White","year: 2011<br />count: 500<br />race: European-American/White","year: 2012<br />count: 560<br />race: European-American/White","year: 2013<br />count: 738<br />race: European-American/White","year: 2014<br />count: 763<br />race: European-American/White","year: 2015<br />count: 762<br />race: European-American/White","year: 2016<br />count: 772<br />race: European-American/White","year: 2017<br />count: 762<br />race: European-American/White","year: 2018<br />count: 741<br />race: European-American/White","year: 2019<br />count: 667<br />race: European-American/White","year: 2020<br />count: 632<br />race: European-American/White"],"type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(239,235,206,1)","line":{"width":1.88976377952756,"color":"transparent"}},"name":"European-American/White","legendgroup":"European-American/White","showlegend":true,"xaxis":"x4","yaxis":"y4","hoverinfo":"text","frame":null},{"orientation":"v","width":[0.900000000000091,0.900000000000091,0.900000000000091,0.900000000000091,0.900000000000091,0.900000000000091,0.900000000000091,0.900000000000091,0.900000000000091,0.900000000000091,0.900000000000091],"base":[13,9,16,11,19,24,30,33,29,17,18],"x":[2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020],"y":[155,190,212,301,302,248,216,273,271,246,232],"text":["year: 2010<br />count: 155<br />race: Hispanic/Latino","year: 2011<br />count: 190<br />race: Hispanic/Latino","year: 2012<br />count: 212<br />race: Hispanic/Latino","year: 2013<br />count: 301<br />race: Hispanic/Latino","year: 2014<br />count: 302<br />race: Hispanic/Latino","year: 2015<br />count: 248<br />race: Hispanic/Latino","year: 2016<br />count: 216<br />race: Hispanic/Latino","year: 2017<br />count: 273<br />race: Hispanic/Latino","year: 2018<br />count: 271<br />race: Hispanic/Latino","year: 2019<br />count: 246<br />race: Hispanic/Latino","year: 2020<br />count: 232<br />race: Hispanic/Latino"],"type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(216,164,143,1)","line":{"width":1.88976377952756,"color":"transparent"}},"name":"Hispanic/Latino","legendgroup":"Hispanic/Latino","showlegend":true,"xaxis":"x4","yaxis":"y4","hoverinfo":"text","frame":null},{"orientation":"v","width":[0.900000000000091,0.900000000000091,0.900000000000091,0.900000000000091,0.900000000000091,0.900000000000091,0.900000000000091,0.900000000000091,0.900000000000091,0.900000000000091,0.900000000000091],"base":[0,0,0,0,0,0,0,0,0,0,0],"x":[2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020],"y":[13,9,16,11,19,24,30,33,29,17,18],"text":["year: 2010<br />count:  13<br />race: Native American/Alaskan","year: 2011<br />count:   9<br />race: Native American/Alaskan","year: 2012<br />count:  16<br />race: Native American/Alaskan","year: 2013<br />count:  11<br />race: Native American/Alaskan","year: 2014<br />count:  19<br />race: Native American/Alaskan","year: 2015<br />count:  24<br />race: Native American/Alaskan","year: 2016<br />count:  30<br />race: Native American/Alaskan","year: 2017<br />count:  33<br />race: Native American/Alaskan","year: 2018<br />count:  29<br />race: Native American/Alaskan","year: 2019<br />count:  17<br />race: Native American/Alaskan","year: 2020<br />count:  18<br />race: Native American/Alaskan"],"type":"bar","textposition":"none","marker":{"autocolorscale":false,"color":"rgba(187,133,136,1)","line":{"width":1.88976377952756,"color":"transparent"}},"name":"Native American/Alaskan","legendgroup":"Native American/Alaskan","showlegend":true,"xaxis":"x4","yaxis":"y4","hoverinfo":"text","frame":null}],"layout":{"xaxis":{"domain":[0,0.4],"automargin":true,"type":"linear","autorange":false,"range":[2009.005,2020.995],"tickmode":"array","ticktext":["2010","2011","2012","2013","2014","2015","2016","2017","2018","2019","2020"],"tickvals":[2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020],"categoryorder":"array","categoryarray":["2010","2011","2012","2013","2014","2015","2016","2017","2018","2019","2020"],"nticks":null,"ticks":"outside","tickcolor":"rgba(179,179,179,1)","ticklen":3.65296803652968,"tickwidth":0.33208800332088,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.689497716895},"tickangle":-45,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(222,222,222,1)","gridwidth":0.33208800332088,"zeroline":false,"anchor":"y","title":{"text":"","font":{"color":null,"family":null,"size":0}},"hoverformat":".2f"},"xaxis2":{"domain":[0.6,1],"automargin":true,"type":"linear","autorange":false,"range":[2009.005,2020.995],"tickmode":"array","ticktext":["2010","2011","2012","2013","2014","2015","2016","2017","2018","2019","2020"],"tickvals":[2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020],"categoryorder":"array","categoryarray":["2010","2011","2012","2013","2014","2015","2016","2017","2018","2019","2020"],"nticks":null,"ticks":"outside","tickcolor":"rgba(179,179,179,1)","ticklen":3.65296803652968,"tickwidth":0.33208800332088,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.689497716895},"tickangle":-45,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(222,222,222,1)","gridwidth":0.33208800332088,"zeroline":false,"anchor":"y2","title":{"text":"","font":{"color":null,"family":null,"size":0}},"hoverformat":".2f"},"xaxis3":{"domain":[0,0.4],"automargin":true,"type":"linear","autorange":false,"range":[2009.005,2020.995],"tickmode":"array","ticktext":["2010","2011","2012","2013","2014","2015","2016","2017","2018","2019","2020"],"tickvals":[2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020],"categoryorder":"array","categoryarray":["2010","2011","2012","2013","2014","2015","2016","2017","2018","2019","2020"],"nticks":null,"ticks":"outside","tickcolor":"rgba(179,179,179,1)","ticklen":3.65296803652968,"tickwidth":0.33208800332088,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.689497716895},"tickangle":-45,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(222,222,222,1)","gridwidth":0.33208800332088,"zeroline":false,"anchor":"y3","title":{"text":"","font":{"color":null,"family":null,"size":0}},"hoverformat":".2f"},"xaxis4":{"domain":[0.6,1],"automargin":true,"type":"linear","autorange":false,"range":[2009.005,2020.995],"tickmode":"array","ticktext":["2010","2011","2012","2013","2014","2015","2016","2017","2018","2019","2020"],"tickvals":[2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020],"categoryorder":"array","categoryarray":["2010","2011","2012","2013","2014","2015","2016","2017","2018","2019","2020"],"nticks":null,"ticks":"outside","tickcolor":"rgba(179,179,179,1)","ticklen":3.65296803652968,"tickwidth":0.33208800332088,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.689497716895},"tickangle":-45,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(222,222,222,1)","gridwidth":0.33208800332088,"zeroline":false,"anchor":"y4","title":{"text":"","font":{"color":null,"family":null,"size":0}},"hoverformat":".2f"},"yaxis4":{"domain":[0,0.4],"automargin":true,"type":"linear","autorange":false,"range":[-78.4,1646.4],"tickmode":"array","ticktext":["0","500","1000","1500"],"tickvals":[0,500,1000,1500],"categoryorder":"array","categoryarray":["0","500","1000","1500"],"nticks":null,"ticks":"outside","tickcolor":"rgba(179,179,179,1)","ticklen":3.65296803652968,"tickwidth":0.33208800332088,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.689497716895},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(222,222,222,1)","gridwidth":0.33208800332088,"zeroline":false,"anchor":"x4","title":{"text":"count","font":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187}},"hoverformat":".2f"},"yaxis3":{"domain":[0,0.4],"automargin":true,"type":"linear","autorange":false,"range":[-78.4,1646.4],"tickmode":"array","ticktext":["0","500","1000","1500"],"tickvals":[0,500,1000,1500],"categoryorder":"array","categoryarray":["0","500","1000","1500"],"nticks":null,"ticks":"outside","tickcolor":"rgba(179,179,179,1)","ticklen":3.65296803652968,"tickwidth":0.33208800332088,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.689497716895},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(222,222,222,1)","gridwidth":0.33208800332088,"zeroline":false,"anchor":"x3","title":{"text":"count","font":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187}},"hoverformat":".2f"},"yaxis2":{"domain":[0.6,1],"automargin":true,"type":"linear","autorange":false,"range":[-70.45,1479.45],"tickmode":"array","ticktext":["0","500","1000"],"tickvals":[0,500,1000],"categoryorder":"array","categoryarray":["0","500","1000"],"nticks":null,"ticks":"outside","tickcolor":"rgba(179,179,179,1)","ticklen":3.65296803652968,"tickwidth":0.33208800332088,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.689497716895},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(222,222,222,1)","gridwidth":0.33208800332088,"zeroline":false,"anchor":"x2","title":{"text":"count","font":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187}},"hoverformat":".2f"},"yaxis":{"domain":[0.6,1],"automargin":true,"type":"linear","autorange":false,"range":[-78.4,1646.4],"tickmode":"array","ticktext":["0","500","1000","1500"],"tickvals":[0,500,1000,1500],"categoryorder":"array","categoryarray":["0","500","1000","1500"],"nticks":null,"ticks":"outside","tickcolor":"rgba(179,179,179,1)","ticklen":3.65296803652968,"tickwidth":0.33208800332088,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":11.689497716895},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(222,222,222,1)","gridwidth":0.33208800332088,"zeroline":false,"anchor":"x","title":{"text":"count","font":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187}},"hoverformat":".2f"},"annotations":[{"x":0.2,"y":1,"text":"Year","xref":"paper","yref":"paper","xanchor":"center","yanchor":"bottom","showarrow":false},{"x":0.8,"y":1,"text":"Sex","xref":"paper","yref":"paper","xanchor":"center","yanchor":"bottom","showarrow":false},{"x":0.2,"y":0.45,"text":"Age","xref":"paper","yref":"paper","xanchor":"center","yanchor":"bottom","showarrow":false},{"x":0.8,"y":0.45,"text":"Race","xref":"paper","yref":"paper","xanchor":"center","yanchor":"bottom","showarrow":false}],"shapes":[{"type":"rect","fillcolor":"transparent","line":{"color":"rgba(179,179,179,1)","width":0.66417600664176,"linetype":"solid"},"yref":"paper","xref":"paper","x0":0,"x1":0.4,"y0":0.6,"y1":1},{"type":"rect","fillcolor":"transparent","line":{"color":"rgba(179,179,179,1)","width":0.66417600664176,"linetype":"solid"},"yref":"paper","xref":"paper","x0":0.6,"x1":1,"y0":0.6,"y1":1},{"type":"rect","fillcolor":"transparent","line":{"color":"rgba(179,179,179,1)","width":0.66417600664176,"linetype":"solid"},"yref":"paper","xref":"paper","x0":0,"x1":0.4,"y0":0,"y1":0.4},{"type":"rect","fillcolor":"transparent","line":{"color":"rgba(179,179,179,1)","width":0.66417600664176,"linetype":"solid"},"yref":"paper","xref":"paper","x0":0.6,"x1":1,"y0":0,"y1":0.4}],"images":[],"margin":{"t":28.1765601217656,"r":7.30593607305936,"b":29.5606630135641,"l":48.9497716894977},"plot_bgcolor":"rgba(255,255,255,1)","paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":14.6118721461187},"showlegend":false,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":1.88976377952756,"font":{"color":"rgba(0,0,0,1)","family":"","size":11.689497716895},"title":{"text":"race","font":{"color":null,"family":null,"size":0}}},"hovermode":"closest","barmode":"relative"},"attrs":{"12923493b24af":{"x":{},"y":{},"fill":{},"type":"bar"},"1292360361d4c":{"x":{},"y":{},"fill":{},"type":"bar"},"1292323948aaf":{"x":{},"y":{},"fill":{},"type":"bar"},"12923541298c4":{"x":{},"y":{},"fill":{},"type":"bar"}},"source":"A","config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"subplot":true,"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
 <hr />
-</div>
 </div>
 <div id="statistical-analysis" class="section level3">
 <h3>Statistical Analysis</h3>
@@ -456,7 +545,7 @@ reg_df1 %&gt;%
   geom_density(color = &quot;dodgerblue1&quot;, fill = &quot;skyblue2&quot;) + 
   geom_vline(xintercept = mean(reg_df1$innocent_kill_per100k), linetype = &quot;dotted&quot;) +
   labs(x = &quot;innocent death(per 10K)&quot;)</code></pre>
-<p><img src="Regression_Model1_files/figure-html/unnamed-chunk-11-1.png" width="90%" /></p>
+<p><img src="Regression_Model1_files/figure-html/unnamed-chunk-9-1.png" width="90%" /></p>
 </div>
 <div id="transformation" class="section level4">
 <h4>2.Transformation</h4>
@@ -467,7 +556,7 @@ reg_df1 %&gt;%
   geom_density(color = &quot;dodgerblue1&quot;, fill = &quot;skyblue2&quot;) + 
   geom_vline(xintercept = mean(log(reg_df1$innocent_kill_per100k)), linetype = &quot;dotted&quot;) + 
   labs(x = &quot;log(innocent death per 10K)&quot;)</code></pre>
-<p><img src="Regression_Model1_files/figure-html/unnamed-chunk-12-1.png" width="90%" /></p>
+<p><img src="Regression_Model1_files/figure-html/unnamed-chunk-10-1.png" width="90%" /></p>
 </div>
 <div id="modeling" class="section level4">
 <h4>3.Modeling</h4>
@@ -1621,7 +1710,7 @@ nobs
 <pre class="r"><code># Model diagnosis
 par(mfrow = c(2, 2))
 plot(fit1)</code></pre>
-<p><img src="Regression_Model1_files/figure-html/unnamed-chunk-14-1.png" width="90%" /></p>
+<p><img src="Regression_Model1_files/figure-html/unnamed-chunk-12-1.png" width="90%" /></p>
 <p><font size="5"><a href = "#top" target = "_self">Back to top</a></font></p>
 </div>
 </div>
