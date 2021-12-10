@@ -1,16 +1,14 @@
 ---
 title: "Visualization"
+author: "Hening CUi"
+date: "12/6/2021"
 output: 
   html_document:
     code_folding: hide
-    toc: true
-    toc_float: true
-    
 ---
 
-```{r,echo = FALSE}
+```{r, warning = FALSE,message = FALSE}
 library (tidyverse)
-library(gganimate)
 library(viridis)
 library(modelr)
 library(mgcv)
@@ -22,7 +20,8 @@ theme_set(theme_minimal() + theme(legend.position = "bottom"))
 knitr::opts_chunk$set(
   fig.width = 8,
   fig.height =6,
-  out.width = "90%"
+  out.width = "90%",
+  warning = FALSE
 )
 
 options(
@@ -34,13 +33,26 @@ scale_color_discrete = scale_color_viridis_d
 scale_fill_discrete = scale_fill_viridis_d
 ```
 
-load data
 
-```{r}
+```{r, warning = FALSE, message = FALSE, echo = FALSE}
 plot_df = 
   read_csv("./data/maindata.csv") %>% 
   separate(date_of_death, c("year", "month", "day")) %>% 
-  filter(year != 2021)
+  filter(year != 2021) %>% 
+  mutate(year = as.double(year))
+```
+
+
+```{r, warning = FALSE,message = FALSE}
+accumulate_by <- function(dat, var) {
+  var <- lazyeval::f_eval(var, dat)
+  lvls <- plotly:::getLevels(var)
+  dats <- lapply(seq_along(lvls), function(x) {
+    cbind(dat[var %in% lvls[seq(1, x)], ], frm = lvls[[x]])
+  })
+  dplyr::bind_rows(dats)
+}
+  
 ```
 
 ## Trend
@@ -48,91 +60,127 @@ plot_df =
 death vs time by year
 
 ```{r}
-plot_time = 
-  plot_df %>% 
-  group_by(year) %>% 
-  summarize(count = n()) %>% 
-  ggplot(aes(x = year, y = count, group = 1)) +
-  geom_line() +
-  geom_point() +
-  labs(title = "Estimated innocent death over time",
-       x = "Year",
-       y = "Number of innocent death") 
+plot_year =
+  plot_df %>%
+  group_by(year) %>%
+  summarize(count = n()) %>%
+  accumulate_by(~ year) %>% 
+  plot_ly(
+    x = ~ year,
+    y = ~ count,
+    type = 'scatter',
+    frame = ~ frm, 
+    mode = 'lines',
+    line = list(simplyfy = F)
+  ) %>%
+  layout(
+    xaxis = list(title = "Year",
+                 zeroline = F),
+    yaxis = list(title = "Number of innocent death",
+                 zeroline = F)
+  ) %>%
+  
+  animation_slider(hide = T)
 
-setwd("./plot")
-
-plot_time + 
-  transition_reveal(as.integer(year))
-
-setwd("..")  
+plot_year
 ```
 
 death vs time by age
 
-```{r}
-plot_age =
+
+```{r, warning = FALSE, message = FALSE, echo = FALSE}
+plot_age = 
   plot_df %>% 
   group_by(year,age_bin) %>% 
   summarize(count = n()) %>% 
-  ggplot(aes(x = year, y = count, color = age_bin, group = age_bin)) +
-  geom_line() +
-  geom_point() +
-  labs(title = "Estimated innocent death over time by age group",
-       x = "Year",
-       y = "Number of innocent death") +
-  scale_x_discrete(breaks = seq(2000, 2020, 4))
+  mutate(age_bin = as.factor(age_bin)) %>% 
+  ungroup(year) %>% 
+  accumulate_by(~ year) %>% 
+  plot_ly(
+    x = ~ year,
+    y = ~ count,
+    split = ~ age_bin,
+    frame = ~ frm,
+    type = 'scatter',
+    mode = 'lines',
+    line = list(simplyfy = F)
+  ) %>%
+  layout(
+    xaxis = list(title = "Year",
+                 zeroline = F),
+    yaxis = list(title = "Number of innocent death",
+                 zeroline = F)
+  )  %>%
+  animation_opts(frame = 100,
+                 transition = 0,
+                 redraw = FALSE) %>% animation_slider(hide = T) 
 
-setwd("./plot")
-
-plot_age + 
-  transition_reveal(as.integer(year))
-
-setwd("..") 
+plot_age 
 ```
+
+
 
 by gender
 
-```{r}
+```{r, warning = FALSE, message = FALSE, echo = FALSE}
 plot_gender =
   plot_df %>% 
   group_by(year, gender) %>% 
   summarize(count = n()) %>% 
-  ggplot(aes(x = year, y = count, color = gender, group = gender)) +
-  geom_line() +
-  geom_point() +
-  labs(title = "Estimated innocent death over time by gender",
-       x = "Year",
-       y = "Number of innocent death") +
-  scale_x_discrete(breaks = seq(2000, 2020, 4))
+  ungroup(year) %>% 
+  accumulate_by(~ year) %>% 
+  plot_ly(
+    x = ~ year,
+    y = ~ count,
+    type = 'scatter',
+    split = ~ gender,
+    frame = ~ frm,
+    mode = 'lines',
+    line = list(simplyfy = F)
+  ) %>%
+  layout(
+    xaxis = list(title = "Year",
+                 zeroline = F),
+    yaxis = list(title = "Number of innocent death",
+                 zeroline = F)
+  ) %>%
+  animation_opts(frame = 100,
+                 transition = 0,
+                 redraw = FALSE) %>% 
+  animation_slider(hide = T)
 
-setwd("./plot")
-
-plot_gender + 
-  transition_reveal(as.integer(year))
-
-setwd("..") 
+plot_gender
 ```
 by race
 
-```{r}
+```{r, warning = FALSE, message = FALSE, echo = FALSE}
 plot_race =
   plot_df %>% 
   group_by(year, race) %>% 
   summarize(count = n()) %>% 
-  ggplot(aes(x = year, y = count, color = race, group = race)) +
-  geom_line() +
-  geom_point() +
-  labs(title = "Estimated innocent death over time by race",
-       x = "Year",
-       y = "Number of innocent death") +
-  scale_x_discrete(breaks = seq(2000, 2020, 4))
+  ungroup(year) %>% 
+  accumulate_by(~ year) %>% 
+plot_ly(
+    x = ~ year,
+    y = ~ count,
+    frame = ~ frm, 
+    type = 'scatter',
+    split = ~ race,
+    mode = 'lines',
+    line = list(simplyfy = F)
+  ) %>%
+  layout(
+    xaxis = list(title = "Year",
+                 zeroline = F),
+    yaxis = list(title = "Number of innocent death",
+                 zeroline = F)
+  ) %>%
+  animation_opts(frame = 100,
+                 transition = 0,
+                 redraw = FALSE) %>% 
+  animation_slider(hide = T)
 
-setwd("./plot")
-
-plot_race + 
-  transition_reveal(as.integer(year))
-
-setwd("..") 
+plot_race
 ```
 
 
