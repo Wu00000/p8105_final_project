@@ -13,8 +13,8 @@
 
 <title>About</title>
 
-<script src="site_libs/header-attrs-2.10/header-attrs.js"></script>
-<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/readable.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
@@ -249,11 +249,23 @@ $(document).ready(function () {
         <li>
   <a href="Visualization.html">Trend plot</a>
 </li>
-<li>
-  <a href="regression_df.html">Regression Analysis</a>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Regression Analysis
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="Regression_Model1.html">Model 1</a>
+    </li>
+    <li>
+      <a href="Regression_Model2.html">Model 2</a>
+    </li>
+  </ul>
 </li>
 <li>
-  <a href="shiny_dashboard_template.html">Interactive Map</a>
+  <a href="https://heningcui.shinyapps.io/interactive_map/">Interactive Map</a>
 </li>
 <li>
   <a href="resource.html">Resource</a>
@@ -282,44 +294,6 @@ $(document).ready(function () {
 <h3>About this site</h3>
 <p>Sometimes you need to say a bit about the site – how it was made, where it’s hosted, where the source code can be found.</p>
 <p>If this is for a project or analysis, I recommend giving some details about the R package versions that you used to create the content.</p>
-<p>More information? Contact us.</p>
-<h1>
-Elegant Contact Form
-</h1>
-<form class="cf">
-<div class="half left cf">
-<pre><code>&lt;input type=&quot;text&quot; id=&quot;input-name&quot; placeholder=&quot;Name&quot;&gt;
-&lt;input type=&quot;email&quot; id=&quot;input-email&quot; placeholder=&quot;Email address&quot;&gt;
-&lt;input type=&quot;text&quot; id=&quot;input-subject&quot; placeholder=&quot;Subject&quot;&gt;</code></pre>
-</div>
-<div class="half right cf">
-<pre><code>&lt;textarea name=&quot;message&quot; type=&quot;text&quot; id=&quot;input-message&quot; placeholder=&quot;Message&quot;&gt;&lt;/textarea&gt;</code></pre>
-</div>
-<input type="submit" value="Submit" id="input-submit">
-</form>
-<p><span class="citation">@import</span> “compass/css3”;</p>
-<p><span class="citation">@import</span> url(<a href="https://fonts.googleapis.com/css?family=Merriweather" class="uri">https://fonts.googleapis.com/css?family=Merriweather</a>); $red: #e74c3c;</p>
-<p><em>, </em>:before, *:after { <span class="citation">@include</span> box-sizing(border-box); }</p>
-<p>html, body { background: #f1f1f1; font-family: ‘Merriweather’, sans-serif; padding: 1em; }</p>
-<p>h1 { text-align: center; color: #a8a8a8; <span class="citation">@include</span> text-shadow(1px 1px 0 rgba(white, 1)); }</p>
-<p>form { max-width: 600px; text-align: center; margin: 20px auto;</p>
-<p>input, textarea { border:0; outline:0; padding: 1em; <span class="citation">@include</span> border-radius(8px); display: block; width: 100%; margin-top: 1em; font-family: ‘Merriweather’, sans-serif; <span class="citation">@include</span> box-shadow(0 1px 1px rgba(black, 0.1)); resize: none;</p>
-<pre><code>&amp;:focus {
-   @include box-shadow(0 0px 2px rgba($red, 1)!important);
-}</code></pre>
-<p>}</p>
-<p>#input-submit { color: white; background: $red; cursor: pointer;</p>
-<pre><code>&amp;:hover {
-   @include box-shadow(0 1px 1px 1px rgba(#aaa, 0.6)); 
-}</code></pre>
-<p>}</p>
-<p>textarea { height: 126px; } }</p>
-<p>.half { float: left; width: 48%; margin-bottom: 1em; }</p>
-<p>.right { width: 50%; }</p>
-<p>.left { margin-right: 2%; }</p>
-<p><span class="citation">@media</span> (max-width: 480px) { .half { width: 100%; float: none; margin-bottom: 0; } }</p>
-<p>/* Clearfix <em>/ .cf:before, .cf:after { content: " "; /</em> 1 <em>/ display: table; /</em> 2 */ }</p>
-<p>.cf:after { clear: both; }</p>
 </div>
 
 

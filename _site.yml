@@ -6,7 +6,11 @@ navbar:
     - text: "Trend plot"
       href: Visualization.html
     - text: "Regression Analysis"
-      href: regression_df.html
+      menu:
+      - text: "Model 1"
+        href: Regression_Model1.html
+      - text: "Model 2"
+        href: Regression_Model2.html
     - text: "Interactive Map"
       href: https://heningcui.shinyapps.io/interactive_map/
     - text: "Resource"
