@@ -1,5 +1,5 @@
 ---
-title: " "
+title: "Regression-Model 1"
 output: 
   html_document: 
     code_folding: hide
@@ -75,7 +75,6 @@ unempolyment_stat <-
   mutate(unemploy_rate = as.numeric(unemploy_rate)/100)
 ```
 
-## Regression-Model 1
 
 ---------------------------------------------------
 
