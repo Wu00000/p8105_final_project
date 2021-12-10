@@ -21,24 +21,15 @@
 window.FlexDashboardComponents = [];
 </script>
 
-<script id="flexdashboard-navbar" type="application/json">
-[{"title":"Source Code","icon":"fa-code","href":"source_embed","align":"right"}]
-</script>
-<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.11.3/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 <link href="site_libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script>
-<script src="site_libs/bs3compat-0.3.0/transition.js"></script>
-<script src="site_libs/bs3compat-0.3.0/tabs.js"></script>
-<script src="site_libs/bs3compat-0.3.0/bs3compat.js"></script>
+<script src="site_libs/bs3compat-0.3.1/transition.js"></script>
+<script src="site_libs/bs3compat-0.3.1/tabs.js"></script>
+<script src="site_libs/bs3compat-0.3.1/bs3compat.js"></script>
 <script src="site_libs/stickytableheaders-0.1.19/jquery.stickytableheaders.min.js"></script>
-<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
-<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
-<link href="site_libs/featherlight-1.3.5/featherlight.min.css" rel="stylesheet" />
-<script src="site_libs/featherlight-1.3.5/featherlight.min.js"></script>
-<link href="site_libs/prism-1.4.1/prism.css" rel="stylesheet" />
-<script src="site_libs/prism-1.4.1/prism.js"></script>
 <link href="site_libs/selectize-0.12.4/selectize.css" rel="stylesheet" />
 <script src="site_libs/selectize-0.12.4/selectize.min.js"></script>
 <script src="site_libs/selectize-0.12.4/selectize-plugin-a11y.min.js"></script>
@@ -2631,8 +2622,8 @@ window.FlexDashboardComponents.push({
 <div class="knitr-options" data-fig-width="576" data-fig-height="460">
 
 </div>
-<div id="section-sidebar" class="section level2 sidebar">
-<h2 class="sidebar">Sidebar</h2>
+<div id="section-column" class="section level2 sidebar">
+<h2 class="sidebar">Column</h2>
 <div class="knitr-options" data-fig-width="576" data-fig-height="460">
 
 </div>
@@ -2725,31 +2716,31 @@ window.FlexDashboardComponents.push({
 </div>
 </div>
 </div>
-<div id="section-column" class="section level2" data-width="450">
+<div id="section-column-1" class="section level2" data-width="450">
 <h2>Column</h2>
 <div id="section-innocent-death-in-u.s." class="section level3">
 <h3>Innocent death in U.S.</h3>
 <div class="knitr-options" data-fig-width="576" data-fig-height="460">
 
 </div>
-<p><div id="outd41b0ae5e5fbe750" style="width:100%; height:400px; " class="highchart html-widget html-widget-output"></div></p>
+<p><div id="out3b520c333fc0dcf3" style="width:100%; height:400px; " class="highchart html-widget html-widget-output"></div></p>
 </div>
 <div id="section-trend-of-innocent-death-by-month" class="section level3">
 <h3>Trend of innocent death by month</h3>
 <div class="knitr-options" data-fig-width="576" data-fig-height="460">
 
 </div>
-<p><div id="outabba35c7cdd98eb2" style="width:100%; height:400px; " class="highchart html-widget html-widget-output"></div></p>
+<p><div id="outb91ca0791e71e309" style="width:100%; height:400px; " class="highchart html-widget html-widget-output"></div></p>
 </div>
 </div>
-<div id="section-column-1" class="section level2" data-width="550">
+<div id="section-column-2" class="section level2" data-width="550">
 <h2>Column</h2>
 <div id="section-innocent-death-interactive-map" class="section level3">
 <h3>Innocent death interactive map</h3>
 <div class="knitr-options" data-fig-width="576" data-fig-height="460">
 
 </div>
-<p><div id="out9e063f81930cbf00" style="width:100%; height:400px; " class="leaflet html-widget html-widget-output"></div></p>
+<p><div id="out4e171f52f02cac2c" style="width:100%; height:400px; " class="leaflet html-widget html-widget-output"></div></p>
 </div>
 </div>
 
@@ -2771,178 +2762,6 @@ $(document).ready(function () {
 });
 </script>
 
-<div id="flexdashboard-source-code">
-<pre class="line-numbers"><code class="language-r">---
-title: "Shiny Dashboard"
-output:
-  flexdashboard::flex_dashboard:
-    orientation: columns
-    vertical_layout: fill
-    theme: 
-      version: 4
-      bootswatch: lux
-    source_code: embed
-runtime: shiny
----
-
-
-```{r setup, echo = FALSE}
-library(flexdashboard)
-library(tidyverse)
-library(viridis)
-library(plotly)
-library(leaflet)
-library(shiny)
-library(treemap)
-library(highcharter)
-library(viridisLite)
-library(forecast)
-library(readxl)
-library(rsconnect)
-
-
-thm <- 
-  hc_theme(
-    colors = c("#F596AA", "#E9A368", "#B481BB"),
-    chart = list(
-      backgroundColor = "transparent",
-      style = list(fontFamily = "Source Sans Pro")
-    ),
-    xAxis = list(
-      gridLineWidth = 1
-    )
-  )
-```
-
-```{r data_import}
-plot = 
-  read_csv("./data/maindata.csv") %>% 
-  separate(date_of_death, c("year", "month", "day")) %>% 
-  filter(year != 2021)
-```
-
-Sidebar {.sidebar}
------------------------------------------------------------------------
-
-```{r}
-Year_choices =
-  plot %>% 
-  distinct(year) %>% 
-  pull()
-
-selectInput(
-  "Year",
-  label = h3("Select Year"),
-  choices = Year_choices,
-  selected = "2020"
-)
-
-state_choices =
-  plot %>% 
-  distinct(state) %>% 
-  pull()
-
-selectInput(
-  "State",
-  label = h3("Select State"),
-  choices = state_choices,
-  selected = "NY"
-)
-```
-
-
-Column {data-width=450}
------------------------------------------------------------------------
-
-
-
-### Innocent death in U.S.
-
-
-```{r}
-renderHighchart({
-  data("usgeojson")
-  
-pop_stat <- 
-  read_excel("data/nst-est2019-01.xlsx",
-             range = "A9:M60") %>% 
-  select("state" = "West", "population" = "78347268") %>% 
-  mutate(
-    state = str_match(state, "[a-zA-Z ]+")
-  )
-
-  plotly = 
-    plot %>%
-    filter(year == input[["Year"]]) %>% 
-    group_by(state) %>% 
-    summarize(count = n()) %>% 
-    mutate(state = state.name[match(state, state.abb)]) %>% 
-    drop_na() %>% 
-    left_join(pop_stat, by = "state") %>% 
-    mutate(death_rate_per10e6 = round(count/population*1000000, digits = 2))
-
-  highchart() %>%
-    hc_add_series_map(usgeojson, plotly, name = "Innocent Death number",
-                      value = "death_rate_per10e6", joinBy = c("woename", "state"),
-                      dataLabels = list(enabled = TRUE,
-                                        format = '{point.properties.postalcode}'))
-})
-
-```
-
-
-
-### Trend of innocent death by month
-
-```{r}
-renderHighchart({
-  plot %>%
-    filter(year == input[["Year"]],
-           state == input[["State"]]) %>%
-    group_by(month, state) %>%
-    summarize(count = n()) %>%
-    hchart("line", hcaes(x = month, y = count, group = state)) %>%
-    hc_add_theme(thm)
-})
-```
-
-Column {data-width=550}
------------------------------------------------------------------------
-
-### Innocent death interactive map
-
-```{r}
-renderLeaflet({
-  plot %>%
-    filter(year == input[["Year"]],
-           state == input[["State"]]) %>%
-    mutate(
-      lan = as.numeric((str_sub(latitude, end = -2))),
-      lon = as.numeric(str_sub(longitude, end = -2)),
-      label = str_c(
-        "<b>City: ",
-        city,
-        "<br>Age: ",
-        age,
-        "<br>Race: ",
-        race,
-        "<br>Gender: ",
-        gender,
-        "<br>Cause of death: ",
-        highest_force,
-        sep = ""
-      )
-    ) %>%
-    leaflet() %>%
-    addProviderTiles(providers$CartoDB.Positron) %>%
-    addCircleMarkers( ~ lon, ~ lan, popup = ~ label, radius = 1)
-})   
-```
-
-
-
-</code></pre>
-</div>
 <script type="text/javascript">
 $(document).ready(function () {
   FlexDashboard.init({

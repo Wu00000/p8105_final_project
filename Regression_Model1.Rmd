@@ -13,7 +13,7 @@ library(readr)
 library(readxl)
 library(kableExtra)
 library(knitr)
-library(ggpubr)
+library(plotly)
 
 knitr::opts_chunk$set(
   fig.width = 10,
@@ -23,16 +23,9 @@ knitr::opts_chunk$set(
   warning = FALSE
 )
 
-theme_set(theme_minimal() + theme(legend.position = "bottom"))
-
-options(
-  ggplot2.continuous.colour = "viridis",
-  ggplot2.continuous.fill = "viridis"
-)
+theme_set(theme_light() + theme(legend.position = "bottom"))
 
 options(knitr.table.format = "html")
-scale_colour_discrete = scale_colour_viridis_d
-scale_fill_discrete = scale_fill_viridis_d
 ```
 
 ```{r, echo=FALSE}
@@ -98,58 +91,142 @@ In this study, we are curious about the association between innocent death rate 
 In order to comprehensively understanding the model 1, the distribution of predictors and variables (innocent death number, sex, age group, race) are plotted below from 2010 to 2020 and there's a phenomenon that the proportion in each predictor is consistent though the total keeps changing. For more details of analysis, you could jump to trend plot part.
 
 ```{r}
-Year_plot = main_df %>% 
-  filter(year %in% c(2010:2020)) %>% 
-  group_by(year) %>% 
-  summarize(count = n()) %>% 
-  ggplot(aes(x = year, y = count, fill = year)) + 
+year_plot =
+  main_df %>%
+  filter(year %in% c(2010:2020)) %>%
+  group_by(year) %>%
+  summarize(count = n()) %>%
+  ggplot(aes(x = year, y = count, fill = as.factor(year))) +
   geom_bar(stat = "identity") +
   scale_x_continuous(breaks = c(2010:2020)) +
+  scale_fill_manual(
+    values = c(
+      "#CC543A",
+      "#E9A368",
+      "#b98b73",
+      "#cb997e",
+      "#ddbea9",
+      "#ffe8d6",
+      "#d4c7b0",
+      "#b7b7a4",
+      "#a5a58d",
+      "#6b705c",
+      "#3f4238"
+    )
+  ) +
   theme(legend.position = "none",
-        axis.title.x = element_blank())
+        axis.text.x = element_text(angle = 45),
+        axis.title.x = element_blank()) 
 
-Sex_plot = main_df %>% 
+sex_plot = 
+  main_df %>% 
   filter(year %in% c(2010:2020)) %>% 
   group_by(year, gender) %>% 
   summarize(count = n()) %>% 
   ggplot(aes(x = year, y = count, fill = gender)) + 
   geom_bar(stat = "identity", position = position_dodge()) +
   scale_x_continuous(breaks = c(2010:2020)) +
+  scale_fill_manual(values = c("#cb997e", "#867835"), labels = c("Female", "Male")) +
   theme(legend.title = element_blank(),
-        legend.text = element_text(size = 7),
-        legend.key.size = unit(5, "mm"),
+        axis.text.x = element_text(angle = 45),
         axis.title.x = element_blank())
 
-Age_plot = main_df %>% 
-  filter(year %in% c(2010:2020)) %>% 
-  group_by(year, age_bin) %>% 
-  summarize(count = n()) %>% 
-  ggplot(aes(x = year, y = count, fill = age_bin)) + 
+age_plot = 
+  main_df %>%
+  filter(year %in% c(2010:2020)) %>%
+  group_by(year, age_bin) %>%
+  summarize(count = n()) %>%
+  ggplot(aes(x = year, y = count, fill = age_bin)) +
   geom_bar(stat = "identity") +
   scale_x_continuous(breaks = c(2010:2020)) +
-  theme(legend.title = element_blank(),
-        legend.text = element_text(size = 7),
-        legend.key.size = unit(5, "mm"),
-        axis.title.x = element_blank()) +
-  guides(fill=guide_legend(ncol=6))
+  scale_fill_manual(values = c("#a3a380","#d6ce93","#efebce","#d8a48f","#bb8588", "#f48498")) +
+  theme(
+    legend.title = element_blank(),
+    axis.text.x = element_text(angle = 45),
+    axis.title.x = element_blank()
+  ) +
+  guides(fill = guide_legend(ncol = 6))
 
-Race_plot = main_df %>%
-  filter(year %in% c(2010:2020)) %>% 
-  group_by(year, race) %>% 
-  summarize(count = n()) %>% 
-  ggplot(aes(x = year, y = count, fill = race)) + 
+race_plot = 
+  main_df %>%
+  filter(year %in% c(2010:2020)) %>%
+  group_by(year, race) %>%
+  summarize(count = n()) %>%
+  ggplot(aes(x = year, y = count, fill = race)) +
   geom_bar(stat = "identity") +
   scale_x_continuous(breaks = c(2010:2020)) +
-  theme(legend.title = element_blank(),
-        legend.text = element_text(size = 7),
-        legend.key.size = unit(5, "mm"),
-        axis.title.x = element_blank()) +
-  guides(fill=guide_legend(ncol=3))
+  scale_fill_manual(values = c("#a3a380","#d6ce93","#efebce","#d8a48f","#bb8588")) +
+  theme(
+    legend.title = element_blank(),
+    axis.text.x = element_text(angle = 45),
+    axis.title.x = element_blank()
+  ) +
+  guides(fill = guide_legend(ncol = 3))
+```
 
-ggarrange(Year_plot, Sex_plot, Age_plot, Race_plot + rremove("x.text"),
-          labels = c("Year", "Sex", "Age", "Race"),
-          ncol = 2, nrow = 2,
-          vjust = 1)
+
+```{r}
+
+combination_plt =
+  subplot(
+    ggplotly(year_plot),
+    ggplotly(sex_plot),
+    ggplotly(age_plot),
+    ggplotly(race_plot),
+    nrows = 2,
+    titleY = TRUE,
+    titleX = TRUE,
+    margin = 0.1
+  ) 
+
+annotations = list( 
+  list( 
+    x = 0.2,  
+    y = 1.0,  
+    text = "Year",  
+    xref = "paper",  
+    yref = "paper",  
+    xanchor = "center",  
+    yanchor = "bottom",  
+    showarrow = FALSE 
+  ),  
+  list( 
+    x = 0.8,  
+    y = 1,  
+    text = "Sex",  
+    xref = "paper",  
+    yref = "paper",  
+    xanchor = "center",  
+    yanchor = "bottom",  
+    showarrow = FALSE 
+  ),  
+  list( 
+    x = 0.2,  
+    y = 0.45,  
+    text = "Age",  
+    xref = "paper",  
+    yref = "paper",  
+    xanchor = "center",  
+    yanchor = "bottom",  
+    showarrow = FALSE 
+  ),
+  list( 
+    x = 0.8,  
+    y = 0.45,  
+    text = "Race",  
+    xref = "paper",  
+    yref = "paper",  
+    xanchor = "center",  
+    yanchor = "bottom",  
+    showarrow = FALSE 
+  ))
+
+  
+combination_plt =
+  combination_plt %>%
+  layout(showlegend = F, annotations = annotations)
+
+combination_plt
 ```
 
 ---------------------------------------------------

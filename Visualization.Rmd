@@ -1,5 +1,5 @@
 ---
-title: "Innocent Death Overview"
+title: "Visualization"
 output: 
   html_document:
     code_folding: hide
@@ -7,7 +7,7 @@ output:
     toc_float: true
 ---
 
-```{r, warning = FALSE,message = FALSE, echo=FALSE}
+```{r, warning = FALSE,message = FALSE}
 library(tidyverse)
 library(viridis)
 library(modelr)
@@ -36,7 +36,8 @@ plot_df =
   mutate(year = as.double(year))
 ```
 
-```{r, warning = FALSE,message = FALSE,echo=FALSE}
+
+```{r, warning = FALSE,message = FALSE}
 accumulate_by <- function(dat, var) {
   var <- lazyeval::f_eval(var, dat)
   lvls <- plotly:::getLevels(var)
@@ -48,14 +49,9 @@ accumulate_by <- function(dat, var) {
   
 ```
 
-For this part, we illustrate the tendency of innocent death by line charts and different stratification in each year. You could click the play bottom to approach the whole pictures and magical animation.
+## Trend of death cases
 
-------------------------------------------------
-
-### 1.Overall Innocent Death Cases
-
-From 2000 to 2020, the number of death in the USA shows a tendency of rising until 2014 and then falling slightly. 
-Then we began to pay attention to what happened in the United States in 2014. What surprised us was that we found that a shooting in 2014 caused great public concern at that time [(News Link)](https://en.wikipedia.org/wiki/Shooting_of_Michael_Brown), and after that, the Obama government began to pay attention to such issues, so there was a subsequent decrease. 
+### Overall death cases
 
 ```{r}
 plot_year =
@@ -83,11 +79,8 @@ plot_year =
 plot_year
 ```
 
-------------------------------------------------
+### Grouped by age
 
-### 2.Proportion of Innocent Death by Age
-
-From 2000 to 2020, the number of deaths in all age groups increased, among which 0-14 and 55-84 showed a smaller increase, while 15-54 showed a faster increase, especially before 2014. However, 35-54 had the largest number of deaths, but due to its larger population base than 25-34, So actually 25-34 is the age group with the most innocent deaths.
 
 ```{r, warning = FALSE, message = FALSE, echo = FALSE}
 
@@ -121,11 +114,9 @@ plot_age =
 plot_age 
 ```
 
-------------------------------------------------
 
-### 3.Proportion of Innocent Death by Gender
 
-From 2000 to 2020, both female and male showed an upward trend, but the increase of female was very slow while the number of innocent deaths of male increased rapidly. What's more, the proportion of innocent death number of male to female gap became larger.
+### Grouped by gender
 
 ```{r, warning = FALSE, message = FALSE, echo = FALSE}
 plot_gender =
@@ -158,11 +149,7 @@ plot_gender =
 plot_gender
 ```
 
-------------------------------------------------
-
-### 4.Proportion of Innocent Death by Race
-
-From 2000 to 2020, the overall growth trend is still present but there is a difference among different race. Among them, Native American/Alaskan and Asian/Pacific Islander have the least number and slow growth, which may be related to the small population base. European American/White and African American/Black account for a high proportion.
+### Grouped by race
 
 ```{r, warning = FALSE, message = FALSE, echo = FALSE}
 plot_race =
