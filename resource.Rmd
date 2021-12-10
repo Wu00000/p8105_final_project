@@ -1,6 +1,9 @@
 ---
 title: "Resource"
-output: html_document
+output: 
+  html_document:
+    toc: true
+    toc_float: true
 ---
 
 ### More information about police killing in the U.S.
@@ -19,21 +22,23 @@ output: html_document
 
 [Young black men killed by US police at highest rate in year of 1,134 deaths](https://www.theguardian.com/us-news/2016/dec/15/us-police-killings-department-of-justice-program)
 
-### 
+
+### The Washington Post
+
+[Police shootings database 2015-2021](https://www.washingtonpost.com/graphics/investigations/police-shootings-database/)
+
+[Killings by police are undercounted by more than half, new study says](https://www.washingtonpost.com/nation/2021/10/01/police-killings-undercount-study/)
+
+[Fatal Force 2019 - 999 people were shot and killed by police in 2019](https://www.washingtonpost.com/graphics/2019/national/police-shootings-2019/)
 
 
 
 
 
-
-
-
-
-
+<br>
 
 <blockquote>
-  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
-  <small>Someone famous in <cite title="Source Title">Source Title</cite></small>
+  <p> Authentic hope requires clarity—seeing the troubles in this world—and imagination, seeing what might lie beyond these situations that are perhaps not inevitable and immutable.</p>
+  <small>Rebecca Solnit</small>
 </blockquote>
-
 
