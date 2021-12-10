@@ -2,14 +2,9 @@
 title: "Police; License to Kill?"
 output: 
   html_document:
-    code_folding: hide
     toc: true
     toc_float: true
-<<<<<<< HEAD
     code_folding: hide
-=======
-    
->>>>>>> b2a3e29dea193b6eb0ca983439ec36f4ba4145ee
 ---
 ```{r setup, echo = FALSE, message = FALSE}
 library(tidyverse)
