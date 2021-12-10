@@ -212,7 +212,8 @@ summary(fit1) %>%
 summary(fit1) %>% 
   broom::glance() %>% 
   knitr::kable() %>% 
-  kable_styling()
+  kable_styling() %>% 
+  scroll_box(height = "200px")
 ```
 
 Based on the summary and statistics in the table above, we could conclude that all all predictor are significant in statistical aspect although some levels in state have no significant association.
