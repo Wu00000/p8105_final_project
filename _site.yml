@@ -8,7 +8,7 @@ navbar:
     - text: "Regression Analysis"
       href: regression_df.html
     - text: "Interactive Map"
-      href: shiny_dashboard_template.html
+      href: https://heningcui.shinyapps.io/interactive_map/
     - text: "Resource"
       href: resource.html
     - icon: fa-github fa-lg
