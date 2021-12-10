@@ -19,4 +19,4 @@ navbar:
       href: https://github.com/Wu00000/p8105_final_project
 output:
   html_document:
-    theme: readable
+    theme: paper
