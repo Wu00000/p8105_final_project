@@ -13,14 +13,14 @@
 
 <title>Regression-Model 1</title>
 
-<script src="site_libs/header-attrs-2.11.3/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 <link href="site_libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script>
-<script src="site_libs/bs3compat-0.3.1/transition.js"></script>
-<script src="site_libs/bs3compat-0.3.1/tabs.js"></script>
-<script src="site_libs/bs3compat-0.3.1/bs3compat.js"></script>
+<script src="site_libs/bs3compat-0.3.0/transition.js"></script>
+<script src="site_libs/bs3compat-0.3.0/tabs.js"></script>
+<script src="site_libs/bs3compat-0.3.0/bs3compat.js"></script>
 <script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
 <link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
 <script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
@@ -391,59 +391,61 @@ div.tocify {
 </div>
 <div id="explorative-graphs" class="section level3">
 <h3>Explorative Graphs</h3>
-<div id="year" class="section level4">
-<h4>Year</h4>
-<p>From 2010 to 2020, the number of death in the USA shows a tendency of rising first and then falling slightly.</p>
-<pre class="r"><code>main_df %&gt;% 
+<p>In order to comprehensively understanding the model 1, the distribution of predictors and variables (innocent death number, sex, age group, race) are plotted below from 2010 to 2020 and there’s a phenomenon that the proportion in each predictor is consistent though the total keeps changing. For more details of analysis, you could jump to trend plot part.</p>
+<pre class="r"><code>Year_plot = main_df %&gt;% 
   filter(year %in% c(2010:2020)) %&gt;% 
   group_by(year) %&gt;% 
   summarize(count = n()) %&gt;% 
   ggplot(aes(x = year, y = count, fill = year)) + 
   geom_bar(stat = &quot;identity&quot;) +
   scale_x_continuous(breaks = c(2010:2020)) +
-  theme(legend.position = &quot;none&quot;)</code></pre>
-<p><img src="Regression_Model1_files/figure-html/unnamed-chunk-6-1.png" width="90%" /></p>
-</div>
-<div id="sex" class="section level4">
-<h4>Sex</h4>
-<p>Rate of male is much larger than female, but the proportion of male and female remains roughly the same from 2010 to 2020.</p>
-<pre class="r"><code>main_df %&gt;% 
+  theme(legend.position = &quot;none&quot;,
+        axis.title.x = element_blank())
+
+Sex_plot = main_df %&gt;% 
   filter(year %in% c(2010:2020)) %&gt;% 
   group_by(year, gender) %&gt;% 
   summarize(count = n()) %&gt;% 
   ggplot(aes(x = year, y = count, fill = gender)) + 
   geom_bar(stat = &quot;identity&quot;, position = position_dodge()) +
   scale_x_continuous(breaks = c(2010:2020)) +
-  theme(legend.title = element_blank())</code></pre>
-<p><img src="Regression_Model1_files/figure-html/unnamed-chunk-7-1.png" width="90%" /></p>
-</div>
-<div id="age-group" class="section level4">
-<h4>Age group</h4>
-<p>The ratio between different age groups are consistent, and the age group(25-34) has the largest share.</p>
-<pre class="r"><code>main_df %&gt;% 
+  theme(legend.title = element_blank(),
+        legend.text = element_text(size = 7),
+        legend.key.size = unit(5, &quot;mm&quot;),
+        axis.title.x = element_blank())
+
+Age_plot = main_df %&gt;% 
   filter(year %in% c(2010:2020)) %&gt;% 
   group_by(year, age_bin) %&gt;% 
   summarize(count = n()) %&gt;% 
   ggplot(aes(x = year, y = count, fill = age_bin)) + 
   geom_bar(stat = &quot;identity&quot;) +
   scale_x_continuous(breaks = c(2010:2020)) +
-  theme(legend.title = element_blank())</code></pre>
-<p><img src="Regression_Model1_files/figure-html/unnamed-chunk-8-1.png" width="90%" /></p>
-</div>
-<div id="race" class="section level4">
-<h4>Race</h4>
-<p>The Hispanic race accounts for the largest proportion and the rates from 2010 to 2020 are similar.</p>
-<pre class="r"><code>main_df %&gt;%
+  theme(legend.title = element_blank(),
+        legend.text = element_text(size = 7),
+        legend.key.size = unit(5, &quot;mm&quot;),
+        axis.title.x = element_blank()) +
+  guides(fill=guide_legend(ncol=6))
+
+Race_plot = main_df %&gt;%
   filter(year %in% c(2010:2020)) %&gt;% 
   group_by(year, race) %&gt;% 
   summarize(count = n()) %&gt;% 
   ggplot(aes(x = year, y = count, fill = race)) + 
   geom_bar(stat = &quot;identity&quot;) +
   scale_x_continuous(breaks = c(2010:2020)) +
-  theme(legend.title = element_blank())</code></pre>
-<p><img src="Regression_Model1_files/figure-html/unnamed-chunk-9-1.png" width="90%" /></p>
+  theme(legend.title = element_blank(),
+        legend.text = element_text(size = 7),
+        legend.key.size = unit(5, &quot;mm&quot;),
+        axis.title.x = element_blank()) +
+  guides(fill=guide_legend(ncol=3))
+
+ggarrange(Year_plot, Sex_plot, Age_plot, Race_plot + rremove(&quot;x.text&quot;),
+          labels = c(&quot;Year&quot;, &quot;Sex&quot;, &quot;Age&quot;, &quot;Race&quot;),
+          ncol = 2, nrow = 2,
+          vjust = 1)</code></pre>
+<p><img src="Regression_Model1_files/figure-html/unnamed-chunk-6-1.png" width="90%" /></p>
 <hr />
-</div>
 </div>
 <div id="statistical-analysis" class="section level3">
 <h3>Statistical Analysis</h3>
@@ -456,7 +458,7 @@ reg_df1 %&gt;%
   geom_density(color = &quot;dodgerblue1&quot;, fill = &quot;skyblue2&quot;) + 
   geom_vline(xintercept = mean(reg_df1$innocent_kill_per100k), linetype = &quot;dotted&quot;) +
   labs(x = &quot;innocent death(per 10K)&quot;)</code></pre>
-<p><img src="Regression_Model1_files/figure-html/unnamed-chunk-11-1.png" width="90%" /></p>
+<p><img src="Regression_Model1_files/figure-html/unnamed-chunk-8-1.png" width="90%" /></p>
 </div>
 <div id="transformation" class="section level4">
 <h4>2.Transformation</h4>
@@ -467,7 +469,7 @@ reg_df1 %&gt;%
   geom_density(color = &quot;dodgerblue1&quot;, fill = &quot;skyblue2&quot;) + 
   geom_vline(xintercept = mean(log(reg_df1$innocent_kill_per100k)), linetype = &quot;dotted&quot;) + 
   labs(x = &quot;log(innocent death per 10K)&quot;)</code></pre>
-<p><img src="Regression_Model1_files/figure-html/unnamed-chunk-12-1.png" width="90%" /></p>
+<p><img src="Regression_Model1_files/figure-html/unnamed-chunk-9-1.png" width="90%" /></p>
 </div>
 <div id="modeling" class="section level4">
 <h4>3.Modeling</h4>
@@ -1621,7 +1623,7 @@ nobs
 <pre class="r"><code># Model diagnosis
 par(mfrow = c(2, 2))
 plot(fit1)</code></pre>
-<p><img src="Regression_Model1_files/figure-html/unnamed-chunk-14-1.png" width="90%" /></p>
+<p><img src="Regression_Model1_files/figure-html/unnamed-chunk-11-1.png" width="90%" /></p>
 <p><font size="5"><a href = "#top" target = "_self">Back to top</a></font></p>
 </div>
 </div>
