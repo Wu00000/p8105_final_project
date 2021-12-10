@@ -39,19 +39,18 @@ In the wake of George Floyd’s murder, a number of protests arisen across the n
 
 ### Findings {.tabset}
 
-#### Finding 1
+#### Findings from Explorative analysis
+We have many interesting findings from explorative analysis. We found that the count of innocent death caused by police in the USA rised greatly from 2010 to 2014, and then falled slightly from 2014 to 2020. The peak of the innocent death count among the 10 years was 2014. We also found male occupied a much larger proportion of innocent deaths compared to female. And the ratio of male to female remains roughly the same from 2010 to 2020. As for age groups effect, the ratio between different age groups are consistent over the 10 years, and the age group (25-34) has the largest share of innocent deaths. For the effect of race, the Hispanic race accounts for the largest proportion and the rates from 2010 to 2020 are similar.
 
-We find that ....
 
+#### Findings from regression analysis.
 
-#### Finding 2
-
-Our regression model indicates that ... statistically significant. This indicates that there indeed are group differences by age and gender... Further detailed analyses are in the Regression Analysis sections.
+We developed two models to investigate the association between innocent death by police and potential factors. Our first regression model indicates that all our main predictor(year, state, age, gender, race) are statistically significant although some levels in state are not. This indicates that there indeed are group differences by year, age, gender, race and some of the states. Our second regression model investigate more potential predictors of innocent deaths and their association. We found that there are significant association between innocent deaths rate and gun ownership rate, crime rate and unemployment rate. Further detailed analyses and plots are in the Regression Analysis sections.
 
 
 
 ### Report
-
+Our report can be found from [here](report_link.html)
 
 
 
@@ -64,7 +63,11 @@ Our regression model indicates that ... statistically significant. This indicate
 
 
 ### Contributors
-
+- Hening Cui
+- Jialiang Hua
+- Congyang Xie
+- Wenhan Bao
+- Qihang Wu
 
 
 <font size="3"><a href = "#top" target = "_self">Back to top</a></font>
