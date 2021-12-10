@@ -20,6 +20,7 @@ navbar:
       href: https://github.com/Wu00000/p8105_final_project
 output:
   html_document:
+    css: style.css
     theme: 
       version: 4
       bootswatch: lux
