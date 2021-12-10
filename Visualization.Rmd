@@ -8,7 +8,7 @@ output:
 ---
 
 ```{r, warning = FALSE,message = FALSE}
-library (tidyverse)
+library(tidyverse)
 library(viridis)
 library(modelr)
 library(mgcv)
@@ -19,18 +19,12 @@ theme_set(theme_minimal() + theme(legend.position = "bottom"))
 
 knitr::opts_chunk$set(
   fig.width = 8,
-  fig.height =6,
+  fig.height = 6,
   out.width = "90%",
   warning = FALSE
 )
 
-options(
-  ggplot2.continuous.color = "viridis",
-  ggplot2.continuous.fill = "viridis"
-)
 
-scale_color_discrete = scale_color_viridis_d
-scale_fill_discrete = scale_fill_viridis_d
 ```
 
 
@@ -71,7 +65,7 @@ plot_year =
     type = 'scatter',
     frame = ~ frm, 
     mode = 'lines',
-    line = list(simplyfy = F)
+    line = list(simplyfy = F, color = '#B5495B')
   ) %>%
   layout(
     xaxis = list(title = "Year",
@@ -89,6 +83,7 @@ death vs time by age
 
 
 ```{r, warning = FALSE, message = FALSE, echo = FALSE}
+
 plot_age = 
   plot_df %>% 
   group_by(year,age_bin) %>% 
@@ -99,11 +94,12 @@ plot_age =
   plot_ly(
     x = ~ year,
     y = ~ count,
-    split = ~ age_bin,
     frame = ~ frm,
     type = 'scatter',
     mode = 'lines',
-    line = list(simplyfy = F)
+    line = list(simplyfy = F),
+    color = ~ age_bin, 
+    colors = c("#F596AA", "#E9A368", "#B481BB", "#838A2D", "#58B2DC")
   ) %>%
   layout(
     xaxis = list(title = "Year",
@@ -133,10 +129,11 @@ plot_gender =
     x = ~ year,
     y = ~ count,
     type = 'scatter',
-    split = ~ gender,
     frame = ~ frm,
     mode = 'lines',
-    line = list(simplyfy = F)
+    line = list(simplyfy = F),
+    color = ~ gender,
+    colors = c("#F596AA", "#58B2DC")
   ) %>%
   layout(
     xaxis = list(title = "Year",
@@ -165,9 +162,10 @@ plot_ly(
     y = ~ count,
     frame = ~ frm, 
     type = 'scatter',
-    split = ~ race,
     mode = 'lines',
-    line = list(simplyfy = F)
+    line = list(simplyfy = F),
+    color = ~ race,
+    colors = c("#F596AA", "#E9A368", "#B481BB", "#838A2D", "#58B2DC")
   ) %>%
   layout(
     xaxis = list(title = "Year",
