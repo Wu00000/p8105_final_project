@@ -5,10 +5,10 @@ account: heningcui
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 5302278
-bundleId: 5353730
+bundleId: 5354288
 url: https://heningcui.shinyapps.io/interactive_map/
-when: 1639111719.12624
-lastSyncTime: 1639111719.12626
+when: 1639119806.15899
+lastSyncTime: 1639119806.159
 asMultiple: FALSE
 asStatic: TRUE
-ignoredFiles: _site.yml|about.html|about.Rmd|census.html|census.md|census.Rmd|data_clean.html|data_clean.Rmd|final_report/.DS_Store|final_report/final_report.pdf|final_report/final_report.Rmd|images/.DS_Store|images/index_img1.png|images/resource_1.jpg|index.html|index.Rmd|Proposal.html|Proposal.md|Proposal.Rmd|README.md|Regression_Model1.html|Regression_Model1.Rmd|Regression_Model2.html|Regression_Model2.Rmd|report_link.html|report_link.Rmd|report.html|resource.html|resource.Rmd|Visualization_files/figure-html/unnamed-chunk-2-1.png|Visualization_files/figure-html/unnamed-chunk-3-1.png|Visualization_files/figure-html/unnamed-chunk-4-1.png|Visualization_files/figure-html/unnamed-chunk-5-1.png|Visualization.html|Visualization.Rmd
+ignoredFiles: _site.yml|about.html|about.Rmd|bootstrap.min.css|census.html|census.md|census.Rmd|data_clean.html|data_clean.Rmd|final_report/.DS_Store|final_report.pdf|images/.DS_Store|images/index_img1.png|images/resource_1.jpg|index.html|index.Rmd|package-lock.json|Proposal.html|Proposal.md|Proposal.Rmd|README.md|Regression_Model1.html|Regression_Model1.Rmd|Regression_Model2.html|Regression_Model2.Rmd|report_link.html|report_link.Rmd|report.html|resource.html|resource.Rmd|Visualization_files/figure-html/unnamed-chunk-2-1.png|Visualization_files/figure-html/unnamed-chunk-3-1.png|Visualization_files/figure-html/unnamed-chunk-4-1.png|Visualization_files/figure-html/unnamed-chunk-5-1.png|Visualization.html|Visualization.Rmd

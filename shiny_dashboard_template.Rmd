@@ -1,9 +1,13 @@
 ---
 title: "Shiny Dashboard"
-output: 
+output:
   flexdashboard::flex_dashboard:
     orientation: columns
     vertical_layout: fill
+    theme: 
+      version: 4
+      bootswatch: lux
+    source_code: embed
 runtime: shiny
 ---
 
@@ -23,10 +27,9 @@ library(readxl)
 library(rsconnect)
 
 
-
 thm <- 
   hc_theme(
-    colors = c("#1a6ecc", "#434348", "#90ed7d"),
+    colors = c("#F596AA", "#E9A368", "#B481BB"),
     chart = list(
       backgroundColor = "transparent",
       style = list(fontFamily = "Source Sans Pro")
@@ -44,7 +47,7 @@ plot =
   filter(year != 2021)
 ```
 
-Column {.sidebar}
+Sidebar {.sidebar}
 -----------------------------------------------------------------------
 
 ```{r}
@@ -56,7 +59,7 @@ Year_choices =
 selectInput(
   "Year",
   label = h3("Select Year"),
-  choices =Year_choices,
+  choices = Year_choices,
   selected = "2020"
 )
 
@@ -119,14 +122,13 @@ pop_stat <-
 
 ```{r}
 renderHighchart({
-plot %>% 
-  filter(     
-    year == input[["Year"]],
-    state ==input[["State"]]) %>% 
-  group_by(month, state) %>% 
-  summarize(count = n()) %>% 
-  hchart("line", hcaes(x = month, y = count, group = state)) %>% 
-  hc_add_theme(thm)
+  plot %>%
+    filter(year == input[["Year"]],
+           state == input[["State"]]) %>%
+    group_by(month, state) %>%
+    summarize(count = n()) %>%
+    hchart("line", hcaes(x = month, y = count, group = state)) %>%
+    hc_add_theme(thm)
 })
 ```
 
@@ -137,23 +139,30 @@ Column {data-width=550}
 
 ```{r}
 renderLeaflet({
-  plot %>% 
-    filter(
-      year == input[["Year"]],
-      state ==input[["State"]]
-    ) %>% 
-    mutate(lan = as.numeric((str_sub(latitude, end = -2))),
-           lon = as.numeric(str_sub(longitude, end = -2)),
-           label = str_c("<b>City: ", city, 
-                         "<br>Age: ", age, 
-                         "<br>Race: ", race,
-                         "<br>Gender: ", gender,
-                         "<br>Cause of death: ", highest_force,
-                         sep = "")) %>%
-  leaflet() %>% 
-  addProviderTiles(providers$CartoDB.Positron ) %>% 
-  addCircleMarkers(~lon, ~lan, popup = ~ label, radius = 1)
-  })   
+  plot %>%
+    filter(year == input[["Year"]],
+           state == input[["State"]]) %>%
+    mutate(
+      lan = as.numeric((str_sub(latitude, end = -2))),
+      lon = as.numeric(str_sub(longitude, end = -2)),
+      label = str_c(
+        "<b>City: ",
+        city,
+        "<br>Age: ",
+        age,
+        "<br>Race: ",
+        race,
+        "<br>Gender: ",
+        gender,
+        "<br>Cause of death: ",
+        highest_force,
+        sep = ""
+      )
+    ) %>%
+    leaflet() %>%
+    addProviderTiles(providers$CartoDB.Positron) %>%
+    addCircleMarkers( ~ lon, ~ lan, popup = ~ label, radius = 1)
+})   
 ```
 
 
