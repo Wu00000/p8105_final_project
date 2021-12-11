@@ -5,6 +5,8 @@ date: "Dec 9 2021"
 output: html_document
 ---
 
+Please click [here](index.html) and go back to our index page...
+
 ```{r setup, echo = FALSE, message = FALSE}
 library(tidyverse)
 library(readr)
@@ -363,6 +365,7 @@ A strength of this study is that the main dataset contains abundant data points 
 ## Contribution
 Congyang Xie was mainly responsible for dataset finding and aesthetic modification of the plots. Wenhan Bao and Qihang Wu were mainly responsible for the Data cleaning, EDA, Regression, Model Selection and analyses. Qihang also contributed to the organization of the whole project. Hening Cui was mainly responsible for further data visualization such as the animation of the trend plot, the shiny app. Jialiang Hua was mainly responsible for the organization of the final report and website building. We discussed the final report and recorded the videos together. All our members engaged in the project actively.
 
-
+<br>
+<br>
 
 <font size="5"><a href = "#top" target = "_self">Back to top</a></font>

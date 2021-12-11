@@ -1,11 +1,13 @@
 ---
-title: "About"
+title: "About us"
 ---
 
-### About this site
+- This website contains the final group project of p8105 data science at Columbia University Mailman School of Public Health. And we are extremely concerned about this social issues...
 
-Sometimes you need to say a bit about the site -- how it was made, where it's hosted, where the source code can be found. 
+- Although we have tried our best to include more resources and data analysis results in this project, we still cannot avoid certain mistakes. Please understand, thank you!
 
-If this is for a project or analysis, I recommend giving some details about the R package versions that you used to create the content.
+<center>
+<img src="images/about_1.jpg" style="width:90%">
 
-
+<font size="2"> Image source: [Unsplash](https://unsplash.com/)</font>
+</center>

@@ -25,7 +25,7 @@ show_main_df <-
 ```
 
 
-###### Exploring the innocent killing rate in the U.S. by police from 2010 to 2020
+###### Exploring the innocent death rate in the U.S. by police from 2010 to 2020
 
 <font size="3">By: Hening Cui | Jialiang Hua | Congyang Xie | Wenhan Bao | Qihang Wu</font>
 
@@ -33,6 +33,9 @@ show_main_df <-
 <font size="2"> Image source: [The Guardian](https://www.theguardian.com/us-news/series/counted-us-police-killings)</font>
 
 <br>
+
+### Website Overview (test)
+<iframe width="560" height="315" src="https://www.youtube.com/embed/S6dGOPTo058" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 ### Background
 In the wake of George Floyd’s murder, a number of protests arisen across the nation. This motivates us to investigate innocent deaths under police violence and the association of confounders with excessive police force. Although the majority encounters that meet death with law enforcement officials present a lethal threat to officers or society, there are still people that involved in the police action meets death with a quantity not to be ignored.  This project analyses the data on people involved in a police operation and results in fatalities.  Despite the assessment of  overuse of police force across geographical factors, this project also focuses on socioeconomic factors, political factors and periodical patterns. 
@@ -72,14 +75,14 @@ We developed two models to investigate the association between innocent death by
 
 
 ### Report
-Our report can be found from [here](./final_report/final_report_firstversion.html).
+Our report can be found from [here](./final_report_firstversion.html).
 
 
 
 ### Website Navigation
-- [<i class="fas fa-chart-line" style="font-size: 1em"></i> Dashboard](dashboard.html)
-- [<i class="fas fa-users" style="font-size: 1em"></i> About](about.html)
+- [<i class="fas fa-chart-line" style="font-size: 1em"></i> Dashboard](https://heningcui.shinyapps.io/interactdashboard/)
 - [<i class="fas fa-info-circle" style="font-size: 1em"></i> Resource](resource.html)
+- [<i class="fas fa-users" style="font-size: 1em"></i> About](about.html)
 
 
 ### Contributors  
