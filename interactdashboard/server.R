@@ -64,7 +64,7 @@ shinyServer(function(input, output) {
       hc_add_series_map(
         usgeojson,
         plotly,
-        name = "Innocent Death number",
+        name = "Innocent Death rate",
         value = "death_rate_per10e6",
         joinBy = c("woename", "state"),
         dataLabels = list(enabled = TRUE,
