@@ -98,57 +98,47 @@ Searching for more potential predictors and finding the association between inno
 
 ### Explorative Graphs
 
-#### Gun ownership rate by state in 2020
+The following graphs show the trend of three variables including crime rate, gun ownership, and unemployment rate. The crime rate varies from state to state, with Alaska showing the highest rate. Gun ownership rates vary by state and Montana has the highest. Unemployment rate in each state shows a diversified trend and Nevada has the highest one.
 
-Gun ownership rates vary by state and Montana has the highest.
+To test the collinearity, we also divide the values based on their original magnitudes. The results demonstrate that there is no apparent interactions among these three variables.
 
-```{r}
-gun_plt = 
+```{r, fig.width = 12, fig.asp = 0.4}
+# Join data
+pop_gun_crime_unemply <- 
   gun_owner %>% 
-  mutate(state = fct_reorder(state, gun_ownership)) %>% 
-  ggplot(aes(x = gun_ownership, y = state, fill = as.numeric(state))) + 
-  geom_col(alpha = 0.6, show.legend = FALSE) +
-  scale_fill_gradient(low = "#77969A", high = "#516E41") +
-  labs(x = "Gun Ownership Rate",
-       y = "State")
+  left_join(crime_stat, by = "state") %>% 
+  left_join(unempolyment_stat, by = "state") %>% 
+  mutate(state = state.abb[match(state, state.name)]) %>% 
+  select(state, everything())
 
-ggplotly(gun_plt) %>% layout(showlegend = F)
-```
-
-#### Crime rate by state in 2020
-
-The crime rate varies from state to state, with Alaska showing the highest rate
-
-```{r}
-crime_plt =
-  crime_stat %>%
-  filter(state != "District of Columbia") %>%
-  mutate(state = fct_reorder(state, crime_per_10e6)) %>%
-  ggplot(aes(x = crime_per_10e6, y = state, fill = as.numeric(state))) +
-  geom_col(alpha = 0.6, show.legend = FALSE) +
-  scale_fill_gradient(low = "#77969A", high = "#516E41") +
-  labs(x = "Crimte rate per 100k",
-       y = "State")
-
-ggplotly(crime_plt) %>% layout(showlegend = F)
-```
-
-#### Unemployment rate by state in 2020
-
-Unemployment rates in each state show a diversified trend and Nevada has the highest unemployment rate.
-
-```{r}
-unemployment_plt =
-  unempolyment_stat %>%
-  filter(state != "District of Columbia") %>%
-  mutate(state = fct_reorder(state, unemploy_rate)) %>%
-  ggplot(aes(x = unemploy_rate, y = state, fill = as.numeric(state))) +
-  geom_col(alpha = 0.6, show.legend = FALSE) +
-  scale_fill_gradient(low = "#77969A", high = "#516E41") +
-  labs(x = "Unemployment rate",
-       y = "State")
-
-ggplotly(unemployment_plt) %>% layout(showlegend = F)
+pop_gun_crime_unemply %>% 
+  mutate(
+    crime_rate = crime_per_10e6 / 10e3,
+    gun_rate = gun_ownership / 6) %>% 
+  select(-(2:3)) %>% 
+  pivot_longer(
+    2:4,
+    names_to = "statistics",
+    values_to = "values"
+  ) %>%
+  mutate(
+    statistics = case_when(
+      statistics == "crime_rate" ~ "Crime Rate Per 1k",
+      statistics == "gun_rate" ~ "Gun Ownership Rate/6",
+      statistics == "unemploy_rate" ~ "Unemployment Rate",
+    )
+  ) %>% 
+  ggplot(aes(x = state, y = values, color = statistics, group = statistics)) + 
+  geom_point(aes(size = values), alpha = .4, show.legend = FALSE) + 
+  geom_smooth(se = FALSE) +
+  facet_grid(. ~ statistics) + 
+  theme(
+    axis.text.x = element_text(size = 6, angle = 90, vjust = 0.5, hjust = 1),
+    legend.position = "none") + 
+  labs(
+    x = "State",
+    y = "Value"
+  )
 ```
 
 ---------------------------------------------------
@@ -199,7 +189,7 @@ reg_df2 <-
 Because the distribution of innocent death per 100K is the same in model 1, here we still conduct log transformation and the formula is followed below:
 
 $$ log(innocent \space death \space per \space 100k) = \beta_0 + \beta_1 age + \beta_2 gender + \beta_3 race + \beta_4Gun \space ownership \space rate$$ 
-$$ + \beta_5Crime \space rate(per \space 100K) + \beta_6 Unemployment \space rate$$
+$$ + \beta_5Crime \space rate + \beta_6 Unemployment \space rate$$
 ```{r}
 # Fit a model
 fit2 <- lm(log(innocent_kill_per100k) ~ age_bin + gender + race + gun_ownership + crime_per_10e6 + unemploy_rate, 
@@ -215,7 +205,7 @@ summary(fit2) %>%
   broom::glance() %>% 
   knitr::kable() %>% 
   kable_styling() %>% 
-  scroll_box(height = "200px")
+  scroll_box(height = "120px")
 ```
 
 According to the statistics in the table above, we could conclude that P-value is $2.2 \times 10^{-16}$ and smaller than significant level which means the association is significant in statistical aspect although crime rate seems have no significant association.

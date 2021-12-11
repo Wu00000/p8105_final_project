@@ -27,7 +27,7 @@ show_main_df <-
 
 ###### Exploring the innocent death rate in the U.S. by police from 2010 to 2020
 
-<font size="3">By: Hening Cui | Jialiang Hua | Congyang Xie | Wenhan Bao | Qihang Wu</font>
+<font size="3">By: [Hening Cui](https://www.linkedin.com/in/赫凝-崔-303230226?trk=people-guest_people_search-card) | [Jialiang Hua](https://cn.linkedin.com/in/jialiang-hua-892698129?trk=people-guest_people_search-card) | [Congyang Xie](https://www.linkedin.com/in/congyang-xie-bb521b191/zh-cn?trk=people-guest_people_search-card) | [Wenhan Bao](https://cn.linkedin.com/in/wenhan-bao-3217281a3?trk=people-guest_people_search-card) | [Qihang Wu](https://www.linkedin.com/in/qihang-wu-2b1b45193/)</font>
 
 <img src="images/index_img1.png" style="width:120%">
 <font size="2"> Image source: [The Guardian](https://www.theguardian.com/us-news/series/counted-us-police-killings)</font>
@@ -46,7 +46,7 @@ In the wake of George Floyd’s murder, a number of protests arisen across the n
 - Main data: [Innocent death by polices](https://www.kaggle.com/kannan1314/innocent-deaths-caused-by-police-all-time)
 - A glance of our main data:
   - `age`, `gender`, and `race` represent the subject's demographic characteristics  
-  - `date_of_death` represents the date of the subject's death.`  
+  - `date_of_death` represents the date of the subject's death.  
   - `city`, `state`, `latitude`, and `longitude` represent the location of the death    
   - `highest_force` represents the cause of death  
   - `intended_force` represents the intentional use of force by police
@@ -70,7 +70,7 @@ We developed two models to investigate the association between innocent death by
 
 
 ### Report
-Our report can be found from [here](./final_report_firstversion.html).
+Our report can be found from [here](./final_report_2ndversion.html).
 
 
 
@@ -78,14 +78,6 @@ Our report can be found from [here](./final_report_firstversion.html).
 - [<i class="fas fa-chart-line" style="font-size: 1em"></i> Dashboard](https://heningcui.shinyapps.io/interactdashboard/)
 - [<i class="fas fa-info-circle" style="font-size: 1em"></i> Resource](resource.html)
 - [<i class="fas fa-users" style="font-size: 1em"></i> About](about.html)
-
-
-### Contributors  
-- <font size="2">**Hening Cui**</font>    | Website
-- <font size="2">**Jialiang Hua**</font>  | Website
-- <font size="2">**Congyang Xie**</font>  | Website
-- <font size="2">**Wenhan Bao**</font>    | Website
-- <font size="2">**Qihang Wu**</font>     | [Website](https://wu00000.github.io/)  
 
 
 #### Stay tuned on Columbia Public Health...

@@ -184,7 +184,7 @@ The main dataset for our project is from Kaggle and to make a more comprehensive
 The image in the upper left corner shows the total amount of innocent death across 50 states by year in the U.S. from 2010 to 2020. It illustrates that the number of cases has increased year by year and leveled off after 2013. It is reassuring that there may be a downward trend in this total count after 2017.
 
 + Stratification by Sex, Age, and Race  
-The other three graphs show the number of innocent death stratified by demographic characteristics. The one in the upper right shows a huge difference in the total amount of innocent death between males and females. These unfortunate cases generally occur in the male group, although the proportion of males and females remains roughly the same from 2010 to 2020. The image in the lower-left displays that people under 54 years old accounts for a large proportion of the whole population. As for race and ethnicity, although the total number of innocent death changes year by year, the European-American/White race group will consistently account for the largest proportion, and then comes the African-American/Black group.
+The other three graphs show the number of innocent death stratified by demographic characteristics. The one in the upper right shows a huge difference in the total amount of innocent death between males and females. These unfortunate cases generally occur in the male group, although the proportion of males and females remains roughly the same in recent decade. The image in the lower-left displays that people under 54 years old accounts for a large proportion of the whole population. As for race and ethnicity, although the total number of innocent death changes year by year, the European-American/White race group will consistently account for the largest proportion, and then comes the African-American/Black group.
 ```{r}
 year_plot =
   main_df %>%
@@ -321,10 +321,10 @@ combination_plt
 ```
 
 
-### Gun Ownership, Crime Rate, and Unemployment Rate by State
-The following graph shows the distributions of the crime rate, gun ownership, and unemployment rate in 50 states of the U.S.  
+#### Gun Ownership, Crime Rate, and Unemployment Rate by State
+The following graph shows the distributions of the crime rate, gun ownership, and unemployment rate in 50 states of the U.S. We also divide them based on their original magnitudes so that we can easily compare their trends.
 
-```{r}
+```{r, fig.width = 14}
 # Join data
 pop_gun_crime_unemply <- 
   gun_owner %>% 
@@ -333,8 +333,7 @@ pop_gun_crime_unemply <-
   mutate(state = state.abb[match(state, state.name)]) %>% 
   select(state, everything())
 
-gun_crime_unemply_plt <-   
-  pop_gun_crime_unemply %>% 
+pop_gun_crime_unemply %>% 
   mutate(
     crime_rate = crime_per_10e6 / 10e3,
     gun_rate = gun_ownership / 6) %>% 
@@ -343,6 +342,13 @@ gun_crime_unemply_plt <-
     2:4,
     names_to = "statistics",
     values_to = "values"
+  ) %>% 
+    mutate(
+    statistics = case_when(
+      statistics == "crime_rate" ~ "Crime Rate Per 1k",
+      statistics == "gun_rate" ~ "Gun Ownership Rate/6",
+      statistics == "unemploy_rate" ~ "Unemployment Rate",
+    )
   ) %>% 
   ggplot(aes(x = state, y = values, color = statistics, group = statistics)) + 
   geom_point(aes(size = values), alpha = .4, show.legend = FALSE) + 
@@ -357,44 +363,13 @@ gun_crime_unemply_plt <-
   )
 ```
 
-```{r}
-crime_plt <- 
-  crime_stat %>% 
-  filter(state != "District of Columbia") %>% 
-  mutate(state = state.abb[match(state, state.name)]) %>% 
-  ggplot(aes(x = state, y = crime_per_10e6)) + 
-  geom_point() + 
-  geom_smooth(se = FALSE) + 
-  theme(
-    axis.title.x = element_blank(),
-    axis.text.x = element_blank())
-
-gun_plt <- 
-  gun_owner %>% 
-  mutate(state = state.abb[match(state, state.name)]) %>% 
-  ggplot(aes(x = state, y = gun_ownership)) + 
-  geom_point() + 
-  geom_smooth(se = FALSE) +
-  theme(
-  axis.title.x = element_blank(),
-  axis.text.x = element_blank())
-
-unemply_plt <- 
-  unempolyment_stat %>% 
-  filter(state != "District of Columbia") %>% 
-  mutate(state = state.abb[match(state, state.name)]) %>% 
-  ggplot(aes(x = state, y = unemploy_rate)) + 
-  geom_point() + 
-  geom_smooth(se = FALSE) + 
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
-
-crime_plt / gun_plt / unemply_plt
-```
-
 
 ## Statistical Analysis
-For statistical analysis, we come up with two regression models. The first one contains variables including state, age, gender, and race based on the data from year 2010 to 2020, while the second one considers not only the above predictors but also the other three: gun ownership, crime rate, and unemployment rate in 2020. Since we believe that all these three factors may somehow connect with the rate of innocent killings by the police in the U.S. For instance, the police might be armed with more advanced weapons in the states where the crime rate is high, which will lead to a higher rate of innocent killings in these regions.  
-The following graph is the distribution of the target variable `innocent_kill_per100k`, we can see that the distribution has nothing to do with the normal, therefore we need to perform a transformation.
+- For statistical analysis, we come up with two regression models. The first one contains variables like state, age, gender, and race based on the data from the year 2010 to 2020, while the second one considers not only the above predictors but also the other three: gun ownership, crime rate, and unemployment rate in 2020. Meanwhile, to avoid collinearity between the variable state and the others, we remove this variable from model 2. 
+
+- In model 2, we believe that all the three factors above may somehow connect with the rate of innocent death in the U.S. For instance, the police might be armed with more advanced weapons in the states where the crime rate is high, which will then lead to a higher rate of innocent killings in these regions.  
+
+- The following graph is the distribution of our target variable `innocent_kill_per100k`, we can see that the distribution has nothing to do with the normal, therefore we need to perform a transformation.
 ```{r}
 before_trans = reg_df1 %>% 
   ggplot(aes(x = innocent_kill_per100k)) + 
@@ -411,14 +386,15 @@ After_trans = reg_df1 %>%
 before_trans + After_trans
 ```
 
-After transforming the variable `innocent_kill_per100k`, we could look at the plot in the left where the distribution is much more normal than before which satisfy the 
-assumption of normality.
+- After transformation, we find that the distribution in the right is more normal than before which then satisfy the assumption of normality.
 
 ## Results
-By transformation above, the formula is below:
+#### Model 1
+By transformation above, the formula is stated as follows:
 
 $$ log(innocent \space death \space per \space 100k) = \beta_0 + \beta_1year + \beta_2state + \beta_3 age + \beta_4 gender + \beta_5 race$$
-Based on the summary and statistics which you could see in the part of regression-model 1, we could conclude that all all predictor are significant in statistical aspect although some levels in state have no significant association.
+
+- The summary and statistics of model 1 are shown as follows, we then conclude that all predictors are significant in statistical aspect although some levels in the state have no significant association.
 
 ```{r echo=FALSE}
 fit1 <- lm(log(innocent_kill_per100k) ~ year + state + age_bin + gender + race, data = reg_df1)
@@ -426,12 +402,13 @@ fit1 <- lm(log(innocent_kill_per100k) ~ year + state + age_bin + gender + race, 
 summary(fit1) %>% 
   broom::glance() %>% 
   knitr::kable() %>% 
-  kable_styling()
+  kable_styling() %>% 
+  scroll_box(height = "120px")
 ```
 
-When concentrating on the table of R.squared, we could figure out that $R^2$ value is 0.72 which means that 72% of the variability in the outcome data can be explained by the model, especially if R-squared value r > 0.7 this value is generally considered strong effect size *(Ref:Moore, D. S., Notz, W. I, & Flinger, M. A. (2013). The basic practice of statistics (6th ed.))*
+- Concentrating on the table of R.squared, we figure out that adjusted $R^2$ is 0.72 which means that around 72% of the variability in the outcome can be explained by the model, especially when R-squared > 0.7, which is generally considered as a strong effect size *(Ref: Moore, D. S., Notz, W. I, & Flinger, M. A. (2013). The basic practice of statistics (6th ed.))*
 
-In order to further make sure the accuracy of model 1 and the homoscedasticity of residual, we draw four plots which are Residuals vs Fitted, Normal QQ, Scale-Location and Residuals vs Leverage respectively. When looking at the plots, we could figure out that the homoscedasticity of residual is proved.
+- To further ensure the accuracy of model 1 and the homoscedasticity of the residual, we draw four plots including Residuals vs Fitted, Normal QQ, Scale-Location, and Residuals vs Leverage respectively. When looking at the plots, we find that the homoscedasticity of residual is proved.
 
 ```{r echo=FALSE}
 # Model diagnosis
@@ -439,10 +416,11 @@ par(mfrow = c(2, 2))
 plot(fit1)
 ```
 
-In addition to the model above, we are still eager to dig out another potential predictors for innocent death so that we fitted another model by adding three variables (Gun ownership rate, Crime rate per 100K and unemployment rate) and the model 2 we are going to fit is where we drop the highly potential correlated variable (State) for avoiding collinearity: 
+#### Model 2
+- In addition to the model above, we are still eager to dig out other potential predictors for innocent death, so we fitted another model by adding three more variables: Gun ownership rate, Crime rate, and unemployment rate. In model 2, we are going to drop a highly correlated variable (State) to avoid collinearity: 
 
 $$ log(innocent \space death \space per \space 100k) = \beta_0 + \beta_1 age + \beta_2 gender + \beta_3 race + \beta_4Gun \space ownership \space rate$$ 
-$$ + \beta_5Crime \space rate(per \space 100K) + \beta_6 Unemployment \space rate$$
+$$ + \beta_5Crime \space rate + \beta_6 Unemployment \space rate$$
 ```{r}
 fit2 <- lm(log(innocent_kill_per100k) ~  age_bin + gender + race + gun_ownership + crime_per_10e6 + unemploy_rate, 
     data = reg_df2)
@@ -450,12 +428,13 @@ fit2 <- lm(log(innocent_kill_per100k) ~  age_bin + gender + race + gun_ownership
 summary(fit2) %>% 
   broom::glance() %>% 
   knitr::kable() %>% 
-  kable_styling()
+  kable_styling() %>% 
+  scroll_box(height = "120px")
 ```
 
-When concentrating on the table of R.squared, we could figure out that adjusted $R^2$ value is 0.62 which means that 62% of the variability in the outcome data can be explained by the model so that this value is generally considered a Moderate effect size and the fit is not as good as model1. If R-squared value 0.5 < r < 0.7 this value is generally considered a Moderate effect size.
+- When concentrating on the table of the adjusted R.squared, we figure out that the adjusted $R^2$ is 0.62 which means that 62% of the variability in the outcome can be explained by the model so this value is generally considered a moderate effect size and the fit is not as good as model1. If R-squared value 0.5 < r < 0.7 this value is generally considered a Moderate effect size. *(Ref: Moore, D. S., Notz, W. I, & Flinger, M. A. (2013). The basic practice of statistics (6th ed.))*
 
-For model 2, we also draw four plots to prove the homoscedasticity of residual and we could find that the multiple linear regression fits not as good as model 1.
+- In model 2, we also draw four plots to prove the homoscedasticity of residual and we find that the multiple linear regression fits not as good as model 1.
 
 ```{r}
 # Model diagnosis
@@ -464,18 +443,18 @@ plot(fit2)
 ```
 
 ## Conclusion
-Our EDA and first regression model indicates that all our main predictor(year, state, age, gender, race) are statistically significant although some levels in state are not. This indicates that there indeed are group differences by year, age, gender, race and most of the states regarding the innocent death by police. Our second regression model investigates more potential predictors of innocent deaths and their association. We found that there are significant association between innocent deaths rate and gun ownership rate as well as unemployment rate. The finding matches what we have proposed mostly, except that the crime rate are not statistically significant in the model we built.
+Our EDA and first regression model indicates that all our main predictor(year, state, age, gender, race) are statistically significant although some levels in the state are not. This indicates that there indeed are group differences by year, age, gender, race, and most of the states regarding the innocent death by police. Our second regression model investigates more potential predictors of innocent deaths and their association. We found that there is a significant association between the innocent deaths rate and gun ownership rate as well as the unemployment rate. The finding matches what we have proposed mostly, except that the crime rate is not statistically significant in the model we built.
 
 ## Discussion
-Overall, some of our findings are consistent with what we had originally hypothesized and some are not. Firstly, The overall trend of innocent death cases shows a tendency of rising until 2014 and then falling slightly. We found a shooting in 2014, which caused great public concern and  government action, may account for the pattern. Secondly, male takes up a larger proportion of innocent death compared with female. This matches what we had hypothesized as higher crime rate and aggressivity of male than female. Thirdly, there are statistically significant associations between rate of innocent death by police and year, age, gender, race and states from our regression model.
+- Overall, some of our findings are consistent with what we had originally hypothesized and some are not. Firstly, The overall trend of innocent death cases shows a tendency of rising until 2014 and then falling slightly. We found a shooting in 2014, which caused great public concern and government action, may account for the pattern. Secondly, male takes up a larger proportion of innocent death compared with females. This matches what we had hypothesized as a higher crime rate and aggressivity of males than females. Thirdly, there are statistically significant associations between the rate of innocent death by police and year, age, gender, race, and states from our regression model.
 
-Since crime rate, gun ownership rate and unemployment rate are associated with state variable, we removed the state variable in our second model to avoid collinearity. The adjusted $R^2$ value for the second model is 0.62, which is considered a moderate effect size and is not as good as model 1. The result shows significant association between innocent death rate and gun ownership rate as well as unemployment rate, which is consistent with what was expected. However, interestingly, the the crime rate does not show a statistically significant association with innocent death rate, which is not in line with our expectation. We thought this could have potentially been due to other factors such as educational level, income level distorting the association. We are unable to dig into this and it needs further investigation.
+- Since crime rate, gun ownership rate, and unemployment rate are associated with a state variable, we removed the state variable in our second model to avoid collinearity. The adjusted $R^2$ value for the second model is 0.62, which is considered a moderate effect size and is not as good as model 1. The result shows a significant association between the innocent death rate and gun ownership rate as well as the unemployment rate, which is consistent with what was expected. However, interestingly, the crime rate does not show a statistically significant association with the innocent death rate, which is not in line with our expectations. We thought this could have potentially been due to other factors such as educational level, income level distorting the association. We are unable to dig into this and it needs further investigation.
 
-A strength of this study is that the main dataset contains abundant data points and many variables, which gives us lots of chance to explore the details and the trends behind the data. Meanwhile, there are many limitations that need to be awared. Firstly, we used combined datasets for analyses. There might be potential inconsistency cause by combining different data sources, which may result in bias in our results.  Secondly, there may be other factors or latent factors influencing innocent death rate that we haven't considered and put into our model. A better model might be built considering other factors such as educational level, income level and so on.
+- A strength of this study is that the main dataset contains abundant data points and many variables, which gives us lots of chances to explore the details and the trends behind the data. Meanwhile, many limitations need to be aware. Firstly, we used combined datasets for analyses. There might be potential inconsistency caused by combining different data sources, which may result in bias in our results.  Secondly, there may be other factors or latent factors influencing the innocent death rate that we haven't considered and put into our model. A better model might be built considering other factors such as educational level, income level, and so on.
 
 
 ## Contribution
-Congyang Xie was mainly responsible for dataset finding and aesthetic modification of the plots. Wenhan Bao and Qihang Wu were mainly responsible for the Data cleaning, EDA, Regression, Model Selection and analyses. Qihang also contributed to the organization of the whole project. Hening Cui was mainly responsible for further data visualization such as the animation of the trend plot, the shiny app. Jialiang Hua was mainly responsible for the organization of the final report and website building. We discussed the final report and recorded the videos together. All our members engaged in the project actively.
+Congyang Xie was mainly responsible for dataset finding and aesthetic modification of the plots. Wenhan Bao and Qihang Wu were mainly responsible for the Data cleaning, EDA, Regression, Model Selection, and analyses. Qihang also contributed to the organization of the whole project. Hening Cui was mainly responsible for further data visualization such as the animation of the trend plot, the shiny app. Jialiang Hua was mainly responsible for the organization of the final report and website building. We discussed the final report and recorded the videos together. All our members engaged in the project actively.
 
 <br>
 <br>

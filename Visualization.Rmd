@@ -89,12 +89,19 @@ plot_year
 
 From 2000 to 2020, the number of deaths in all age groups increased, among which 0-14 and 55-84 showed a smaller increase, while 15-54 showed a faster increase, especially before 2014. However, 35-54 had the largest number of deaths, but due to its larger population base than 25-34, So actually 25-34 is the age group with the most innocent deaths.
 
-```{r, warning = FALSE, message = FALSE, echo = FALSE}
+```{r, warning = FALSE, message = FALSE}
+data1 <- data.frame(
+  year = c(2000, 2002:2005, 2012),
+  age_bin = rep("85+", 6),
+  count = rep(0, 6)
+)
 
 plot_age = 
   plot_df %>% 
   group_by(year,age_bin) %>% 
   summarize(count = n()) %>% 
+  rbind(data1) %>% 
+  arrange(year) %>% 
   mutate(age_bin = as.factor(age_bin)) %>% 
   ungroup(year) %>% 
   accumulate_by(~ year) %>% 
@@ -127,7 +134,7 @@ plot_age
 
 From 2000 to 2020, both female and male showed an upward trend, but the increase of female was very slow while the number of innocent deaths of male increased rapidly. What's more, the proportion of innocent death number of male to female gap became larger.
 
-```{r, warning = FALSE, message = FALSE, echo = FALSE}
+```{r, warning = FALSE, message = FALSE}
 plot_gender =
   plot_df %>% 
   group_by(year, gender) %>% 
@@ -164,7 +171,7 @@ plot_gender
 
 From 2000 to 2020, the overall growth trend is still present but there is a difference among different race. Among them, Native American/Alaskan and Asian/Pacific Islander have the least number and slow growth, which may be related to the small population base. European American/White and African American/Black account for a high proportion.
 
-```{r, warning = FALSE, message = FALSE, echo = FALSE}
+```{r, warning = FALSE, message = FALSE}
 plot_race =
   plot_df %>% 
   group_by(year, race) %>% 
