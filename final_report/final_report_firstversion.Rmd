@@ -4,6 +4,7 @@ author: "Hening Cui, Jialiang Hua, Congyang Xie, Wenhan Bao, Qihang Wu"
 date: "Dec 9 2021"
 output: html_document
 ---
+
 ```{r setup, echo = FALSE, message = FALSE}
 library(tidyverse)
 library(readr)
@@ -349,3 +350,7 @@ For model 2, we also draw four plots to prove the homoscedasticity of residual a
 
 ## Contribution
 
+
+
+
+<font size="5"><a href = "#top" target = "_self">Back to top</a></font>
