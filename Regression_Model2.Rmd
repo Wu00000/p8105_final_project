@@ -83,11 +83,10 @@ unempolyment_stat <-
 
 ### Description
 
-Searching for more potential predictors and finding the association between innocent death and other factors, we decide to concern about the variables (Gun ownership rates, crime rate, unemployment rate in each state) and just concentrate on 2020. 
+Searching for more potential predictors and finding the association between innocent death and other factors, we decide to concern about the variables (Gun ownership rates, crime rate, unemployment rate in each state) and just concentrate on 2020 but in order to avoid the collinearity, we drop the highly potential correlated variable (State). 
 
 + In this model, predictors and variables are below:
   + **innocent death(per 10K):** count of innocent death divided by state population and multiplied by 10K
-  + **state:** the best state location where the injury causing death happened that we can find using Google Maps.
   + **age_bin:** age divided into 6 groups(0-14, 15-24, 25-34, 35-54, 55-85, 85+)
   + **gender:** Male, Female
   + **race:** usually based on visual evidence or official reports(European-American/White, African-American/Black, Native American/Alaskan, Asian/Pacific Islander, Hispanic/Latino)
@@ -199,11 +198,11 @@ reg_df2 <-
 
 Because the distribution of innocent death per 10K is the same in model 1, here we still conduct log transformation and the formula is followed below:
 
-$$ log(innocent \space death \space per \space 100k) = \beta_0 +  \beta_1state + \beta_2 age + \beta_3 gender + \beta_4 race + \beta_5Gun \space ownership \space rate$$ 
-$$ + \beta_6Crime \space rate(per \space 100K) + \beta_7 Unemployment \space rate$$
+$$ log(innocent \space death \space per \space 100k) = \beta_0 + \beta_1 age + \beta_2 gender + \beta_3 race + \beta_4Gun \space ownership \space rate$$ 
+$$ + \beta_5Crime \space rate(per \space 100K) + \beta_6 Unemployment \space rate$$
 ```{r}
 # Fit a model
-fit2 <- lm(log(innocent_kill_per100k) ~ state + age_bin + gender + race + gun_ownership + crime_per_10e6 + unemploy_rate, 
+fit2 <- lm(log(innocent_kill_per100k) ~ age_bin + gender + race + gun_ownership + crime_per_10e6 + unemploy_rate, 
     data = reg_df2)
 
 summary(fit2) %>% 
@@ -219,13 +218,13 @@ summary(fit2) %>%
   scroll_box(height = "200px")
 ```
 
-According to the statistics in the table above, we could conclude that all all P-value is smaller than significant level which means the association is significant in statistical aspect although some levels in state have no significant association.
+According to the statistics in the table above, we could conclude that P-value is $2.2 \times 10^{-16}$ and smaller than significant level which means the association is significant in statistical aspect although crime rate seems have no significant association.
 
-When concentrating on the table of R.squared, we could figure out that adjusted $R^2$ value is 0.75 which means that 75% of the variability in the outcome data can be explained by the model, especially if R-squared value r > 0.7 this value is generally considered strong effect size *(Ref:Moore, D. S., Notz, W. I, & Flinger, M. A. (2013). The basic practice of statistics (6th ed.))*
+When concentrating on the table of R.squared, we could figure out that adjusted $R^2$ value is 0.62 which means that 62% of the variability in the outcome data can be explained by the model so that this value is generally considered a Moderate effect size and the fit is not as good as model1. If R-squared value 0.5 < r < 0.7 this value is generally considered a Moderate effect size *(Ref:Moore, D. S., Notz, W. I, & Flinger, M. A. (2013). The basic practice of statistics (6th ed.))*
 
 #### 2.MLR dignostics
 
-The four graphs is used for proving the homoscedasticity of residual. When looking deep into those graphs, we're able to conclude that all assumption is satisfied.
+The four graphs is used for proving the homoscedasticity of residual. When looking deep into those graphs, we're able to conclude that all assumption is satisfied but it's not as good as model 1.
 
 * Residuals vs Fitted: show that it has linear relationship due to the nearly equal distribution.
 * Q-Q plot: illustrate residual is normality
