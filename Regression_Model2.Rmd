@@ -86,7 +86,7 @@ unempolyment_stat <-
 Searching for more potential predictors and finding the association between innocent death and other factors, we decide to concern about the variables (Gun ownership rates, crime rate, unemployment rate in each state) and just concentrate on 2020 but in order to avoid the collinearity, we drop the highly potential correlated variable (State). 
 
 + In this model, predictors and variables are below:
-  + **innocent death(per 10K):** count of innocent death divided by state population and multiplied by 10K
+  + **innocent death(per 100K):** count of innocent death divided by state population and multiplied by 100K
   + **age_bin:** age divided into 6 groups(0-14, 15-24, 25-34, 35-54, 55-85, 85+)
   + **gender:** Male, Female
   + **race:** usually based on visual evidence or official reports(European-American/White, African-American/Black, Native American/Alaskan, Asian/Pacific Islander, Hispanic/Latino)
@@ -196,7 +196,7 @@ reg_df2 <-
 
 #### 1.Modeling
 
-Because the distribution of innocent death per 10K is the same in model 1, here we still conduct log transformation and the formula is followed below:
+Because the distribution of innocent death per 100K is the same in model 1, here we still conduct log transformation and the formula is followed below:
 
 $$ log(innocent \space death \space per \space 100k) = \beta_0 + \beta_1 age + \beta_2 gender + \beta_3 race + \beta_4Gun \space ownership \space rate$$ 
 $$ + \beta_5Crime \space rate(per \space 100K) + \beta_6 Unemployment \space rate$$
