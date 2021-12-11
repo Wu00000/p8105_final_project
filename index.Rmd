@@ -37,6 +37,8 @@ show_main_df <-
 ### Website Overview
 <iframe width="560" height="315" src="https://www.youtube.com/embed/S6dGOPTo058" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
+<br>
+
 ### Background
 In the wake of George Floyd’s murder, a number of protests arisen across the nation. This motivates us to investigate innocent deaths under police violence and the association of confounders with excessive police force. Although the majority encounters that meet death with law enforcement officials present a lethal threat to officers or society, there are still people that involved in the police action meets death with a quantity not to be ignored.  This project analyses the data on people involved in a police operation and results in fatalities.  Despite the assessment of  overuse of police force across geographical factors, this project also focuses on socioeconomic factors, political factors and periodical patterns. 
 
