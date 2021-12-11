@@ -350,11 +350,18 @@ plot(fit2)
 ```
 
 ## Conclusion
+Our EDA and first regression model indicates that all our main predictor(year, state, age, gender, race) are statistically significant although some levels in state are not. This indicates that there indeed are group differences by year, age, gender, race and most of the states regarding the innocent death by police. Our second regression model investigates more potential predictors of innocent deaths and their association. We found that there are significant association between innocent deaths rate and gun ownership rate as well as unemployment rate. The finding matches what we have proposed mostly, except that the crime rate are not statistically significant in the model we built.
 
 ## Discussion
+Overall, some of our findings are consistent with what we had originally hypothesized and some are not. Firstly, The overall trend of innocent death cases shows a tendency of rising until 2014 and then falling slightly. We found a shooting in 2014, which caused great public concern and  government action, may account for the pattern. Secondly, male takes up a larger proportion of innocent death compared with female. This matches what we had hypothesized as higher crime rate and aggressivity of male than female. Thirdly, there are statistically significant associations between rate of innocent death by police and year, age, gender, race and states from our regression model.
+
+Since crime rate, gun ownership rate and unemployment rate are associated with state variable, we removed the state variable in our second model to avoid collinearity. The adjusted $R^2$ value for the second model is 0.62, which is considered a moderate effect size and is not as good as model 1. The result shows significant association between innocent death rate and gun ownership rate as well as unemployment rate, which is consistent with what was expected. However, interestingly, the the crime rate does not show a statistically significant association with innocent death rate, which is not in line with our expectation. We thought this could have potentially been due to other factors such as educational level, income level distorting the association. We are unable to dig into this and it needs further investigation.
+
+A strength of this study is that the main dataset contains abundant data points and many variables, which gives us lots of chance to explore the details and the trends behind the data. Meanwhile, there are many limitations that need to be awared. Firstly, we used combined datasets for analyses. There might be potential inconsistency cause by combining different data sources, which may result in bias in our results.  Secondly, there may be other factors or latent factors influencing innocent death rate that we haven't considered and put into our model. A better model might be built considering other factors such as educational level, income level and so on.
+
 
 ## Contribution
-
+Congyang Xie was mainly responsible for dataset finding and aesthetic modification of the plots. Wenhan Bao and Qihang Wu were mainly responsible for the Data cleaning, EDA, Regression, Model Selection and analyses. Qihang also contributed to the organization of the whole project. Hening Cui was mainly responsible for further data visualization such as the animation of the trend plot, the shiny app. Jialiang Hua was mainly responsible for the organization of the final report and website building. We discussed the final report and recorded the videos together. All our members engaged in the project actively.
 
 
 
