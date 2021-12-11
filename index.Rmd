@@ -93,7 +93,7 @@ Our report can be found from [here](./final_report_firstversion.html).
 - <font size="2">**Qihang Wu**</font>     | [Website](https://wu00000.github.io/)  
 
 
-##### Stay tuned on Columbia Public Health...
+#### Stay tuned on Columbia Public Health...
 
 [<i class="fab fa-linkedin" style="font-size: 1.5em"></i>](https://www.linkedin.com/school/msph/)
 [<i class="fab fa-twitter" style="font-size: 1.5em"></i>](https://twitter.com/ColumbiaMSPH)
@@ -102,4 +102,4 @@ Our report can be found from [here](./final_report_firstversion.html).
 <br>
 <br>
 
-<font size="5"><a href = "#top" target = "_self">Back to top</a></font>
+<font size="3"><a href = "#top" target = "_self">Back to top</a></font>
