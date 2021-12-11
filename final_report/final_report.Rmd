@@ -11,6 +11,7 @@ library(readxl)
 library(kableExtra)
 library(knitr)
 library(modelr)
+library(patchwork)
 
 knitr::opts_chunk$set(
   echo = FALSE, 
@@ -115,6 +116,33 @@ unempolyment_stat <-
   mutate(unemploy_rate = as.numeric(unemploy_rate)/100)
 ```
 
+```{r, echo=FALSE}
+reg_df1 <- 
+  main_df %>% 
+  group_by(year, state, age_bin, gender, race) %>% 
+  summarize(count = n()) %>% 
+  filter(year %in% c(2010:2020), state != "DC") %>% 
+  left_join(pop_stat, by = c("year", "state", "age_bin", "gender", "race")) %>% 
+  mutate(innocent_kill_per100k = count / population * 10^5)
+```
+
+```{r include=FALSE,echo=FALSE}
+# Model 2 -- year 2020
+# Join data
+pop_gun_crime_unemply <- 
+  gun_owner %>% 
+  left_join(crime_stat, by = "state") %>% 
+  left_join(unempolyment_stat, by = "state") %>% 
+  mutate(state = state.abb[match(state, state.name)]) %>% 
+  select(state, everything())
+
+reg_df2 <- 
+  reg_df1 %>% 
+  filter(year == 2020) %>% 
+  left_join(pop_gun_crime_unemply, by = "state") %>% 
+  select(2:5, 8:11)
+```
+
 ## Motivation
 In the wake of George Floyd’s murder, a number of protests arisen across the nation. This motivates us to investigate innocent deaths under police violence and the association of confounders with excessive police force. Although the majority encounters that meet death with law enforcement officials present a lethal threat to officers or society, there are still people that involved in the police action meets death with a quantity not to be ignored.  This project analyses the data on people involved in a police operation and results in fatalities.  Despite the assessment of  overuse of police force across geographical factors, this project also focuses on socioeconomic factors, political factors and periodical patterns.
 
@@ -194,28 +222,67 @@ reg_df1 <-
 For statistical analysis, we come up with two regression models. The first one contains variables including state, age, gender, and race based on the data from year 2010 to 2020, while the second one considers not only the above predictors but also the other three: gun ownership, crime rate, and unemployment rate in 2020. Since we believe that all these three factors may somehow connect with the rate of innocent killings by the police in the U.S. For instance, the police might be armed with more advanced weapons in the states where the crime rate is high, which will lead to a higher rate of innocent killings in these regions.  
 The following graph is the distribution of the target variable `innocent_kill_per100k`, we can see that the distribution has nothing to do with the normal, therefore we need to perform a transformation.
 ```{r}
-reg_df1 %>% 
+before_trans = reg_df1 %>% 
   ggplot(aes(x = innocent_kill_per100k)) + 
   geom_density(color = "dodgerblue1", fill = "skyblue2") + 
   geom_vline(xintercept = mean(reg_df1$innocent_kill_per100k), linetype = "dotted") +
-  labs(
-    title = "Distribution of Innocent Killings Per 100k",
-    x = "innocent death(per 10K)")
-```
+  labs(x = "innocent death(per 10K)")
 
-Now, it looks way more better.
-```{r}
-reg_df1 %>% 
+After_trans = reg_df1 %>% 
   ggplot(aes(x = log(innocent_kill_per100k))) + 
   geom_density(color = "dodgerblue1", fill = "skyblue2") + 
   geom_vline(xintercept = mean(log(reg_df1$innocent_kill_per100k)), linetype = "dotted") + 
-  labs(
-    title = "Distribution of Innocent Killings Per 100k after transformation",
-    x = "log(innocent death per 10K)")
+  labs(x = "log(innocent death per 10K)")
+
+before_trans + After_trans
 ```
 
+After transforming the variable `innocent_kill_per100k`, we could look at the plot in the left where the distribution is much more normal than before which satisfy the 
+assumption of normality.
 
 ## Results
+
+By transformation above, the formula is below:
+
+$$ log(innocent \space death \space per \space 100k) = \beta_0 + \beta_1year + \beta_2state + \beta_3 age + \beta_4 gender + \beta_5 race$$
+Based on the summary and statistics which you could see in the part of regression-model 1, we could conclude that all all predictor are significant in statistical aspect although some levels in state have no significant association.
+
+```{r echo=FALSE}
+fit1 <- lm(log(innocent_kill_per100k) ~ year + state + age_bin + gender + race, data = reg_df1)
+
+summary(fit1) %>% 
+  broom::glance() %>% 
+  knitr::kable() %>% 
+  kable_styling()
+```
+
+When concentrating on the table of R.squared, we could figure out that $R^2$ value is 0.72 which means that 72% of the variability in the outcome data can be explained by the model, especially if R-squared value r > 0.7 this value is generally considered strong effect size *(Ref:Moore, D. S., Notz, W. I, & Flinger, M. A. (2013). The basic practice of statistics (6th ed.))*
+
+In order to further make sure the accuracy of model 1 and the homoscedasticity of residual, we draw four plots which are Residuals vs Fitted, Normal QQ, Scale-Location and Residuals vs Leverage respectively. When looking at the plots, we could figure out that the homoscedasticity of residual is proved.
+
+```{r echo=FALSE}
+# Model diagnosis
+par(mfrow = c(2, 2))
+plot(fit1)
+```
+
+In addition to the model above, we are still eager to dig out another potential predictors for innocent death so that we fitted another model by adding three variables (Gun ownership rate, Crime rate per 100K and unemployment rate) and the model 2 we are going to fit is: 
+
+$$ log(innocent \space death \space per \space 100k) = \beta_0 +  \beta_1state + \beta_2 age + \beta_3 gender + \beta_4 race + \beta_5Gun \space ownership \space rate$$ 
+$$ + \beta_6Crime \space rate(per \space 100K) + \beta_7 Unemployment \space rate$$
+```{r}
+fit2 <- lm(log(innocent_kill_per100k) ~ state + age_bin + gender + race + gun_ownership + crime_per_10e6 + unemploy_rate, 
+    data = reg_df2)
+
+summary(fit2) %>% 
+  broom::glance() %>% 
+  knitr::kable() %>% 
+  kable_styling()
+```
+
+When concentrating on the table of R.squared, we could figure out that adjusted $R^2$ value is 0.75 which means that 75% of the variability in the outcome data can be explained by the model, especially if R-squared value r > 0.7 this value is generally considered strong effect size
+
+For model 2, we also draw four plots to prove the homoscedasticity of residual and we could find that the multiple linear regression fits well.
 
 ## Conclusion
 

@@ -215,7 +215,8 @@ summary(fit2) %>%
 summary(fit2) %>% 
   broom::glance() %>% 
   knitr::kable() %>% 
-  kable_styling()
+  kable_styling() %>% 
+  scroll_box(height = "200px")
 ```
 
 According to the statistics in the table above, we could conclude that all all P-value is smaller than significant level which means the association is significant in statistical aspect although some levels in state have no significant association.

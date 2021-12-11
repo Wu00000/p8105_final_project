@@ -1644,32 +1644,34 @@ raceNative American/Alaskan
 <pre class="r"><code>summary(fit1) %&gt;% 
   broom::glance() %&gt;% 
   knitr::kable() %&gt;% 
-  kable_styling()</code></pre>
+  kable_styling() %&gt;% 
+  scroll_box(height = &quot;200px&quot;)</code></pre>
+<div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:200px; ">
 <table class="table" style="margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
-<th style="text-align:right;">
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
 r.squared
 </th>
-<th style="text-align:right;">
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
 adj.r.squared
 </th>
-<th style="text-align:right;">
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
 sigma
 </th>
-<th style="text-align:right;">
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
 statistic
 </th>
-<th style="text-align:right;">
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
 p.value
 </th>
-<th style="text-align:right;">
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
 df
 </th>
-<th style="text-align:right;">
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
 df.residual
 </th>
-<th style="text-align:right;">
+<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
 nobs
 </th>
 </tr>
@@ -1703,6 +1705,7 @@ nobs
 </tr>
 </tbody>
 </table>
+</div>
 <p>Based on the summary and statistics in the table above, we could conclude that all all predictor are significant in statistical aspect although some levels in state have no significant association.</p>
 <p>When concentrating on the table of R.squared, we could figure out that <span class="math inline">\(R^2\)</span> value is 0.72 which means that 72% of the variability in the outcome data can be explained by the model, especially if R-squared value r &gt; 0.7 this value is generally considered strong effect size <em>(Ref:Moore, D. S., Notz, W. I, &amp; Flinger, M. A. (2013). The basic practice of statistics (6th ed.))</em></p>
 </div>
