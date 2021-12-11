@@ -2,7 +2,7 @@ name: "p8105_final_project"
 output_dir: "."
 navbar:
   title: "Home"
-  type: default
+  type: lux
   right:
     - text: "Trend plot"
       href: Visualization.html
@@ -21,4 +21,6 @@ navbar:
 output:
   html_document:
     css: style.css
-    theme: sandstone
+    theme: 
+      version: 4
+      bootswatch: lux
