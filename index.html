@@ -13,7 +13,7 @@
 
 <title>Police; License to Kill?</title>
 
-<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.10/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 <link href="site_libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet" />
@@ -27,8 +27,6 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
-<script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
-<link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
 
@@ -378,241 +376,18 @@ div.tocify {
 <div id="datasets" class="section level3">
 <h3>Datasets</h3>
 <ul>
-<li>Main data: <a href="https://www.kaggle.com/kannan1314/innocent-deaths-caused-by-police-all-time">Innocent death by polices</a>
-<ul>
+<li>Main data: <a href="https://www.kaggle.com/kannan1314/innocent-deaths-caused-by-police-all-time">Innocent death by polices</a></li>
 <li>A glance of our main data:
-<div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:150px; ">
-<table class="table" style="margin-left: auto; margin-right: auto;">
-<thead>
-<tr>
-<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
-age
-</th>
-<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
-gender
-</th>
-<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
-race
-</th>
-<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
-date_of_death
-</th>
-<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
-city
-</th>
-<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
-state
-</th>
-<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
-latitude
-</th>
-<th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;">
-longitude
-</th>
-<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
-highest_force
-</th>
-<th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;">
-intended_force
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:right;">
-18
-</td>
-<td style="text-align:left;">
-Male
-</td>
-<td style="text-align:left;">
-European-American/White
-</td>
-<td style="text-align:left;">
-2010-01-01
-</td>
-<td style="text-align:left;">
-Charlottesville
-</td>
-<td style="text-align:left;">
-VA
-</td>
-<td style="text-align:right;">
-37.91650
-</td>
-<td style="text-align:right;">
--78.54853
-</td>
-<td style="text-align:left;">
-Gunshot
-</td>
-<td style="text-align:left;">
-Deadly force
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-50
-</td>
-<td style="text-align:left;">
-Male
-</td>
-<td style="text-align:left;">
-European-American/White
-</td>
-<td style="text-align:left;">
-2010-01-01
-</td>
-<td style="text-align:left;">
-Fort Collins
-</td>
-<td style="text-align:left;">
-CO
-</td>
-<td style="text-align:right;">
-40.58980
-</td>
-<td style="text-align:right;">
--105.07752
-</td>
-<td style="text-align:left;">
-Gunshot
-</td>
-<td style="text-align:left;">
-Deadly force
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-36
-</td>
-<td style="text-align:left;">
-Male
-</td>
-<td style="text-align:left;">
-European-American/White
-</td>
-<td style="text-align:left;">
-2010-01-02
-</td>
-<td style="text-align:left;">
-Hamilton
-</td>
-<td style="text-align:left;">
-MT
-</td>
-<td style="text-align:right;">
-46.25510
-</td>
-<td style="text-align:right;">
--114.15676
-</td>
-<td style="text-align:left;">
-Gunshot
-</td>
-<td style="text-align:left;">
-Deadly force
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-47
-</td>
-<td style="text-align:left;">
-Male
-</td>
-<td style="text-align:left;">
-European-American/White
-</td>
-<td style="text-align:left;">
-2010-01-02
-</td>
-<td style="text-align:left;">
-Waco
-</td>
-<td style="text-align:left;">
-TX
-</td>
-<td style="text-align:right;">
-31.53939
-</td>
-<td style="text-align:right;">
--97.19730
-</td>
-<td style="text-align:left;">
-Gunshot
-</td>
-<td style="text-align:left;">
-Deadly force
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-47
-</td>
-<td style="text-align:left;">
-Male
-</td>
-<td style="text-align:left;">
-Hispanic/Latino
-</td>
-<td style="text-align:left;">
-2010-01-04
-</td>
-<td style="text-align:left;">
-Santa Ana
-</td>
-<td style="text-align:left;">
-CA
-</td>
-<td style="text-align:right;">
-33.71979
-</td>
-<td style="text-align:right;">
--117.91335
-</td>
-<td style="text-align:left;">
-Gunshot
-</td>
-<td style="text-align:left;">
-Deadly force
-</td>
-</tr>
-<tr>
-<td style="text-align:right;">
-32
-</td>
-<td style="text-align:left;">
-Male
-</td>
-<td style="text-align:left;">
-African-American/Black
-</td>
-<td style="text-align:left;">
-2010-01-04
-</td>
-<td style="text-align:left;">
-Calumet City
-</td>
-<td style="text-align:left;">
-IL
-</td>
-<td style="text-align:right;">
-41.58605
-</td>
-<td style="text-align:right;">
--87.52969
-</td>
-<td style="text-align:left;">
-Gunshot
-</td>
-<td style="text-align:left;">
-Deadly force
-</td>
-</tr>
-</tbody>
-</table>
-</div></li>
+<ul>
+<li><code>age</code>, <code>gender</code>, and <code>race</code> represent the subject’s demographic characteristics<br />
+</li>
+<li><code>date_of_death</code> represents the date of the subject’s death.`<br />
+</li>
+<li><code>city</code>, <code>state</code>, <code>latitude</code>, and <code>longitude</code> represent the location of the death<br />
+</li>
+<li><code>highest_force</code> represents the cause of death<br />
+</li>
+<li><code>intended_force</code> represents the intentional use of force by police</li>
 </ul></li>
 <li>Other data sources:
 <ul>
