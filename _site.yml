@@ -13,7 +13,7 @@ navbar:
       - text: "Model 2"
         href: Regression_Model2.html
     - text: "Interactive Map"
-      href: https://heningcui.shinyapps.io/interactive_map/
+      href: https://heningcui.shinyapps.io/interactdashboard/
     - text: "Resource"
       href: resource.html
     - icon: fa-github
