@@ -325,12 +325,12 @@ par(mfrow = c(2, 2))
 plot(fit1)
 ```
 
-In addition to the model above, we are still eager to dig out another potential predictors for innocent death so that we fitted another model by adding three variables (Gun ownership rate, Crime rate per 100K and unemployment rate) and the model 2 we are going to fit is: 
+In addition to the model above, we are still eager to dig out another potential predictors for innocent death so that we fitted another model by adding three variables (Gun ownership rate, Crime rate per 100K and unemployment rate) and the model 2 we are going to fit is where we drop the highly potential correlated variable (State) for avoiding collinearity: 
 
-$$ log(innocent \space death \space per \space 100k) = \beta_0 +  \beta_1state + \beta_2 age + \beta_3 gender + \beta_4 race + \beta_5Gun \space ownership \space rate$$ 
-$$ + \beta_6Crime \space rate + \beta_7 Unemployment \space rate$$
+$$ log(innocent \space death \space per \space 100k) = \beta_0 + \beta_1 age + \beta_2 gender + \beta_3 race + \beta_4Gun \space ownership \space rate$$ 
+$$ + \beta_5Crime \space rate(per \space 100K) + \beta_6 Unemployment \space rate$$
 ```{r}
-fit2 <- lm(log(innocent_kill_per100k) ~ state + age_bin + gender + race + gun_ownership + crime_per_10e6 + unemploy_rate, 
+fit2 <- lm(log(innocent_kill_per100k) ~  age_bin + gender + race + gun_ownership + crime_per_10e6 + unemploy_rate, 
     data = reg_df2)
 
 summary(fit2) %>% 
@@ -339,10 +339,15 @@ summary(fit2) %>%
   kable_styling()
 ```
 
-When concentrating on the table of R.squared, we could figure out that adjusted $R^2$ value is 0.75 which means that 75% of the variability in the outcome data can be explained by the model, especially if R-squared value r > 0.7 this value is generally considered strong effect size
+When concentrating on the table of R.squared, we could figure out that adjusted $R^2$ value is 0.62 which means that 62% of the variability in the outcome data can be explained by the model so that this value is generally considered a Moderate effect size and the fit is not as good as model1. If R-squared value 0.5 < r < 0.7 this value is generally considered a Moderate effect size.
 
-For model 2, we also draw four plots to prove the homoscedasticity of residual and we could find that the multiple linear regression fits well.
+For model 2, we also draw four plots to prove the homoscedasticity of residual and we could find that the multiple linear regression fits not as good as model 1.
 
+```{r}
+# Model diagnosis
+par(mfrow = c(2, 2))
+plot(fit2)
+```
 
 ## Conclusion
 
