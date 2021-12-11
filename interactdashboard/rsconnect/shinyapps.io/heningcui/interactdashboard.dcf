@@ -5,9 +5,9 @@ account: heningcui
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 5307918
-bundleId: 5358781
+bundleId: 5358888
 url: https://heningcui.shinyapps.io/interactdashboard/
-when: 1639207279.99366
-lastSyncTime: 1639207279.99367
+when: 1639209809.76696
+lastSyncTime: 1639209809.76698
 asMultiple: FALSE
 asStatic: FALSE
