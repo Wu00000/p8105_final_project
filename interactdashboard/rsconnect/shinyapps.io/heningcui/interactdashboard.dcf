@@ -1,0 +1,13 @@
+name: interactdashboard
+title: interactdashboard
+username:
+account: heningcui
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 5307918
+bundleId: 5358781
+url: https://heningcui.shinyapps.io/interactdashboard/
+when: 1639207279.99366
+lastSyncTime: 1639207279.99367
+asMultiple: FALSE
+asStatic: FALSE
