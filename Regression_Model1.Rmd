@@ -77,12 +77,12 @@ unempolyment_stat <-
 In this study, we are curious about the association between innocent death rate by police and potential factors. In this case, innocent death(per 100K) will be considered as dependent variable while some interests will be regarded as predictors so that multiple linear regression will be used to testify and assess whether the correlation is significant or not.
 
 + For Model 1, predictors and variables are below:
-  + **innocent death(per 100K):** count of innocent death divided by state population and multiplied by 100K
-  + **year:** the year of death(2010 - 2020)
+  + **innocent death (per 100K):** count of innocent death divided by state population and multiplied by 100K
+  + **year:** the year of death (2010 - 2020)
   + **state:** the best state location where the injury causing death happened that we can find using Google Maps.
-  + **age_bin:** age divided into 6 groups(0-14, 15-24, 25-34, 35-54, 55-85, 85+)
+  + **age_bin:** age divided into 6 groups (0-14, 15-24, 25-34, 35-54, 55-85, 85+)
   + **gender:** Male, Female
-  + **race:** Usually based on visual evidence or official reports(European-American/White, African-American/Black, Native American/Alaskan, Asian/Pacific Islander, Hispanic/Latino)
+  + **race:** Usually based on visual evidence or official reports (European-American/White, African-American/Black, Native American/Alaskan, Asian/Pacific Islander, Hispanic/Latino)
 
 ---------------------------------------------------
 
@@ -179,7 +179,7 @@ annotations = list(
   list( 
     x = 0.2,  
     y = 1.0,  
-    text = "Year",  
+    text = "Total Innocent Death in the US",  
     xref = "paper",  
     yref = "paper",  
     xanchor = "center",  
@@ -291,7 +291,8 @@ summary(fit1) %>%
 summary(fit1) %>% 
   broom::glance() %>% 
   knitr::kable() %>% 
-  kable_styling()
+  kable_styling() %>% 
+  scroll_box(height = "120px")
 ```
 
 Based on the summary and statistics in the table above, we could conclude that all all predictor are significant in statistical aspect although some levels in state have no significant association.
