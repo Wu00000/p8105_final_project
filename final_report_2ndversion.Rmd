@@ -15,6 +15,7 @@ library(kableExtra)
 library(knitr)
 library(modelr)
 library(patchwork)
+library(ggridges)
 library(plotly)
 
 knitr::opts_chunk$set(
@@ -172,14 +173,18 @@ The main dataset for our project is from Kaggle and to make a more comprehensive
 
 ## Exploratory Data Analysis
 #### Innocent Death Rate per 100k population 
-The following image shows the innocent death rate per 100k population from 2010 to 2020 in each state of the U.S.
++ The following heatmap briefly shows the innocent death rate per 100k population from 2010 to 2020 in each state of the U.S. The top three states are New Mexico, Alaska, and Nevada, respectively.
+
 <center>
 <img src="images/report_img1.png" width="80%"/>
 <center/>
 
-#### 
-##### US Total
-The total amount of innocent death across 50 states by year in the U.S. from 2010 to 2020 is shown as follows. This graph illustrates that the number of cases has increased year by year and stabilized after 2013. It is reassuring that there may be a downward trend in this total count after 2017.
+#### US Total and Stratification by Demographics
++ Total number of Innocent Death in the U.S.  
+The image in the upper left corner shows the total amount of innocent death across 50 states by year in the U.S. from 2010 to 2020. It illustrates that the number of cases has increased year by year and leveled off after 2013. It is reassuring that there may be a downward trend in this total count after 2017.
+
++ Stratification by Sex, Age, and Race  
+The other three graphs show the number of innocent death stratified by demographic characteristics. The one in the upper right shows a huge difference in the total amount of innocent death between males and females. These unfortunate cases generally occur in the male group, although the proportion of males and females remains roughly the same from 2010 to 2020. The image in the lower-left displays that people under 54 years old accounts for a large proportion of the whole population. As for race and ethnicity, although the total number of innocent death changes year by year, the European-American/White race group will consistently account for the largest proportion, and then comes the African-American/Black group.
 ```{r}
 year_plot =
   main_df %>%
@@ -315,109 +320,75 @@ combination_plt =
 combination_plt
 ```
 
-```{r}
-main_df %>% 
-  filter(year %in% c(2010:2020)) %>% 
-  group_by(year) %>% 
-  summarize(count = n()) %>% 
-  ggplot(aes(x = year, y = count, fill = year)) + 
-  geom_bar(stat = "identity") +
-  geom_text(aes(label = count), vjust = -.8) + 
-  scale_x_continuous(breaks = c(2010:2020)) +
-  theme(legend.position = "none") + 
-  labs(
-    x = "Year", 
-    y = "Total Number",
-    title = "Overall Innocent Death Cases in the U.S.")
-```
 
-### Sex
-The graph below shows a huge difference in the total amount of innocent killings between men and women. These unfortunate cases generally occur in the male group, although the proportion of male and female remains roughly the same from 2010 to 2020.
-```{r}
-main_df %>% 
-  filter(year %in% c(2010:2020)) %>% 
-  group_by(year, gender) %>% 
-  summarize(count = n()) %>% 
-  ggplot(aes(x = year, y = count, fill = gender)) + 
-  geom_bar(stat = "identity", position = position_dodge()) +
-  scale_x_continuous(breaks = c(2010:2020)) +
-  theme(legend.title = element_blank()) + 
-  labs(
-    x = "Year",
-    y = "Total Number",
-    title = "Number of Innocent Death by Gender")
-```
+### Gun Ownership, Crime Rate, and Unemployment Rate by State
+The following graph shows the distributions of the crime rate, gun ownership, and unemployment rate in 50 states of the U.S.  
 
-### Age
-The 55-84 age group accounts for the largest proportion among all age groups.
 ```{r}
-main_df %>% 
-  filter(year %in% c(2010:2020)) %>% 
-  group_by(year, age_bin) %>% 
-  summarize(count = n()) %>% 
-  ggplot(aes(x = year, y = count, fill = age_bin)) + 
-  geom_bar(stat = "identity") +
-  scale_x_continuous(breaks = c(2010:2020)) +
-  theme(legend.title = element_blank()) + 
-  labs(
-    x = "Year",
-    y = "Total Number",
-    title = "Number of Innocent Death by Age")
-```
-
-### Race and ethicity
-Although the total number of innocent death changes every year, the European-American/White race group will consistently account for the largest proportion and comes the African-American/Black group.
-```{r}
-main_df %>%
-  filter(year %in% c(2010:2020)) %>% 
-  group_by(year, race) %>% 
-  summarize(count = n()) %>% 
-  ggplot(aes(x = year, y = count, fill = race)) + 
-  geom_bar(stat = "identity") +
-  scale_x_continuous(breaks = c(2010:2020)) +
-  theme(legend.title = element_blank()) + 
-  labs(
-    x = "Year",
-    y = "Total Number",
-    title = "Number of Innocent Death by Race")
-```
-
-### Gun Ownership, Crime Rate, and Unemployment Rate
-The following three graphs show the rate of gun ownership rate, crime, and unemployment in all 50 states in the U.S.
-```{r}
-gun_plot <-   
+# Join data
+pop_gun_crime_unemply <- 
   gun_owner %>% 
-  mutate(state = fct_reorder(state, gun_ownership)) %>% 
-  ggplot(aes(x = gun_ownership, y = state, fill = state)) + 
-  geom_bar(stat = "identity", show.legend = FALSE) + 
-  labs(x = "Gun Ownership Rate",
-       y = "State")
+  left_join(crime_stat, by = "state") %>% 
+  left_join(unempolyment_stat, by = "state") %>% 
+  mutate(state = state.abb[match(state, state.name)]) %>% 
+  select(state, everything())
+
+gun_crime_unemply_plt <-   
+  pop_gun_crime_unemply %>% 
+  mutate(
+    crime_rate = crime_per_10e6 / 10e3,
+    gun_rate = gun_ownership / 6) %>% 
+  select(-(2:3)) %>% 
+  pivot_longer(
+    2:4,
+    names_to = "statistics",
+    values_to = "values"
+  ) %>% 
+  ggplot(aes(x = state, y = values, color = statistics, group = statistics)) + 
+  geom_point(aes(size = values), alpha = .4, show.legend = FALSE) + 
+  geom_smooth(se = FALSE) +
+  facet_grid(. ~ statistics) + 
+  theme(
+    axis.text.x = element_text(size = 6, angle = 90, vjust = 0.5, hjust = 1),
+    legend.position = "none") + 
+  labs(
+    x = "State",
+    y = "Value"
+  )
 ```
 
 ```{r}
-crime_plot <- 
+crime_plt <- 
   crime_stat %>% 
   filter(state != "District of Columbia") %>% 
-  mutate(state = fct_reorder(state, crime_per_10e6)) %>% 
-  ggplot(aes(x = crime_per_10e6, y = state, fill = state)) + 
-  geom_bar(stat = "identity", show.legend = FALSE) + 
-  labs(x = "Crimte rate per 100k",
-       y = element_blank())
-```
+  mutate(state = state.abb[match(state, state.name)]) %>% 
+  ggplot(aes(x = state, y = crime_per_10e6)) + 
+  geom_point() + 
+  geom_smooth(se = FALSE) + 
+  theme(
+    axis.title.x = element_blank(),
+    axis.text.x = element_blank())
 
-```{r}
-unemploy_plot <- 
+gun_plt <- 
+  gun_owner %>% 
+  mutate(state = state.abb[match(state, state.name)]) %>% 
+  ggplot(aes(x = state, y = gun_ownership)) + 
+  geom_point() + 
+  geom_smooth(se = FALSE) +
+  theme(
+  axis.title.x = element_blank(),
+  axis.text.x = element_blank())
+
+unemply_plt <- 
   unempolyment_stat %>% 
   filter(state != "District of Columbia") %>% 
-  mutate(state = fct_reorder(state, unemploy_rate)) %>% 
-  ggplot(aes(x = unemploy_rate, y = state, fill = state)) + 
-  geom_bar(stat = "identity", show.legend = FALSE) + 
-  labs(x = "Unemployment rate",
-       y = element_blank())
-```
+  mutate(state = state.abb[match(state, state.name)]) %>% 
+  ggplot(aes(x = state, y = unemploy_rate)) + 
+  geom_point() + 
+  geom_smooth(se = FALSE) + 
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
 
-```{r, fig.width = 12}
-gun_plot + crime_plot + unemploy_plot
+crime_plt / gun_plt / unemply_plt
 ```
 
 
@@ -429,13 +400,13 @@ before_trans = reg_df1 %>%
   ggplot(aes(x = innocent_kill_per100k)) + 
   geom_density(color = "dodgerblue1", fill = "skyblue2") + 
   geom_vline(xintercept = mean(reg_df1$innocent_kill_per100k), linetype = "dotted") +
-  labs(x = "innocent death(per 10K)")
+  labs(x = "innocent death per 100K")
 
 After_trans = reg_df1 %>% 
   ggplot(aes(x = log(innocent_kill_per100k))) + 
   geom_density(color = "dodgerblue1", fill = "skyblue2") + 
   geom_vline(xintercept = mean(log(reg_df1$innocent_kill_per100k)), linetype = "dotted") + 
-  labs(x = "log(innocent death per 10K)")
+  labs(x = "log (innocent death per 100K)")
 
 before_trans + After_trans
 ```

@@ -250,7 +250,7 @@ reg_fig1 =
   ggplot(aes(x = innocent_kill_per100k)) + 
   geom_density(fill = "#77969A", alpha = 0.6) + 
   geom_vline(xintercept = mean(reg_df1$innocent_kill_per100k), linetype = "dotted") +
-  labs(x = "innocent death(per 10K)")
+  labs(x = "innocent death per 100K")
 
 ggplotly(reg_fig1)
 ```
@@ -266,7 +266,7 @@ reg_trans_1 =
   ggplot(aes(x = log(innocent_kill_per100k))) + 
   geom_density(fill = "#77969A", alpha = 0.6) + 
   geom_vline(xintercept = mean(log(reg_df1$innocent_kill_per100k)), linetype = "dotted") + 
-  labs(x = "log(innocent death per 10K)")
+  labs(x = "log(innocent death per 100K)")
 
 ggplotly(reg_trans_1)
 ```
