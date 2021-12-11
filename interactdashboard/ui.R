@@ -38,12 +38,15 @@ Group_choices =
 dashboardPage(
   skin = "black",
   dashboardHeader(title = "Innocent death"),
-  dashboardSidebar(sidebarMenu(menuItem(
+  dashboardSidebar(sidebarMenu(
+    menuItem(
     selectInput('Year',
                 'Select year',
                 choices = Year_choices,
                 selected = "2020")
-  ))),
+  ),
+  menuItem(text = "Back to homepage", href = "https://wu00000.github.io/p8105_final_project/index.html"),
+  menuItem(text = "Github Code for the website", href = "https://github.com/Wu00000/p8105_final_project.git"))),
   dashboardBody(
     fluidRow(
       tabBox(id = "tab", width = 12, 
