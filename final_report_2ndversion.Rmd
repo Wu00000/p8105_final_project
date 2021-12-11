@@ -177,7 +177,8 @@ The following image shows the innocent death rate per 100k population from 2010 
 <img src="images/report_img1.png" width="80%"/>
 <center/>
 
-#### US Total
+#### 
+##### US Total
 The total amount of innocent death across 50 states by year in the U.S. from 2010 to 2020 is shown as follows. This graph illustrates that the number of cases has increased year by year and stabilized after 2013. It is reassuring that there may be a downward trend in this total count after 2017.
 ```{r}
 year_plot =
@@ -268,7 +269,7 @@ annotations = list(
   list( 
     x = 0.2,  
     y = 1.0,  
-    text = "US Total by year",  
+    text = "Total Innocent Death in the US",  
     xref = "paper",  
     yref = "paper",  
     xanchor = "center",  
