@@ -48,7 +48,7 @@ accumulate_by <- function(dat, var) {
   
 ```
 
-For this part, we illustrate the tendency of innocent death by line charts and different stratification in each year. You could click the play bottom to approach the whole pictures and magical animation.
+For this part, we illustrate the tendency of innocent death by line charts and different stratification in each year. You could click the “Play” button to approach the whole pictures and magical animation.
 
 ------------------------------------------------
 
