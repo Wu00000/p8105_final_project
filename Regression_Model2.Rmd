@@ -236,6 +236,6 @@ par(mfrow = c(2, 2))
 plot(fit2)
 ```
 
+<br>
 
-
-<font size="5"><a href = "#top" target = "_self">Back to top</a></font>
+<font size="3"><a href = "#top" target = "_self">Back to top</a></font>
