@@ -74,10 +74,10 @@ unempolyment_stat <-
 
 ### Description
 
-In this study, we are curious about the association between innocent death rate by police and potential factors. In this case, innocent death(per 10K) will be considered as dependent variable while some interests will be regarded as predictors so that multiple linear regression will be used to testify and assess whether the correlation is significant or not.
+In this study, we are curious about the association between innocent death rate by police and potential factors. In this case, innocent death(per 100K) will be considered as dependent variable while some interests will be regarded as predictors so that multiple linear regression will be used to testify and assess whether the correlation is significant or not.
 
 + For Model 1, predictors and variables are below:
-  + **innocent death(per 10K):** count of innocent death divided by state population and multiplied by 10K
+  + **innocent death(per 100K):** count of innocent death divided by state population and multiplied by 100K
   + **year:** the year of death(2010 - 2020)
   + **state:** the best state location where the injury causing death happened that we can find using Google Maps.
   + **age_bin:** age divided into 6 groups(0-14, 15-24, 25-34, 35-54, 55-85, 85+)
@@ -162,10 +162,6 @@ race_plot =
     axis.title.x = element_blank()
   ) +
   guides(fill = guide_legend(ncol = 3))
-```
-
-
-```{r}
 
 combination_plt =
   subplot(
@@ -243,9 +239,9 @@ reg_df1 <-
   mutate(innocent_kill_per100k = count / population * 10^5)
 ```
 
-#### 1.Distribution of dependent variable(innocent death(per 10K))
+#### 1.Distribution of dependent variable(innocent death(per 100K))
 
-The density plot below is the distribution of innocent death(per 10K) which we notice it is not satisfied of the assumption of the multiple linear regression so that we need to transform it.
+The density plot below is the distribution of innocent death(per 100K) which we notice it is not satisfied of the assumption of the multiple linear regression so that we need to transform it.
 
 ```{r}
 # Find distribution of the target variable `innocent_kill_per100k`
