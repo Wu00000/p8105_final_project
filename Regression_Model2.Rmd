@@ -214,7 +214,8 @@ summary(fit2) %>%
 summary(fit2) %>% 
   broom::glance() %>% 
   knitr::kable() %>% 
-  kable_styling()
+  kable_styling() %>% 
+  scroll_box(height = "200px")
 ```
 
 According to the statistics in the table above, we could conclude that P-value is $2.2 \times 10^{-16}$ and smaller than significant level which means the association is significant in statistical aspect although crime rate seems have no significant association.
